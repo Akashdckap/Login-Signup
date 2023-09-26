@@ -7,21 +7,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* .form-control {
-  margin: 10px auto;
-  padding: 5px 4px;
-} */
 
-.container {
-  height: auto;
-  width: 30%;
+ .container {
   background-color: skyblue;
   border-radius: 10px;
   margin: 3pc auto;
-  padding: 22px 72px;
-}
+  padding: 15px 50px;
+} 
 
-.form-control:focus {
+.signUp::selection{
+  color: red;
+  background-color: yellow;
+}
+/* .form-control:focus {
   border-style: none;
   border-color: white;
 }
@@ -46,9 +44,9 @@ ul {
   align-items: center;
   gap: 45px;
   padding: 24px 76px;
-}
+} */ 
 
-button {
+/* button {
   margin: 18px 66px;
   height: 36px;
   width: 85px;
@@ -57,17 +55,16 @@ button {
   background-color: #506380;
   border-style: none;
   border-radius: 2px;
-}
+} */
 
-button:hover {
+/* button:hover {
   opacity: 0.9;
   cursor: pointer;
-}
+} */
 
-input {
+/* input {
   width: 300px;
   height: 30px;
-  /* padding: 5px; */
 
   margin: 10px auto;
   padding: 5px 4px;
@@ -84,4 +81,4 @@ input {
 input:focus {
   border-color: #007bff;
   box-shadow: 2px 2px 5px rgba(0, 123, 255, 0.5);
-}
+} */

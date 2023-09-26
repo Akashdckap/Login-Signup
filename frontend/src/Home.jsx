@@ -21,7 +21,7 @@ export default function Home() {
           setMessage(res.data.Error);
         }
       })
-      .then(err => console.log(err));
+      .catch(err => console.log(err));
   }, [])
 
   const handleDeleteAccount = () => {
@@ -32,12 +32,13 @@ export default function Home() {
   }
   return (
     <div>
-      <h1>Homepage</h1>
+      <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Homepage</h1></center>
       {
         auth ?
-          <div>
-            <h3>You are Authorized ---- {name}</h3>
-            <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
+          <div className='d-flex'>
+            <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
+            <button>Add Task</button>
+            <button style={{ color: '#CD5C5C', backgroundColor: 'burlywood' }} onClick={handleDeleteAccount}>Logout</button>
           </div>
           :
           <div>

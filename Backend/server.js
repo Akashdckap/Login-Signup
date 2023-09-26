@@ -66,7 +66,7 @@ app.post('/register', (req, res) => {
         req.body.name,
         req.body.email,
         req.body.password
-    ]
+    ];
 })
 
 app.post('/login', (req, res) => {
@@ -80,9 +80,10 @@ app.post('/login', (req, res) => {
                 if (err) return res.json({ Error: 'password compare error' })
                 if (response) {
                     const name = data[0].name;
-                    const token = jwt.sign({ name }, 'jwt-secret-key', { expiresIn: '1d' });
+                    const token = jwt.sign({ name, id: data[0].id }, 'jwt-secret-key', { expiresIn: '1d' });
                     res.cookie('token', token);
                     return res.json({ Status: 'Success' })
+
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
@@ -94,9 +95,21 @@ app.post('/login', (req, res) => {
     })
 })
 
-app.get('/logout',(req,res)=>{
+
+app.get('/register', (req, res) => {
+    const sql = "SELECT * from signup";
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json(err)
+        }
+        else {
+            return res.json(data)
+        }
+    })
+})
+app.get('/logout', (req, res) => {
     res.clearCookie('token');
-    return res.json({Status:"Success"});
+    return res.json({ Status: "Success" });
 })
 
 app.listen(8081, () => {
