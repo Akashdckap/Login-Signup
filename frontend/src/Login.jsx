@@ -28,7 +28,7 @@ export default function Login() {
         <div>
             <div className='container'>
                 <div>
-                    <h3>Login up</h3>
+                    <h1>Login up</h1>
                 </div>
 
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
@@ -41,9 +41,9 @@ export default function Login() {
                         <input type="password" className='form-control' id="exampleInputPassword1" onChange={e => setValues({ ...values, password: e.target.value })} placeholder="password" name='password' />
                         {/* {passwordError ? <label className='text-danger p-2 '>password is required</label> : ""} */}
                     </div>
-                    <button type='submit'>Register</button>
+                    <button type='submit'>Log-in</button>
                     <div>
-                        <p>Don't have account <Link to='/register'>Register</Link></p>
+                        <p>Don't have any account <Link to='/register'>Register</Link></p>
                     </div>
                 </form>
             </div>

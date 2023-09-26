@@ -25,7 +25,7 @@ function Register() {
         <div>
             <div className='container'>
                 <div>
-                    <h3>Sign up</h3>
+                    <h1>Sign up</h1>
                 </div>
 
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
@@ -44,7 +44,7 @@ function Register() {
                     </div>
                     <button type='submit'>Register</button>
                     <div>
-                        <p>Already have account <Link to='/login'>Login</Link></p>
+                        <p>Already have an account <Link to='/login'>Login</Link></p>
                     </div>
                 </form>
             </div>

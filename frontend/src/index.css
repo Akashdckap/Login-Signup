@@ -7,18 +7,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.form-control {
-  margin: 0 auto;
-  width: 300px;
-}
+/* .form-control {
+  margin: 10px auto;
+  padding: 5px 4px;
+} */
 
 .container {
   height: auto;
-  width: 40%;
+  width: 30%;
   background-color: skyblue;
   border-radius: 10px;
   margin: 3pc auto;
-  padding: 19px 0px;
+  padding: 22px 72px;
 }
 
 .form-control:focus {
@@ -62,4 +62,26 @@ button {
 button:hover {
   opacity: 0.9;
   cursor: pointer;
+}
+
+input {
+  width: 300px;
+  height: 30px;
+  /* padding: 5px; */
+
+  margin: 10px auto;
+  padding: 5px 4px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  color: #333;
+  outline: none;
+}
+
+input:focus {
+  border-color: #007bff;
+  box-shadow: 2px 2px 5px rgba(0, 123, 255, 0.5);
 }
