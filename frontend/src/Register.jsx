@@ -40,10 +40,10 @@ function Register() {
             isVaild = false;
         }
 
-        if (formData.name.length < 7 && formData.name.trim() !== "") {
-            newErrors.name = 'Username must be at least 5 characters long';
-            isVaild = false;
-        }
+        // if (formData.name.length < 7 && formData.name.trim() !== "") {
+        //     newErrors.name = 'Username must be at least 5 characters long';
+        //     isVaild = false;
+        // }
         if (formData.email.length < 10 && formData.email.trim() !== "") {
             newErrors.email = 'Email must be at least 8 characters long';
             isVaild = false;
@@ -82,7 +82,6 @@ function Register() {
                         navigate('/login');
                         console.log(res);
                     } else {
-
                         alert("Error");
                     }
                 })

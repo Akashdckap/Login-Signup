@@ -8,20 +8,22 @@ body {
 }
 
 
- .container {
+.container {
   background-color: skyblue;
   border-radius: 10px;
   margin: 3pc auto;
   padding: 15px 50px;
-} 
+}
 
-.signUp::selection{
-  color: red;
-  background-color: yellow;
+.signUp::selection {
+  color: white;
+  background-color: black;
 }
-.error{
+
+.error {
   color: red;
 }
+
 /* .form-control:focus {
   border-style: none;
   border-color: white;
@@ -47,7 +49,7 @@ ul {
   align-items: center;
   gap: 45px;
   padding: 24px 76px;
-} */ 
+} */
 
 /* button {
   margin: 18px 66px;

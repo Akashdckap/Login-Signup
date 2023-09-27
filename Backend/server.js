@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -83,7 +83,6 @@ app.post('/login', (req, res) => {
                     const token = jwt.sign({ name, id: data[0].id }, 'jwt-secret-key', { expiresIn: '1d' });
                     res.cookie('token', token);
                     return res.json({ Status: 'Success' })
-
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
@@ -107,6 +106,7 @@ app.get('/register', (req, res) => {
         }
     })
 })
+
 app.get('/logout', (req, res) => {
     res.clearCookie('token');
     return res.json({ Status: "Success" });
@@ -115,3 +115,33 @@ app.get('/logout', (req, res) => {
 app.listen(8081, () => {
     console.log("Running...")
 })
+
+app.post('/home', (req, res) => {
+    const sql = "INSERT INTO tasks (`taskName`,`description`) VALUES(?)";
+    const values = [
+        req.body.taskName,
+        req.body.description,
+    ];
+    db.query(sql, [values], (err, data) => {
+        if (err) {
+            return res.json(err)
+        }
+        if (res) {
+            return res.json({ Status: 'Success' })
+        }
+        else {
+            return res.json(data)
+        }
+    })
+})
+
+// create table tasks(
+//     id int not null AUTO_INCREMENT,
+//     user_id int,
+//     taskName varchar(255),
+//     description varchar(255),
+//     created_at timestamp,
+//     updated_at timestamp,
+//     PRIMARY key(id),
+//     FOREIGN key(user_id) REFERENCES signup(id)
+//     );
