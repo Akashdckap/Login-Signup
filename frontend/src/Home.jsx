@@ -53,10 +53,15 @@ export default function Home() {
     // e.preventDefault();
     if (validate()) {
       axios.post('http://localhost:8081/home', formData)
-        .then(res =>
-          console.log(res),
-          window.location.reload(true)
-        )
+        .then(res => {
+          if (res.data.Status == "Success") {
+            console.log(res.data.Status);
+            console.log(res.data.id);
+          }
+          else {
+            console.log(res.data.Error);
+          }
+        })
         .catch(err => console.log(err));
     }
     else {
@@ -71,7 +76,7 @@ export default function Home() {
         if (res.data.Status === "Success") {
           setAuth(true);
           setName(res.data.name);
-          console.log(res.data.id);
+          // console.log(res.data.id);
         } else {
           setAuth(false)
           navigate('/login');

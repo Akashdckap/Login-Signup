@@ -35,6 +35,7 @@ const verifyUser = (req, res, next) => {
             }
             else {
                 req.name = decoded.name;
+                req.id = decoded.id
                 next();
             }
         });
@@ -43,7 +44,7 @@ const verifyUser = (req, res, next) => {
 
 
 app.get('/', verifyUser, (req, res) => {
-    return res.json({ Status: "Success", name: req.name });
+    return res.json({ Status: "Success", name: req.name, id: req.id });
 })
 
 
@@ -116,12 +117,14 @@ app.listen(8081, () => {
     console.log("Running...")
 })
 
-app.post('/home', (req, res) => {
-    const sql = "INSERT INTO tasks (`taskName`,`description`) VALUES(?)";
+app.post('/home', verifyUser, (req, res) => {
+    const sql = "INSERT INTO tasks (`user_id`,taskName`,`description`) VALUES(?)";
     const values = [
+        req.id,
         req.body.taskName,
         req.body.description,
     ];
+
     db.query(sql, [values], (err, data) => {
         if (err) {
             return res.json(err)

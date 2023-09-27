@@ -56,15 +56,10 @@ export default function Login() {
                         navigate('/home');
                     } else {
                         alert(res.data.Error);
-                        // setEmailErrors(res.data.EmailError)
-                        // setPasswordErrors(res.data.passwordError)
                     }
                 })
                 .catch(err => console.log(err));
         }
-        // else {
-        //     alert("Something error")
-        // }
     }
 
     return (
