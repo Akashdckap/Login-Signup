@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import { Button, Modal } from "antd";
 export default function Home() {
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
@@ -15,9 +23,9 @@ export default function Home() {
         if (res.data.Status === "Success") {
           setAuth(true);
           setName(res.data.name);
-          // navigate('/login');
         } else {
           setAuth(false)
+          navigate('/login');
           setMessage(res.data.Error);
         }
       })
@@ -33,20 +41,23 @@ export default function Home() {
   return (
     <div>
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Homepage</h1></center>
-      {
-        auth ?
-          <div className='d-flex'>
-            <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
-            <button>Add Task</button>
-            <button style={{ color: '#CD5C5C', backgroundColor: 'burlywood' }} onClick={handleDeleteAccount}>Logout</button>
-          </div>
-          :
-          <div>
-            <h3>{message}</h3>
-            <h3>Login Now</h3>
-            <Link to='/login'>Login</Link>
-          </div>
-      }
+      <div className='d-flex justify-content-around'>
+        <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
+        <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
+      </div>
+      <Button type="primary" className='ms-5' onClick={showModal}>
+        Add task
+      </Button>
+      <Modal title="Basic Modal" open={isModalOpen} okText={"submit"} onCancel={handleCancel}>
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlInput1" className="form-label">Task name</label>
+          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Enter a task name" />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
+          <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder='Type something'></textarea>
+        </div>
+      </Modal>
     </div>
   )
 }

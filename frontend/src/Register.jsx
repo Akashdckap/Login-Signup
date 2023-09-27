@@ -3,58 +3,95 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Register() {
-    const [values, setValues] = useState({
+    const [formData, setFormData] = useState({
         name: '',
         email: '',
-        password: ''
-    })
-    const navigate = useNavigate();
-    const [fetchData, setFetchDatas] = useState([])
-
-    // let alertMsg = document.querySelector(".alertMessage")
-    // function alertMessage(text, color) {
-    //     alertMsg.innertext = text
-    //     alertMsg.style.color = color
-    //     window.setTimeout(() => {
-    //         alertMsg.innertext = ''
-    //         alertMsg.color = ''
-    //     }, 1000)
-    // }
+        password: '',
+    });
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        password: '',
+    });
+    const [fetchData, setfetchData] = useState([])
     useEffect(() => {
-        fetch("http://localhost:8081/register")
+        fetch('http://localhost:8081/register')
             .then(res => res.json())
-            .then(data => setFetchDatas(data))
-            .catch(err => err.json());
-    }, []);
+            .then(data => data.forEach((ele) => {
+                console.log(ele);
+                setfetchData(ele)
+            }))
+            .catch(err => err.json())
+    }, [])
+    const validate = () => {
+        let newErrors = { ...errors };
+        let isVaild = true;
+        // if (formData.name.trim() === "" && formData.email.trim() === "" && formData.password.trim() === "") {
+        //     newErrors.name = 'Username is required';
+        //     newErrors.email = 'Email is required';
+        //     newErrors.password = 'Password is required';
+        //     isVaild = false;
+        // }
 
+        if (formData.name.trim() === "" && formData.password.trim() === "" && formData.email.trim() === "") {
+            newErrors.name = 'Username is required';
+            newErrors.password = 'password is required';
+            newErrors.email = 'Email is required';
+            isVaild = false;
+        }
+
+        if (formData.name.length < 7 && formData.name.trim() !== "") {
+            newErrors.name = 'Username must be at least 5 characters long';
+            isVaild = false;
+        }
+        if (formData.email.length < 10 && formData.email.trim() !== "") {
+            newErrors.email = 'Email must be at least 8 characters long';
+            isVaild = false;
+        }
+
+        if (formData.email == fetchData.email) {
+            newErrors.email = 'Email id alreay exits';
+            isVaild = false;
+        }
+
+        if (formData.password.length < 7 && formData.password.trim() !== "") {
+            newErrors.password = 'Password must be at least 8 characters long';
+            isVaild = false;
+        }
+        setErrors(newErrors);
+        return isVaild;
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+        delete errors[name]
+    };
+    const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
-        // let inputs = document.querySelectorAll('.form-control')
-        // inputs.forEach(ele => {
-        //     if (ele.value == "") {
-        //         alert("Please enter the values")
-        //         console.log("Please enter the values");
-        //         navigate('/register');
-        //     }
-        //     else {
-        axios.post('http://localhost:8081/register', values)
-            .then(res => {
-                if (res.data.Status == "Success") {
-                    navigate('/login');
-                    console.log(res.data.Status);
-                } else {
-                    alert("Error");
-                }
-            })
-            .catch(err => err.json());
-        //     }
-        // })
+        if (validate()) {
+            axios.post('http://localhost:8081/register', formData)
+                .then(res => {
+                    if (res.data.Status == "Success") {
+                        localStorage.setItem('username', formData.name)
+                        localStorage.setItem('email', formData.email)
+                        navigate('/login');
+                        console.log(res);
+                    } else {
+
+                        alert("Error");
+                    }
+                })
+                .catch(err => err.json());
+        }
+        else {
+            console.log("not okay");
+        }
     }
-    fetchData.forEach(ele => {
-        console.log(ele);
-    })
-
-
     return (
         <div>
             <p className='alertMessage'></p>
@@ -62,23 +99,21 @@ function Register() {
                 <div>
                     <h1 className='signUp'>Sign up</h1>
                 </div>
-
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputUsername" className="form-label">Username</label>
-                        <input type="text" className="form-control w-75" onChange={e => setValues({ ...values, name: e.target.value })} id="exampleInputEmail1" placeholder="Enter username" name='name' />
-                        {/* {firstnameError ? <label className='text-danger p-2 '>FirstName is required</label> : ""} */}
+                        <input type="text" className="form-control w-75" onChange={handleChange} value={formData.name} id="exampleInputEmail1" placeholder="Enter username" name='name' />
+                        {errors.name ? <span className="error">{errors.name}</span> : ""}
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                        <input type="email" className="form-control  w-75" onChange={e => setValues({ ...values, email: e.target.value })} id="exampleInputEmail1" placeholder="Enter email" name='email' />
-                        {/* {emailError ? <label className='text-danger p-2 '>email is required</label> : ""} */}
-
+                        <input type="email" className="form-control  w-75" onChange={handleChange} value={formData.email} id="exampleInputEmail1" placeholder="Enter email" name='email' />
+                        {errors.email && <span className="error">{errors.email}</span>}
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                        <input type="password" className='form-control  w-75' onChange={e => setValues({ ...values, password: e.target.value })} id="exampleInputPassword1" placeholder="password" name='password' />
-                        {/* {passwordError ? <label className='text-danger p-2 '>password is required</label> : ""} */}
+                        <input type="password" className='form-control  w-75' onChange={handleChange} value={formData.password} id="exampleInputPassword1" placeholder="password" name='password' />
+                        {errors.password && <span className="error">{errors.password}</span>}
                     </div>
                     <button type='submit' className="btn btn-primary">Register</button>
                     <div>
@@ -86,7 +121,6 @@ function Register() {
                     </div>
                 </form>
             </div>
-
         </div>
     )
 }
