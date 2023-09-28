@@ -20,7 +20,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "dckap",
     password: "Dckap2023Ecommerce",
-    database: 'registeration'
+    database: 'registration'
 })
 
 const verifyUser = (req, res, next) => {
@@ -44,12 +44,13 @@ const verifyUser = (req, res, next) => {
 
 
 app.get('/', verifyUser, (req, res) => {
+    // console.log(req.id);
     return res.json({ Status: "Success", name: req.name, id: req.id });
 })
 
 
 app.post('/register', (req, res) => {
-    const sql = "INSERT INTO signup (`name`,`email`,`password`) VALUES(?)";
+    const sql = "INSERT INTO login (`name`,`email`,`password`) VALUES(?)";
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Error for hashing password" });
 
@@ -71,7 +72,7 @@ app.post('/register', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-    const sql = 'SELECT * from signup where email = ?'
+    const sql = 'SELECT * from login where email = ?'
     db.query(sql, [req.body.email], (err, data) => {
         if (err) {
             return res.json({ Error: 'Login error in server' })
@@ -83,6 +84,7 @@ app.post('/login', (req, res) => {
                     const name = data[0].name;
                     const token = jwt.sign({ name, id: data[0].id }, 'jwt-secret-key', { expiresIn: '1d' });
                     res.cookie('token', token);
+                    console.log(token);
                     return res.json({ Status: 'Success' })
                 }
                 else {
@@ -97,7 +99,7 @@ app.post('/login', (req, res) => {
 
 
 app.get('/register', (req, res) => {
-    const sql = "SELECT * from signup";
+    const sql = "SELECT * from login";
     db.query(sql, (err, data) => {
         if (err) {
             return res.json(err)
@@ -117,34 +119,51 @@ app.listen(8081, () => {
     console.log("Running...")
 })
 
+
 app.post('/home', verifyUser, (req, res) => {
-    const sql = "INSERT INTO tasks (`user_id`,taskName`,`description`) VALUES(?)";
+    const sql = "INSERT INTO tasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
-        req.id,
         req.body.taskName,
         req.body.description,
+        req.id
     ];
-
     db.query(sql, [values], (err, data) => {
-        if (err) {
-            return res.json(err)
-        }
-        if (res) {
-            return res.json({ Status: 'Success' })
-        }
+        if (err) return res.json({ Error: "Task adding error" });
+
+        return res.json({ Status: "Success" });
+    })
+})
+
+app.get('/home', (req, res) => {
+    const sql = "SELECT * FROM tasks";
+    db.query(sql, (err, data) => {
+        if (err) return res.json({ Error: "Fetch Failure" })
         else {
-            return res.json(data)
+            return res.json({ data });
+            // console.log(res.data);
         }
     })
 })
 
-// create table tasks(
-//     id int not null AUTO_INCREMENT,
-//     user_id int,
-//     taskName varchar(255),
-//     description varchar(255),
-//     created_at timestamp,
-//     updated_at timestamp,
-//     PRIMARY key(id),
-//     FOREIGN key(user_id) REFERENCES signup(id)
-//     );
+
+// Database tables
+/*
+create table login(
+    id int not null AUTO_INCREMENT,
+    name varchar(255),
+    email varchar(255),
+    password varchar(255),
+    created_at timestamp,
+    updated_at timestamp,
+    primary key(id));
+    
+    create table tasks(
+    id int not null AUTO_INCREMENT,
+    task_name varchar(255),
+    description varchar(255),
+    user_id int,
+    created_at timestamp,
+    updated_at timestamp,
+    PRIMARY KEY (id),
+    FOREIGN key(user_id) REFERENCES login(id) on DELETE SET null);
+*/

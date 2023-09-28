@@ -15,7 +15,7 @@ export default function Home() {
     taskName: '',
     description: '',
   });
-
+  const [storeData, setStoremData] = useState([]);
   const [errors, setErrors] = useState({
     taskName: '',
     description: '',
@@ -56,7 +56,7 @@ export default function Home() {
         .then(res => {
           if (res.data.Status == "Success") {
             console.log(res.data.Status);
-            console.log(res.data.id);
+            // console.log(formData.taskName);
           }
           else {
             console.log(res.data.Error);
@@ -97,6 +97,7 @@ export default function Home() {
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Homepage</h1></center>
       <div className='d-flex justify-content-around'>
         <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
+
         <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
       </div>
       <Button type="primary" className='ms-5' onClick={showModal}>

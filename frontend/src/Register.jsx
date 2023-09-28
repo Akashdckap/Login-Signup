@@ -80,7 +80,7 @@ function Register() {
                         localStorage.setItem('username', formData.name)
                         localStorage.setItem('email', formData.email)
                         navigate('/login');
-                        console.log(res);
+                        // console.log(res);
                     } else {
                         alert("Error");
                     }
