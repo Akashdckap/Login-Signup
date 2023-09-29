@@ -15,7 +15,7 @@ export default function Home() {
     taskName: '',
     description: '',
   });
-  const [storeData, setStoremData] = useState([]);
+  const [storeData, setStoreData] = useState([]);
   const [errors, setErrors] = useState({
     taskName: '',
     description: '',
@@ -49,34 +49,42 @@ export default function Home() {
     return isVaild;
   }
 
-  const handleSubmit = () => {
-    // e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (validate()) {
-      axios.post('http://localhost:8081/home', formData)
-        .then(res => {
-          if (res.data.Status == "Success") {
-            console.log(res.data.Status);
-            // console.log(formData.taskName);
-          }
-          else {
-            console.log(res.data.Error);
-          }
-        })
+      axios.post('http://localhost:5051/home', formData)
+        .then(res => console.log(res))
         .catch(err => console.log(err));
+      setIsModalOpen(false);
+      window.location.reload(true)
     }
     else {
       console.log("not okay");
     }
   }
 
+  // useEffect(() => {
+  //   fetch('http://localhost:5051/home')
+  //     .then(res => res.json())
+
+  //     .then(data => setStoreData(data))
+  //     .catch(err => console.log("data", err))
+  // }, [])
+  // console.log(storeData);
+
+
   axios.defaults.withCredentials = true;
   useEffect(() => {
-    axios.get('http://localhost:8081')
+    axios.get('http://localhost:5051/')
       .then(res => {
         if (res.data.Status === "Success") {
           setAuth(true);
           setName(res.data.name);
-          // console.log(res.data.id);
+          axios.get('http://localhost:5051/home')
+            .then(({ data }) => {
+              setStoreData(data)
+            })
+            .catch(err => console.log("data", err))
         } else {
           setAuth(false)
           navigate('/login');
@@ -87,7 +95,7 @@ export default function Home() {
   }, [])
 
   const handleDeleteAccount = () => {
-    axios.get('http://localhost:8081/logout')
+    axios.get('http://localhost:5051/logout')
       .then(res => {
         location.reload(true)
       }).catch(err => console.log(err))
@@ -97,7 +105,6 @@ export default function Home() {
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Homepage</h1></center>
       <div className='d-flex justify-content-around'>
         <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
-
         <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
       </div>
       <Button type="primary" className='ms-5' onClick={showModal}>
@@ -106,7 +113,7 @@ export default function Home() {
       <Modal title="Task Form" open={isModalOpen} okText={"submit"} onCancel={handleCancel} onOk={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="exampleFormControlInput1" className="form-label">Task name</label>
-          <input type="email" className="form-control" onChange={handleChange} value={formData.taskName} id="exampleFormControlInput1" placeholder="Enter a task name" name='taskName' />
+          <input type="text" className="form-control" onChange={handleChange} value={formData.taskName} id="exampleFormControlInput1" placeholder="Enter a task name" name='taskName' />
           {errors.taskName ? <span className="error">{errors.taskName}</span> : ""}
         </div>
         <div className="mb-3">
@@ -115,6 +122,16 @@ export default function Home() {
           {errors.description ? <span className="error">{errors.description}</span> : ""}
         </div>
       </Modal>
+      <div className='taskMainContainer'>
+        {
+          storeData.map((item, index) =>
+            <div key={index} className='taskContainer'>
+              <p><span>Task Name : </span>{item.task_name}</p>
+              <p><span>Description : </span>{item.description}</p>
+            </div>
+          )
+        }
+      </div>
     </div>
   )
 }

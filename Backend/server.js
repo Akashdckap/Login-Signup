@@ -25,11 +25,13 @@ const db = mysql.createConnection({
 
 const verifyUser = (req, res, next) => {
     const token = req.cookies.token;
+    console.log(req.cookies);
     if (!token) {
         return res.json({ Error: "You are not authenticated" });
     }
     else {
         jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+            // console.log(decoded);
             if (err) {
                 return res.json({ Error: "Token is not okay" })
             }
@@ -44,10 +46,8 @@ const verifyUser = (req, res, next) => {
 
 
 app.get('/', verifyUser, (req, res) => {
-    // console.log(req.id);
     return res.json({ Status: "Success", name: req.name, id: req.id });
 })
-
 
 app.post('/register', (req, res) => {
     const sql = "INSERT INTO login (`name`,`email`,`password`) VALUES(?)";
@@ -64,11 +64,11 @@ app.post('/register', (req, res) => {
             return res.json({ Status: "Success" })
         })
     })
-    const values = [
-        req.body.name,
-        req.body.email,
-        req.body.password
-    ];
+    // const values = [
+    //     req.body.name,
+    //     req.body.email,
+    //     req.body.password
+    // ];
 })
 
 app.post('/login', (req, res) => {
@@ -115,10 +115,19 @@ app.get('/logout', (req, res) => {
     return res.json({ Status: "Success" });
 })
 
-app.listen(8081, () => {
-    console.log("Running...")
-})
 
+
+
+app.get('/home', verifyUser, (req, res) => {
+    console.log(req.id);
+    const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
+    db.query(sql, (err, data) => {
+        if (err) return res.json({ Error: "Fetch Failure" })
+        else {
+            return res.json(data);
+        }
+    })
+})
 
 app.post('/home', verifyUser, (req, res) => {
     const sql = "INSERT INTO tasks (`task_name`,`description`,`user_id`) VALUES(?)";
@@ -129,25 +138,21 @@ app.post('/home', verifyUser, (req, res) => {
     ];
     db.query(sql, [values], (err, data) => {
         if (err) return res.json({ Error: "Task adding error" });
-
         return res.json({ Status: "Success" });
     })
 })
-
-app.get('/home', (req, res) => {
-    const sql = "SELECT * FROM tasks";
-    db.query(sql, (err, data) => {
-        if (err) return res.json({ Error: "Fetch Failure" })
-        else {
-            return res.json({ data });
-            // console.log(res.data);
-        }
-    })
+app.listen(5051, () => {
+    console.log("Running...")
 })
+
 
 
 // Database tables
 /*
+
+drop database registration;
+create database registration;
+
 create table login(
     id int not null AUTO_INCREMENT,
     name varchar(255),

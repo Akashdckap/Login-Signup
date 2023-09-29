@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, json, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Register() {
@@ -14,15 +14,18 @@ function Register() {
         password: '',
     });
     const [fetchData, setfetchData] = useState([])
+
     useEffect(() => {
         fetch('http://localhost:8081/register')
             .then(res => res.json())
+            // .then(data=>console.log(data))
             .then(data => data.forEach((ele) => {
                 console.log(ele);
                 setfetchData(ele)
             }))
             .catch(err => err.json())
     }, [])
+
     const validate = () => {
         let newErrors = { ...errors };
         let isVaild = true;
@@ -40,10 +43,10 @@ function Register() {
             isVaild = false;
         }
 
-        // if (formData.name.length < 7 && formData.name.trim() !== "") {
-        //     newErrors.name = 'Username must be at least 5 characters long';
-        //     isVaild = false;
-        // }
+        if (formData.name.length < 4 && formData.name.trim() !== "") {
+            newErrors.name = 'Username must be at least 5 characters long';
+            isVaild = false;
+        }
         if (formData.email.length < 10 && formData.email.trim() !== "") {
             newErrors.email = 'Email must be at least 8 characters long';
             isVaild = false;
@@ -74,7 +77,7 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:8081/register', formData)
+            axios.post('http://localhost:5051/register', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
                         localStorage.setItem('username', formData.name)

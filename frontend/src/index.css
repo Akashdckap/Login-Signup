@@ -24,6 +24,28 @@ body {
   color: red;
 }
 
+.taskMainContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: start;
+  row-gap: 27px;
+  column-gap: 78px;
+  margin: 29px auto;
+  padding: 0px 49px;
+}
+
+
+.taskContainer {
+  height: auto;
+  width: 20%;
+  background-color: turquoise;
+  padding: 2px 10px;
+  border-radius: 5px;
+}
+
+
 /* .form-control:focus {
   border-style: none;
   border-color: white;
