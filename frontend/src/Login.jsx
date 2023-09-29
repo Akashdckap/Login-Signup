@@ -50,7 +50,7 @@ export default function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:8081/login', formData)
+            axios.post('http://localhost:5051/login', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
                         navigate('/home');
