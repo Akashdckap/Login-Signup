@@ -80,8 +80,8 @@ function UserRegister() {
             axios.post('http://localhost:5051/userRegister', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
-                        localStorage.setItem('username', formData.name)
-                        localStorage.setItem('email', formData.email)
+                        // localStorage.setItem('username', formData.name)
+                        // localStorage.setItem('email', formData.email)
                         navigate('/userLogin');
                         // console.log(res);
                     } else {
