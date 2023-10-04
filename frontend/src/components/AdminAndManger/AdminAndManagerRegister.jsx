@@ -23,17 +23,9 @@ export default function AdminAndManagerRegister() {
         password: '',
     });
 
-    const navigate = useNavigate()
     const validate = () => {
         let newErrors = { ...errors };
         let isVaild = true;
-        // if (formData.name.trim() === "" && formData.email.trim() === "" && formData.password.trim() === "") {
-        //     newErrors.name = 'Username is required';
-        //     newErrors.email = 'Email is required';
-        //     newErrors.password = 'Password is required';
-        //     isVaild = false;
-        // }
-
         if (formData.name.trim() === "" && formData.password.trim() === "" && formData.email.trim() === "") {
             newErrors.name = 'Username is required';
             newErrors.password = 'password is required';

@@ -1,4 +1,4 @@
-import express, { json, response } from "express";
+import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -47,11 +47,19 @@ const verifyUser = (req, res, next) => {
 app.get('/userHome', verifyUser, (req, res) => {
     const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
     db.query(sql, (err, data) => {
-        if (err) return res.json({ Error: "Fetch Failure" })
+        if (err) return res.json({ Error: "Fetch Failure in userhome router" })
         else {
             return res.json({ data, Status: "Success", name: req.name, id: req.id });
         }
     })
+})
+
+app.get('/managerHome', verifyUser, (req, res) => {
+    return res.json({ Status: "Success", name: req.name, id: req.id });
+})
+
+app.get('/adminHome', verifyUser, (req, res) => {
+    return res.json({ Status: "Success", name: req.name, id: req.id });
 })
 
 
@@ -74,7 +82,7 @@ app.post('/userRegister', (req, res) => {
 })
 
 
-app.post('/adminOrManagerRegister',(req,res)=>{
+app.post('/adminOrManagerRegister', (req, res) => {
     const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)"
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Error for hashing password" });
@@ -117,21 +125,22 @@ app.post('/userLogin', (req, res) => {
     })
 })
 
-app.post('/adminOrManagerLogin',(req,res)=>{
+app.post('/adminOrManagerLogin', (req, res) => {
     const sql = 'SELECT * FROM adminManager WHERE email = ?';
 
-    db.query(sql,[req.body.email], (err,data)=>{
-        if(err){
-            return res.json({Error : "Login error"})
+    db.query(sql, [req.body.email], (err, data) => {
+        if (err) {
+            return res.json({ Error: "Login error" })
         }
-        if(data.length>0){
-            bcrypt.compare(req.body.password.toString(),data[0].password,(err,response)=>{
-                if(err) return res.json({Error : "Password compare error"})
+        if (data.length > 0) {
+            bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
+                if (err) return res.json({ Error: "Password compare error" })
                 if (response) {
                     const name = data[0].name;
+                    const role = data[0].role
                     const id = data[0].id
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
-                    return res.json({ Status: 'Success', token: token })
+                    return res.json({ Status: 'Success', token: token, role: role })
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })

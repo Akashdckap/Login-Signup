@@ -12,8 +12,6 @@ export default function UserLogin() {
         email: '',
         password: '',
     });
-    // const [emailerrors, setEmailErrors] = useState(true)
-    // const [passworderrors, setPasswordErrors] = useState(true)
     const validate = () => {
         let newErrors = { ...errors };
         let isVaild = true;
@@ -69,7 +67,6 @@ export default function UserLogin() {
                 <div>
                     <h1>Login page</h1>
                 </div>
-
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
