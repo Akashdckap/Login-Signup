@@ -85,7 +85,7 @@ export default function AdminAndManagerRegister() {
                         navigate('/adminOrManagerLogin');
                         // console.log(res);
                     } else {
-                        alert("Error");
+                        alert(res.data.Error);
                     }
                 })
                 .catch(err => console.log(err));
