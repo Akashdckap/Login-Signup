@@ -110,6 +110,7 @@ app.get('/userRegister', (req, res) => {
         else {
             return res.json(data)
         }
+        
     })
 })
 
