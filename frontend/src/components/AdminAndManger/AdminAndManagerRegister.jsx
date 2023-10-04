@@ -89,7 +89,7 @@ export default function AdminAndManagerRegister() {
             <p className='alertMessage'></p>
             <div className='container w-50 p-20'>
                 <div>
-                    <h2 className='signUp'>Admin And Manager Register</h2>
+                    <h2 className='signUp'>Admin And Manager <span className='text-success'>Register</span></h2>
                 </div>
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
