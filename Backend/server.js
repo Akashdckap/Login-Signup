@@ -28,7 +28,7 @@ const verifyUser = (req, res, next) => {
     const token = authHeader ? authHeader.split(' ')[1] : "auth header error";
 
     if (!token) {
-        console.log(token);
+        // console.log(token);
         return res.json({ Error: "You are not authenticated" });
     }
     else {
@@ -64,41 +64,61 @@ app.get('/adminHome', verifyUser, (req, res) => {
 
 
 app.post('/userRegister', (req, res) => {
+    const exists = "SELECT * FROM users WHERE email = ?"
     const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
-    bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
-        if (err) return res.json({ Error: "Error for hashing password" });
-        const values = [
-            req.body.name,
-            req.body.email,
-            hash
-        ];
-        db.query(sql, [values], (err, result) => {
-            if (err) return res.json({ Error: "Inserting datas in server" })
-            else {
-                return res.json({ Status: "Success" })
-            }
-        })
+    db.query(exists,[req.body.email],(err,data)=>{
+        if(err) throw err;
+        else if(data.length>0){
+            return res.json({Error:"Email already exists"})
+        }
+        else{
+            bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+                if (err) return res.json({ Error: "Error for hashing password" });
+                const values = [
+                    req.body.name,
+                    req.body.email,
+                    hash
+                ];
+                db.query(sql, [values], (err, result) => {
+                    if (err) return res.json({ Error: "Inserting datas in server" })
+                    else {
+                        return res.json({ Status: "Success" })
+                    }
+                })
+            })
+        }
     })
+   
 })
 
 
-app.post('/adminOrManagerRegister', (req, res) => {
-    const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)"
-    bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
-        if (err) return res.json({ Error: "Error for hashing password" });
-        const values = [
-            req.body.name,
-            req.body.role,
-            req.body.email,
-            hash
-        ]; db.query(sql, [values], (err, result) => {
-            if (err) return res.json({ Error: "Inserting admin data is error" });
-            else {
-                return res.json({ Status: "Success" })
-            }
-        })
-    })
-})
+
+app.post('/adminOrManagerRegister',(req,res)=>{
+
+    const exists = "SELECT * FROM adminManager WHERE email = ?";
+    const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)";
+    db.query(exists,[req.body.email],(err,data)=>{
+        if(err) throw err;
+        else if(data.length>0){
+            return res.json({Error:"Email id already exists"})
+        }
+        else{
+            bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
+                if(err) return res.json({ Error: "Error for hashing password"});
+                const values=[
+                    req.body.name,
+                    req.body.role,
+                    req.body.email,
+                    hash
+                ];db.query(sql, [values], (err,result)=>{
+                    if(err) return res.json({ Error: "Inserting admin data is error"});
+                    else{
+                        return res.json({ Status: "Success" })
+                    }
+                })
+        
+            })
+        }
 
 app.post('/userLogin', (req, res) => {
     const sql = 'SELECT * from users where email = ?'
@@ -136,11 +156,12 @@ app.post('/adminOrManagerLogin', (req, res) => {
             bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
                 if (err) return res.json({ Error: "Password compare error" })
                 if (response) {
+                    // console.log(data);
                     const name = data[0].name;
-                    const role = data[0].role
-                    const id = data[0].id
+                    const id = data[0].id;
+                    const role = data[0].role;
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
-                    return res.json({ Status: 'Success', token: token, role: role })
+                    return res.json({ Status: 'Success', token: token, role: role})
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
