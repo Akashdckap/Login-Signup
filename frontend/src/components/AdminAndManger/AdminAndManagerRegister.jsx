@@ -7,11 +7,15 @@ export default function AdminAndManagerRegister() {
 
     const [formData, setFormData] = useState({
         name: '',
+        role: '',
         email: '',
         password: '',
     });
+
+    const navigate = useNavigate()
     const [errors, setErrors] = useState({
         name: '',
+        role:'',
         email: '',
         password: '',
     });
@@ -42,10 +46,10 @@ export default function AdminAndManagerRegister() {
             isVaild = false;
         }
 
-        if (formData.email == fetchData.email) {
-            newErrors.email = 'Email id alreay exits';
-            isVaild = false;
-        }
+        // if (formData.email == fetchData.email) {
+        //     newErrors.email = 'Email id alreay exits';
+        //     isVaild = false;
+        // }
 
         if (formData.password.length < 7 && formData.password.trim() !== "") {
             newErrors.password = 'Password must be at least 8 characters long';
@@ -67,18 +71,18 @@ export default function AdminAndManagerRegister() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            // axios.post('http://localhost:5051/userRegister', formData)
-            //     .then(res => {
-            //         if (res.data.Status == "Success") {
-            //             localStorage.setItem('username', formData.name)
-            //             localStorage.setItem('email', formData.email)
-            //             navigate('/userLogin');
-            //             // console.log(res);
-            //         } else {
-            //             alert("Error");
-            //         }
-            //     })
-            //     .catch(err => err.json());
+            axios.post('http://localhost:5051/adminOrManagerRegister', formData)
+                .then(res => {
+                    if (res.data.Status == "Success") {
+                        localStorage.setItem('username', formData.name)
+                        localStorage.setItem('email', formData.email)
+                        navigate('/adminOrManagerLogin');
+                        // console.log(res);
+                    } else {
+                        alert("Error");
+                    }
+                })
+                .catch(err => console.log(err));
         }
         else {
             console.log("not okay");
@@ -99,12 +103,12 @@ export default function AdminAndManagerRegister() {
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputUsername" className="form-label">Select one</label>
-                        <select id="adminOrManager" className='form-control  w-75'>
+                        <select className='form-control  w-75' onChange={handleChange} value={formData.role} id="adminOrManager" name='role'>
                             <option value="None">None</option>
                             <option value="Admin">Admin</option>
                             <option value="Manager">Manager</option>
                         </select>
-                        {errors.name ? <span className="error">{errors.name}</span> : ""}
+                        {errors.name ? <span className="error">{errors.role}</span> : ""}
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
