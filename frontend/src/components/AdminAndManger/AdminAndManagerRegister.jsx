@@ -9,7 +9,9 @@ export default function AdminAndManagerRegister() {
         name: '',
         role: '',
         email: '',
+        role: '',
         password: '',
+
     });
 
     const navigate = useNavigate()
@@ -17,9 +19,11 @@ export default function AdminAndManagerRegister() {
         name: '',
         role:'',
         email: '',
+        role: '',
         password: '',
     });
 
+    const navigate = useNavigate()
     const validate = () => {
         let newErrors = { ...errors };
         let isVaild = true;
@@ -34,6 +38,7 @@ export default function AdminAndManagerRegister() {
             newErrors.name = 'Username is required';
             newErrors.password = 'password is required';
             newErrors.email = 'Email is required';
+            newErrors.adminOrManager = 'any one field is required';
             isVaild = false;
         }
 
@@ -71,6 +76,7 @@ export default function AdminAndManagerRegister() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
+
             axios.post('http://localhost:5051/adminOrManagerRegister', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
@@ -85,6 +91,7 @@ export default function AdminAndManagerRegister() {
                 .catch(err => console.log(err));
         }
         else {
+            navigate('/adminOrManagerRegister')
             console.log("not okay");
         }
     }
@@ -93,7 +100,7 @@ export default function AdminAndManagerRegister() {
             <p className='alertMessage'></p>
             <div className='container w-50 p-20'>
                 <div>
-                    <h2 className='signUp'>Admin And Manager <span className='text-success'>Register</span></h2>
+                    <h2 className='signUp'>Admin Or Manager <span className='text-success'>Register</span></h2>
                 </div>
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
@@ -101,14 +108,17 @@ export default function AdminAndManagerRegister() {
                         <input type="text" className="form-control w-75" onChange={handleChange} value={formData.name} id="exampleInputEmail1" placeholder="Enter username" name='name' />
                         {errors.name ? <span className="error">{errors.name}</span> : ""}
                     </div>
-                    <div className="form-group mb-3">
-                        <label htmlFor="exampleInputUsername" className="form-label">Select one</label>
-                        <select className='form-control  w-75' onChange={handleChange} value={formData.role} id="adminOrManager" name='role'>
+
+                    <div className="form-floating mb-3">
+                        <select name='role' onChange={handleChange} value={formData.role} className="form-select w-75" id="floatingSelect" aria-label="Floating label select example">
+
                             <option value="None">None</option>
                             <option value="Admin">Admin</option>
                             <option value="Manager">Manager</option>
                         </select>
-                        {errors.name ? <span className="error">{errors.role}</span> : ""}
+
+                        <label htmlFor="floatingSelect">Role Type</label>
+
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
