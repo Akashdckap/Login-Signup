@@ -51,17 +51,17 @@ export default function AdminAndMangerLogin() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            navigate('/adminHome')
-            //     axios.post('http://localhost:5051/userLogin', formData)
-            //         .then(res => {
-            //             if (res.data.Status === "Success") {
-            //                 localStorage.setItem('token', res.data.token)
-            //                 navigate('/userHome');
-            //             } else {
-            //                 alert(res.data.Error);
-            //             }
-            //         })
-            //         .catch(err => console.log(err));
+            // navigate('/adminHome')
+                axios.post('http://localhost:5051/adminOrManagerLogin', formData)
+                    .then(res => {
+                        if (res.data.Status === "Success") {
+                            localStorage.setItem('token', res.data.token)
+                            navigate('/adminHome');
+                        } else {
+                            alert(res.data.Error);
+                        }
+                    })
+                    .catch(err => console.log(err));
         }
         else {
             navigate('/adminOrManagerLogin')

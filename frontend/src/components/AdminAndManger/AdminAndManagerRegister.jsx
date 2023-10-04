@@ -7,14 +7,17 @@ export default function AdminAndManagerRegister() {
 
     const [formData, setFormData] = useState({
         name: '',
+        role: '',
         email: '',
         role: '',
         password: '',
 
     });
 
+    const navigate = useNavigate()
     const [errors, setErrors] = useState({
         name: '',
+        role:'',
         email: '',
         role: '',
         password: '',
@@ -73,22 +76,19 @@ export default function AdminAndManagerRegister() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            navigate('/adminOrManagerLogin')
 
             axios.post('http://localhost:5051/adminOrManagerRegister', formData)
                 .then(res => {
-                    console.log(res);
-                    navigate('/adminOrManagerRegister')
-                    //         if (res.data.Status == "Success") {
-                    //             localStorage.setItem('username', formData.name)
-                    //             localStorage.setItem('email', formData.email)
-                    //             navigate('/userLogin');
-                    //             // console.log(res);
-                    //         } else {
-                    //             alert("Error");
-                    //         }
+                    if (res.data.Status == "Success") {
+                        localStorage.setItem('username', formData.name)
+                        localStorage.setItem('email', formData.email)
+                        navigate('/adminOrManagerLogin');
+                        // console.log(res);
+                    } else {
+                        alert("Error");
+                    }
                 })
-                .catch(err => err.json());
+                .catch(err => console.log(err));
         }
         else {
             navigate('/adminOrManagerRegister')
@@ -108,13 +108,17 @@ export default function AdminAndManagerRegister() {
                         <input type="text" className="form-control w-75" onChange={handleChange} value={formData.name} id="exampleInputEmail1" placeholder="Enter username" name='name' />
                         {errors.name ? <span className="error">{errors.name}</span> : ""}
                     </div>
+
                     <div className="form-floating mb-3">
                         <select name='role' onChange={handleChange} value={formData.role} className="form-select w-75" id="floatingSelect" aria-label="Floating label select example">
+
                             <option value="None">None</option>
                             <option value="Admin">Admin</option>
                             <option value="Manager">Manager</option>
                         </select>
+
                         <label htmlFor="floatingSelect">Role Type</label>
+
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>

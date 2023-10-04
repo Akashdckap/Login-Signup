@@ -1,4 +1,4 @@
-import express, { json } from "express";
+import express, { json, response } from "express";
 import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -56,7 +56,7 @@ app.get('/userHome', verifyUser, (req, res) => {
 
 
 app.post('/userRegister', (req, res) => {
-    const sql = "INSERT INTO login (`name`,`email`,`password`) VALUES(?)";
+    const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Error for hashing password" });
         const values = [
@@ -73,7 +73,8 @@ app.post('/userRegister', (req, res) => {
     })
 })
 
-app.post('/adminOrManagerRegister', (req, res) => {
+
+app.post('/adminOrManagerRegister',(req,res)=>{
     const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)"
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Error for hashing password" });
@@ -91,9 +92,8 @@ app.post('/adminOrManagerRegister', (req, res) => {
     })
 })
 
-
 app.post('/userLogin', (req, res) => {
-    const sql = 'SELECT * from login where email = ?'
+    const sql = 'SELECT * from users where email = ?'
     db.query(sql, [req.body.email], (err, data) => {
         if (err) {
             return res.json({ Error: 'Login error in server' })
@@ -112,6 +112,33 @@ app.post('/userLogin', (req, res) => {
                 }
             })
         } else {
+            return res.json({ Error: 'No email existed' })
+        }
+    })
+})
+
+app.post('/adminOrManagerLogin',(req,res)=>{
+    const sql = 'SELECT * FROM adminManager WHERE email = ?';
+
+    db.query(sql,[req.body.email], (err,data)=>{
+        if(err){
+            return res.json({Error : "Login error"})
+        }
+        if(data.length>0){
+            bcrypt.compare(req.body.password.toString(),data[0].password,(err,response)=>{
+                if(err) return res.json({Error : "Password compare error"})
+                if (response) {
+                    const name = data[0].name;
+                    const id = data[0].id
+                    const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
+                    return res.json({ Status: 'Success', token: token })
+                }
+                else {
+                    return res.json({ Error: 'Password not matched' })
+                }
+            })
+        }
+        else {
             return res.json({ Error: 'No email existed' })
         }
     })
