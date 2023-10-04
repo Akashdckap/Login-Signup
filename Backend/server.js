@@ -75,6 +75,25 @@ app.post('/userRegister', (req, res) => {
     })
 })
 
+app.post('/adminRegister',(req,res)=>{
+    const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)"
+    bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
+        if(err) return res.json({ Error: "Error for hashing password"});
+        const values=[
+            req.body.name,
+            req.body.role,
+            req.body.email,
+            hash
+        ];db.query(sql, [values], (err,result)=>{
+            if(err) return res.json({ Error: "Inserting admin data is error"});
+            else{
+                return res.json({ Status: "Success" })
+            }
+        })
+
+    })
+})
+
 
 app.post('/userLogin', (req, res) => {
     const sql = 'SELECT * from login where email = ?'
