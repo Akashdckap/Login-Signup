@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #bfebfd;
 }
 
 
@@ -38,11 +39,12 @@ body {
 
 
 .taskContainer {
-  height: auto;
+  height: 100px;
   width: 20%;
   background-color: turquoise;
-  padding: 2px 10px;
+  padding: 10px 10px;
   border-radius: 5px;
+  overflow-y: scroll;
 }
 
 

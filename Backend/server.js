@@ -1,9 +1,9 @@
-import express from "express";
+import express, { json } from "express";
 import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import cookieParser from "cookie-parser";
+// import cookieParser from "cookie-parser";
 
 const salt = 10;
 
@@ -14,26 +14,27 @@ app.use(cors({
     methods: ["POST", "GET"],
     credentials: true
 }));
-app.use(cookieParser());
+// app.use(cookieParser());
 
 const db = mysql.createConnection({
     host: "localhost",
     user: "dckap",
     password: "Dckap2023Ecommerce",
     database: 'registration'
-})
+});
 
 const verifyUser = (req, res, next) => {
-    const token = req.cookies.token;
-    console.log(req.cookies);
+    const authHeader = req.headers.authorization;
+    const token = authHeader ? authHeader.split(' ')[1] : "auth header error";
+
     if (!token) {
+        console.log(token);
         return res.json({ Error: "You are not authenticated" });
     }
     else {
         jwt.verify(token, "jwt-secret-key", (err, decoded) => {
-            // console.log(decoded);
             if (err) {
-                return res.json({ Error: "Token is not okay" })
+                res.json({ Error: "Token is not okay" })
             }
             else {
                 req.name = decoded.name;
@@ -45,31 +46,35 @@ const verifyUser = (req, res, next) => {
 }
 
 
-app.get('/', verifyUser, (req, res) => {
-    return res.json({ Status: "Success", name: req.name, id: req.id });
+app.get('/home', verifyUser, (req, res) => {
+    const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
+    db.query(sql, (err, data) => {
+        if (err) return res.json({ Error: "Fetch Failure" })
+        else {
+            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+        }
+    })
 })
+
 
 app.post('/register', (req, res) => {
     const sql = "INSERT INTO login (`name`,`email`,`password`) VALUES(?)";
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Error for hashing password" });
-
         const values = [
             req.body.name,
             req.body.email,
             hash
-        ]
+        ];
         db.query(sql, [values], (err, result) => {
             if (err) return res.json({ Error: "Inserting datas in server" })
-            return res.json({ Status: "Success" })
+            else {
+                return res.json({ Status: "Success" })
+            }
         })
     })
-    // const values = [
-    //     req.body.name,
-    //     req.body.email,
-    //     req.body.password
-    // ];
 })
+
 
 app.post('/login', (req, res) => {
     const sql = 'SELECT * from login where email = ?'
@@ -82,10 +87,9 @@ app.post('/login', (req, res) => {
                 if (err) return res.json({ Error: 'password compare error' })
                 if (response) {
                     const name = data[0].name;
-                    const token = jwt.sign({ name, id: data[0].id }, 'jwt-secret-key', { expiresIn: '1d' });
-                    res.cookie('token', token);
-                    console.log(token);
-                    return res.json({ Status: 'Success' })
+                    const id = data[0].id
+                    const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
+                    return res.json({ Status: 'Success', token: token })
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
@@ -97,7 +101,6 @@ app.post('/login', (req, res) => {
     })
 })
 
-
 app.get('/register', (req, res) => {
     const sql = "SELECT * from login";
     db.query(sql, (err, data) => {
@@ -106,25 +109,6 @@ app.get('/register', (req, res) => {
         }
         else {
             return res.json(data)
-        }
-    })
-})
-
-app.get('/logout', (req, res) => {
-    res.clearCookie('token');
-    return res.json({ Status: "Success" });
-})
-
-
-
-
-app.get('/home', verifyUser, (req, res) => {
-    console.log(req.id);
-    const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
-    db.query(sql, (err, data) => {
-        if (err) return res.json({ Error: "Fetch Failure" })
-        else {
-            return res.json(data);
         }
     })
 })
@@ -141,6 +125,8 @@ app.post('/home', verifyUser, (req, res) => {
         return res.json({ Status: "Success" });
     })
 })
+
+
 app.listen(5051, () => {
     console.log("Running...")
 })

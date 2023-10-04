@@ -16,7 +16,7 @@ function Register() {
     const [fetchData, setfetchData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:8081/register')
+        fetch('http://localhost:6000/register')
             .then(res => res.json())
             // .then(data=>console.log(data))
             .then(data => data.forEach((ele) => {
