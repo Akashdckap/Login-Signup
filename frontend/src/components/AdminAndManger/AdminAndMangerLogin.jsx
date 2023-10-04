@@ -54,6 +54,7 @@ export default function AdminAndMangerLogin() {
             // navigate('/adminHome')
                 axios.post('http://localhost:5051/adminOrManagerLogin', formData)
                     .then(res => {
+                        // console.log(res)
                         if (res.data.Status === "Success") {
                             localStorage.setItem('token', res.data.token)
                             navigate('/adminHome');

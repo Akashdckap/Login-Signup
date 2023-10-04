@@ -85,10 +85,10 @@ function UserRegister() {
                         navigate('/userLogin');
                         // console.log(res);
                     } else {
-                        alert("Error");
+                        alert(res.data.Error);
                     }
                 })
-                .catch(err => err.json());
+                .catch(err => console.log(err));
         }
         else {
             console.log("not okay");
