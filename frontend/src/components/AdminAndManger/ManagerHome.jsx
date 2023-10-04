@@ -21,9 +21,19 @@ export default function ManagerHome() {
       })
 
   }, [])
+
+  const handleDeleteAccount = () => {
+    localStorage.removeItem('token')
+    navigate('/adminOrManagerLogin')
+  }
+  
   return (
     <div>
-      <center className='p-3'><h2>ManagerHome page <span className='text-primary'>{name}</span></h2></center>
+      <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Manager Home page</h1></center>
+      <div className='d-flex justify-content-around'>
+        <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
+        <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
+      </div>
     </div>
   )
 }

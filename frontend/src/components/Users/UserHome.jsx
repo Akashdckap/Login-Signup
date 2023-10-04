@@ -55,13 +55,12 @@ export default function UserHome() {
     if (validate()) {
       axios.post('http://localhost:5051/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
-          // if (res.data.Status === "Success") {
-          console.log(res);
-          // console.log("Data stored successfully");
-          // }
-          // else {
-          //   alert("Error in store data")
-          // }  
+          if (res.data.Status === "Success") {
+            setMessage(res.data.Status);
+          }
+          else {
+            alert("Error in store data")
+          }
         })
         .catch(err => console.log(err));
       setIsModalOpen(false);
@@ -81,8 +80,9 @@ export default function UserHome() {
         if (res.data.Status === "Success") {
           setName(res.data.name);
           setStoreData(res.data.data)
-        } else {
           navigate('/userHome');
+        } else {
+          navigate('/userLogin');
           setMessage(res.data.Error);
         }
       })
@@ -96,11 +96,12 @@ export default function UserHome() {
 
   return (
     <div>
-      <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Homepage</h1></center>
+      <center><h1 style={{ color: 'ThreeDDarkShadow' }}>User Homepage</h1></center>
       <div className='d-flex justify-content-around'>
         <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
         <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
       </div>
+      {/* <h3>{message}</h3> */}
       <Button type="primary" className='ms-5' onClick={showModal}>
         Add task
       </Button>

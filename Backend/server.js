@@ -45,7 +45,7 @@ const verifyUser = (req, res, next) => {
     }
 }
 app.get('/userHome', verifyUser, (req, res) => {
-    const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
+    const sql = `SELECT * FROM userTasks where user_id = ${req.id}`;
     db.query(sql, (err, data) => {
         if (err) return res.json({ Error: "Fetch Failure in userhome router" })
         else {
@@ -66,12 +66,12 @@ app.get('/adminHome', verifyUser, (req, res) => {
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
     const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
-    db.query(exists,[req.body.email],(err,data)=>{
-        if(err) throw err;
-        else if(data.length>0){
-            return res.json({Error:"Email already exists"})
+    db.query(exists, [req.body.email], (err, data) => {
+        if (err) throw err;
+        else if (data.length > 0) {
+            return res.json({ Error: "Email already exists" })
         }
-        else{
+        else {
             bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
                 if (err) return res.json({ Error: "Error for hashing password" });
                 const values = [
@@ -88,37 +88,39 @@ app.post('/userRegister', (req, res) => {
             })
         }
     })
-   
+
 })
 
 
 
-app.post('/adminOrManagerRegister',(req,res)=>{
-
+app.post('/adminOrManagerRegister', (req, res) => {
     const exists = "SELECT * FROM adminManager WHERE email = ?";
     const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)";
-    db.query(exists,[req.body.email],(err,data)=>{
-        if(err) throw err;
-        else if(data.length>0){
-            return res.json({Error:"Email id already exists"})
+    db.query(exists, [req.body.email], (err, data) => {
+        if (err) throw err;
+        else if (data.length > 0) {
+            return res.json({ Error: "Email id already exists" })
         }
-        else{
-            bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
-                if(err) return res.json({ Error: "Error for hashing password"});
-                const values=[
+        else {
+            bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+                if (err) return res.json({ Error: "Error for hashing password" });
+                const values = [
                     req.body.name,
                     req.body.role,
                     req.body.email,
                     hash
-                ];db.query(sql, [values], (err,result)=>{
-                    if(err) return res.json({ Error: "Inserting admin data is error"});
-                    else{
+                ]; db.query(sql, [values], (err, result) => {
+                    if (err) return res.json({ Error: "Inserting admin data is error" });
+                    else {
                         return res.json({ Status: "Success" })
                     }
                 })
-        
+
             })
         }
+    });
+})
+
 
 app.post('/userLogin', (req, res) => {
     const sql = 'SELECT * from users where email = ?'
@@ -161,7 +163,7 @@ app.post('/adminOrManagerLogin', (req, res) => {
                     const id = data[0].id;
                     const role = data[0].role;
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
-                    return res.json({ Status: 'Success', token: token, role: role})
+                    return res.json({ Status: 'Success', token: token, role: role })
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
@@ -174,21 +176,21 @@ app.post('/adminOrManagerLogin', (req, res) => {
     })
 })
 
-app.get('/userRegister', (req, res) => {
-    const sql = "SELECT * from login";
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json(err)
-        }
-        else {
-            return res.json(data)
-        }
+// app.get('/userRegister', (req, res) => {
+//     const sql = "SELECT * from login";
+//     db.query(sql, (err, data) => {
+//         if (err) {
+//             return res.json(err)
+//         }
+//         else {
+//             return res.json(data)
+//         }
 
-    })
-})
+//     })
+// })
 
 app.post('/userHome', verifyUser, (req, res) => {
-    const sql = "INSERT INTO tasks (`task_name`,`description`,`user_id`) VALUES(?)";
+    const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
         req.body.taskName,
         req.body.description,
@@ -199,10 +201,6 @@ app.post('/userHome', verifyUser, (req, res) => {
         return res.json({ Status: "Success" });
     })
 })
-
-
 app.listen(5051, () => {
     console.log("Running...")
-})
-
-
+});
