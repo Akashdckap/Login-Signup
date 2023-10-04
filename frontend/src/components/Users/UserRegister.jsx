@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, json, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-function Register() {
+function UserRegister() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -15,16 +15,16 @@ function Register() {
     });
     const [fetchData, setfetchData] = useState([])
 
-    useEffect(() => {
-        fetch('http://localhost:6000/register')
-            .then(res => res.json())
-            // .then(data=>console.log(data))
-            .then(data => data.forEach((ele) => {
-                console.log(ele);
-                setfetchData(ele)
-            }))
-            .catch(err => err.json())
-    }, [])
+    // useEffect(() => {
+    //     fetch('http://localhost:6000/register')
+    //         .then(res => res.json())
+    //         // .then(data=>console.log(data))
+    //         .then(data => data.forEach((ele) => {
+    //             console.log(ele);
+    //             setfetchData(ele)
+    //         }))
+    //         .catch(err => err.json())
+    // }, [])
 
     const validate = () => {
         let newErrors = { ...errors };
@@ -77,12 +77,12 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:5051/register', formData)
+            axios.post('http://localhost:5051/userRegister', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
                         localStorage.setItem('username', formData.name)
                         localStorage.setItem('email', formData.email)
-                        navigate('/login');
+                        navigate('/userLogin');
                         // console.log(res);
                     } else {
                         alert("Error");
@@ -119,7 +119,7 @@ function Register() {
                     </div>
                     <button type='submit' className="btn btn-primary">Register</button>
                     <div>
-                        <p className='p-3'>Already have an account  <Link to='/login' className='btn btn-light border-secondary'>Login</Link></p>
+                        <p className='p-3'>Already have an account  <Link to='/userLogin' className='btn btn-light border-secondary'>Login</Link></p>
                     </div>
                 </form>
             </div>
@@ -127,4 +127,4 @@ function Register() {
     )
 }
 
-export default Register
+export default UserRegister

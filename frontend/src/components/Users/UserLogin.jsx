@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Login() {
+export default function UserLogin() {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -50,11 +50,11 @@ export default function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:5051/login', formData)
+            axios.post('http://localhost:5051/userLogin', formData)
                 .then(res => {
                     if (res.data.Status === "Success") {
                         localStorage.setItem('token', res.data.token)
-                        navigate('/home');
+                        navigate('/userHome');
                     } else {
                         alert(res.data.Error);
                     }
@@ -83,7 +83,7 @@ export default function Login() {
                     </div>
                     <button type='submit' className="btn btn-primary">Login</button>
                     <div>
-                        <p className='p-3'>Already have an account  <Link to='/register' className='btn btn-light border-secondary'>Register</Link></p>
+                        <p className='p-3'>Already have an account  <Link to='/userRegister' className='btn btn-light border-secondary'>Register</Link></p>
                     </div>
                 </form>
             </div>

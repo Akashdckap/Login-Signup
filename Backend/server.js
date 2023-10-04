@@ -46,7 +46,7 @@ const verifyUser = (req, res, next) => {
 }
 
 
-app.get('/home', verifyUser, (req, res) => {
+app.get('/userHome', verifyUser, (req, res) => {
     const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
     db.query(sql, (err, data) => {
         if (err) return res.json({ Error: "Fetch Failure" })
@@ -57,7 +57,7 @@ app.get('/home', verifyUser, (req, res) => {
 })
 
 
-app.post('/register', (req, res) => {
+app.post('/userRegister', (req, res) => {
     const sql = "INSERT INTO login (`name`,`email`,`password`) VALUES(?)";
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Error for hashing password" });
@@ -76,7 +76,7 @@ app.post('/register', (req, res) => {
 })
 
 
-app.post('/login', (req, res) => {
+app.post('/userLogin', (req, res) => {
     const sql = 'SELECT * from login where email = ?'
     db.query(sql, [req.body.email], (err, data) => {
         if (err) {
@@ -101,7 +101,7 @@ app.post('/login', (req, res) => {
     })
 })
 
-app.get('/register', (req, res) => {
+app.get('/userRegister', (req, res) => {
     const sql = "SELECT * from login";
     db.query(sql, (err, data) => {
         if (err) {
@@ -113,7 +113,7 @@ app.get('/register', (req, res) => {
     })
 })
 
-app.post('/home', verifyUser, (req, res) => {
+app.post('/userHome', verifyUser, (req, res) => {
     const sql = "INSERT INTO tasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
         req.body.taskName,

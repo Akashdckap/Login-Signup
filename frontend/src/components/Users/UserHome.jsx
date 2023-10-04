@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Button, Modal } from "antd";
 
 
-export default function Home() {
+export default function UserHome() {
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
@@ -53,7 +53,7 @@ export default function Home() {
     let token = localStorage.getItem('token')
     e.preventDefault();
     if (validate()) {
-      axios.post('http://localhost:5051/home', formData, { headers: { Authorization: `Bearer ${token}` } })
+      axios.post('http://localhost:5051/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
           // if (res.data.Status === "Success") {
           console.log(res);
@@ -76,13 +76,13 @@ export default function Home() {
 
   useEffect(() => {
     let token = localStorage.getItem('token')
-    axios.get('http://localhost:5051/home', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get('http://localhost:5051/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         if (res.data.Status === "Success") {
           setName(res.data.name);
           setStoreData(res.data.data)
         } else {
-          navigate('/login');
+          navigate('/userHome');
           setMessage(res.data.Error);
         }
       })
@@ -91,7 +91,7 @@ export default function Home() {
 
   const handleDeleteAccount = () => {
     localStorage.removeItem('token')
-    navigate('/login')
+    navigate('/userLogin')
   }
 
   return (
