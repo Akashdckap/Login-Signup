@@ -63,6 +63,9 @@ export default function AdminAndMangerLogin() {
             //         })
             //         .catch(err => console.log(err));
         }
+        else {
+            navigate('/adminOrManagerLogin')
+        }
 
     }
     return (

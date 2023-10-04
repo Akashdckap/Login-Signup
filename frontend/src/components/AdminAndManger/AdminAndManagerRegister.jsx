@@ -8,14 +8,19 @@ export default function AdminAndManagerRegister() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        role: '',
         password: '',
+
     });
+
     const [errors, setErrors] = useState({
         name: '',
         email: '',
+        role: '',
         password: '',
     });
 
+    const navigate = useNavigate()
     const validate = () => {
         let newErrors = { ...errors };
         let isVaild = true;
@@ -30,6 +35,7 @@ export default function AdminAndManagerRegister() {
             newErrors.name = 'Username is required';
             newErrors.password = 'password is required';
             newErrors.email = 'Email is required';
+            newErrors.adminOrManager = 'any one field is required';
             isVaild = false;
         }
 
@@ -42,10 +48,10 @@ export default function AdminAndManagerRegister() {
             isVaild = false;
         }
 
-        if (formData.email == fetchData.email) {
-            newErrors.email = 'Email id alreay exits';
-            isVaild = false;
-        }
+        // if (formData.email == fetchData.email) {
+        //     newErrors.email = 'Email id alreay exits';
+        //     isVaild = false;
+        // }
 
         if (formData.password.length < 7 && formData.password.trim() !== "") {
             newErrors.password = 'Password must be at least 8 characters long';
@@ -67,20 +73,25 @@ export default function AdminAndManagerRegister() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            // axios.post('http://localhost:5051/userRegister', formData)
-            //     .then(res => {
-            //         if (res.data.Status == "Success") {
-            //             localStorage.setItem('username', formData.name)
-            //             localStorage.setItem('email', formData.email)
-            //             navigate('/userLogin');
-            //             // console.log(res);
-            //         } else {
-            //             alert("Error");
-            //         }
-            //     })
-            //     .catch(err => err.json());
+            navigate('/adminOrManagerLogin')
+
+            axios.post('http://localhost:5051/adminOrManagerRegister', formData)
+                .then(res => {
+                    console.log(res);
+                    navigate('/adminOrManagerRegister')
+                    //         if (res.data.Status == "Success") {
+                    //             localStorage.setItem('username', formData.name)
+                    //             localStorage.setItem('email', formData.email)
+                    //             navigate('/userLogin');
+                    //             // console.log(res);
+                    //         } else {
+                    //             alert("Error");
+                    //         }
+                })
+                .catch(err => err.json());
         }
         else {
+            navigate('/adminOrManagerRegister')
             console.log("not okay");
         }
     }
@@ -89,7 +100,7 @@ export default function AdminAndManagerRegister() {
             <p className='alertMessage'></p>
             <div className='container w-50 p-20'>
                 <div>
-                    <h2 className='signUp'>Admin And Manager <span className='text-success'>Register</span></h2>
+                    <h2 className='signUp'>Admin Or Manager <span className='text-success'>Register</span></h2>
                 </div>
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
                     <div className="form-group mb-3">
@@ -97,14 +108,13 @@ export default function AdminAndManagerRegister() {
                         <input type="text" className="form-control w-75" onChange={handleChange} value={formData.name} id="exampleInputEmail1" placeholder="Enter username" name='name' />
                         {errors.name ? <span className="error">{errors.name}</span> : ""}
                     </div>
-                    <div className="form-group mb-3">
-                        <label htmlFor="exampleInputUsername" className="form-label">Select one</label>
-                        <select id="adminOrManager" className='form-control  w-75'>
+                    <div className="form-floating mb-3">
+                        <select name='role' onChange={handleChange} value={formData.role} className="form-select w-75" id="floatingSelect" aria-label="Floating label select example">
                             <option value="None">None</option>
                             <option value="Admin">Admin</option>
                             <option value="Manager">Manager</option>
                         </select>
-                        {errors.name ? <span className="error">{errors.name}</span> : ""}
+                        <label htmlFor="floatingSelect">Role Type</label>
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>

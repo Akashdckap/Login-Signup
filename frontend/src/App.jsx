@@ -7,6 +7,8 @@ import UserRegister from './components/Users/UserRegister'
 import UserHome from './components/Users/UserHome'
 import AdminAndManagerRegister from './components/AdminAndManger/AdminAndManagerRegister'
 import AdminAndMangerLogin from './components/AdminAndManger/AdminAndMangerLogin'
+import AdminHome from './components/AdminAndManger/AdminHome'
+import ManagerHome from './components/AdminAndManger/ManagerHome'
 
 function App() {
 
@@ -19,6 +21,8 @@ function App() {
         <Route path='/userLogin' element={<UserLogin />}></Route>
         <Route path='/adminOrManagerRegister' element={<AdminAndManagerRegister />}></Route>
         <Route path='/adminOrManagerLogin' element={<AdminAndMangerLogin />}></Route>
+        <Route path='/adminHome' element={<AdminHome />}></Route>
+        <Route path='/managerHome' element={<ManagerHome />}></Route>
       </Routes>
     </BrowserRouter>
   )

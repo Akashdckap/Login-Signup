@@ -20,7 +20,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "dckap",
     password: "Dckap2023Ecommerce",
-    database: 'registration'
+    database: 'adminUsers'
 });
 
 const verifyUser = (req, res, next) => {
@@ -44,8 +44,6 @@ const verifyUser = (req, res, next) => {
         });
     }
 }
-
-
 app.get('/userHome', verifyUser, (req, res) => {
     const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
     db.query(sql, (err, data) => {
@@ -75,22 +73,21 @@ app.post('/userRegister', (req, res) => {
     })
 })
 
-app.post('/adminRegister',(req,res)=>{
+app.post('/adminOrManagerRegister', (req, res) => {
     const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)"
-    bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
-        if(err) return res.json({ Error: "Error for hashing password"});
-        const values=[
+    bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
+        if (err) return res.json({ Error: "Error for hashing password" });
+        const values = [
             req.body.name,
             req.body.role,
             req.body.email,
             hash
-        ];db.query(sql, [values], (err,result)=>{
-            if(err) return res.json({ Error: "Inserting admin data is error"});
-            else{
+        ]; db.query(sql, [values], (err, result) => {
+            if (err) return res.json({ Error: "Inserting admin data is error" });
+            else {
                 return res.json({ Status: "Success" })
             }
         })
-
     })
 })
 
@@ -129,7 +126,7 @@ app.get('/userRegister', (req, res) => {
         else {
             return res.json(data)
         }
-        
+
     })
 })
 
@@ -152,29 +149,3 @@ app.listen(5051, () => {
 })
 
 
-
-// Database tables
-/*
-
-drop database registration;
-create database registration;
-
-create table login(
-    id int not null AUTO_INCREMENT,
-    name varchar(255),
-    email varchar(255),
-    password varchar(255),
-    created_at timestamp,
-    updated_at timestamp,
-    primary key(id));
-    
-    create table tasks(
-    id int not null AUTO_INCREMENT,
-    task_name varchar(255),
-    description varchar(255),
-    user_id int,
-    created_at timestamp,
-    updated_at timestamp,
-    PRIMARY KEY (id),
-    FOREIGN key(user_id) REFERENCES login(id) on DELETE SET null);
-*/
