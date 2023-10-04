@@ -50,10 +50,19 @@ export default function Home() {
   }
 
   const handleSubmit = (e) => {
+    let token = localStorage.getItem('token')
     e.preventDefault();
     if (validate()) {
-      axios.post('http://localhost:5051/home', formData)
-        .then(res => console.log(res))
+      axios.post('http://localhost:5051/home', formData, { headers: { Authorization: `Bearer ${token}` } })
+        .then(res => {
+          // if (res.data.Status === "Success") {
+          console.log(res);
+          // console.log("Data stored successfully");
+          // }
+          // else {
+          //   alert("Error in store data")
+          // }  
+        })
         .catch(err => console.log(err));
       setIsModalOpen(false);
       window.location.reload(true)
@@ -63,30 +72,16 @@ export default function Home() {
     }
   }
 
-  // useEffect(() => {
-  //   fetch('http://localhost:5051/home')
-  //     .then(res => res.json())
-
-  //     .then(data => setStoreData(data))
-  //     .catch(err => console.log("data", err))
-  // }, [])
-  // console.log(storeData);
-
-
   axios.defaults.withCredentials = true;
+
   useEffect(() => {
-    axios.get('http://localhost:5051/')
-      .then(res => {
+    let token = localStorage.getItem('token')
+    axios.get('http://localhost:5051/home', { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
         if (res.data.Status === "Success") {
-          setAuth(true);
           setName(res.data.name);
-          axios.get('http://localhost:5051/home')
-            .then(({ data }) => {
-              setStoreData(data)
-            })
-            .catch(err => console.log("data", err))
+          setStoreData(res.data.data)
         } else {
-          setAuth(false)
           navigate('/login');
           setMessage(res.data.Error);
         }
@@ -95,11 +90,10 @@ export default function Home() {
   }, [])
 
   const handleDeleteAccount = () => {
-    axios.get('http://localhost:5051/logout')
-      .then(res => {
-        location.reload(true)
-      }).catch(err => console.log(err))
+    localStorage.removeItem('token')
+    navigate('/login')
   }
+
   return (
     <div>
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Homepage</h1></center>
@@ -126,8 +120,8 @@ export default function Home() {
         {
           storeData.map((item, index) =>
             <div key={index} className='taskContainer'>
-              <p><span>Task Name : </span>{item.task_name}</p>
-              <p><span>Description : </span>{item.description}</p>
+              <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
+              <p><span className='text-white'>Description : </span>{item.description}</p>
             </div>
           )
         }

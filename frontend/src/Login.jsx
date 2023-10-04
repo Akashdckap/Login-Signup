@@ -52,7 +52,8 @@ export default function Login() {
         if (validate()) {
             axios.post('http://localhost:5051/login', formData)
                 .then(res => {
-                    if (res.data.Status == "Success") {
+                    if (res.data.Status === "Success") {
+                        localStorage.setItem('token', res.data.token)
                         navigate('/home');
                     } else {
                         alert(res.data.Error);
