@@ -52,8 +52,16 @@ export default function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      axios.post('http://localhost:5051/home', formData)
-        .then(res => console.log(res))
+      let token = localStorage.getItem('usertoken')
+      axios.post('http://localhost:8881/home', formData, { headers: { Authorization: `Bearer ${token}` } })
+        .then(res => {
+          if (res.data.Status == "Success") {
+            navigate('/home')
+          }
+          else {
+            alert(res.data.Error);
+          }
+        })
         .catch(err => console.log(err));
       setIsModalOpen(false);
       window.location.reload(true)
@@ -75,18 +83,14 @@ export default function Home() {
 
   axios.defaults.withCredentials = true;
   useEffect(() => {
-    axios.get('http://localhost:5051/')
+    let token = localStorage.getItem('usertoken')
+    axios.get('http://localhost:8881/home', { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
+        // console.log(res)
         if (res.data.Status === "Success") {
-          setAuth(true);
           setName(res.data.name);
-          axios.get('http://localhost:5051/home')
-            .then(({ data }) => {
-              setStoreData(data)
-            })
-            .catch(err => console.log("data", err))
+          setStoreData(res.data.data)
         } else {
-          setAuth(false)
           navigate('/login');
           setMessage(res.data.Error);
         }
@@ -95,10 +99,8 @@ export default function Home() {
   }, [])
 
   const handleDeleteAccount = () => {
-    axios.get('http://localhost:5051/logout')
-      .then(res => {
-        location.reload(true)
-      }).catch(err => console.log(err))
+    localStorage.removeItem('usertoken');
+    navigate('/login');
   }
   return (
     <div>

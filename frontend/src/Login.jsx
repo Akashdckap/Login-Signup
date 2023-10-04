@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
 
 export default function Login() {
     const [formData, setFormData] = useState({
@@ -50,9 +50,11 @@ export default function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:5051/login', formData)
+            axios.post('http://localhost:8881/login', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
+                        // console.log(res);
+                        localStorage.setItem('usertoken',res.data.token)
                         navigate('/home');
                     } else {
                         alert(res.data.Error);

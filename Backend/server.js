@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
 
+
 const salt = 10;
 
 const app = express();
@@ -14,7 +15,7 @@ app.use(cors({
     methods: ["POST", "GET"],
     credentials: true
 }));
-app.use(cookieParser());
+// app.use(cookieParser());
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -24,29 +25,59 @@ const db = mysql.createConnection({
 })
 
 const verifyUser = (req, res, next) => {
-    const token = req.cookies.token;
-    console.log(req.cookies);
-    if (!token) {
-        return res.json({ Error: "You are not authenticated" });
-    }
-    else {
+    const authHeader = req.headers["authorization"];
+
+    const token = authHeader ? authHeader.split(' ')[1] : "";
+    // console.log(token);
+    if (token) {
         jwt.verify(token, "jwt-secret-key", (err, decoded) => {
-            // console.log(decoded);
+            // console.log(decoded)
+            // console.log(err)
             if (err) {
+
                 return res.json({ Error: "Token is not okay" })
             }
             else {
-                req.name = decoded.name;
+                req.name = decoded.name
                 req.id = decoded.id
                 next();
             }
         });
     }
+    else {
+        // console.log("not");
+        return res.json({ Error: "You are not authenticated" });
+    }
 }
 
+app.post('/home', verifyUser, (req, res) => {
+    console.log(req.id);
+    const sql = "INSERT INTO tasks (`task_name`,`description`,`user_id`) VALUES(?)";
+    const values = [
+        req.body.taskName,
+        req.body.description,
+        req.id
+    ];
+    db.query(sql, [values], (err, data) => {
 
-app.get('/', verifyUser, (req, res) => {
-    return res.json({ Status: "Success", name: req.name, id: req.id });
+        if (err) return res.json({ Error: "Task adding error" });
+        return res.json({ Status: "Success" });
+    })
+})
+
+
+app.get('/home',verifyUser, (req, res) => {
+    // console.log(req.id)
+    const sql = `SELECT * FROM tasks where user_id = ${req.id}`
+    db.query(sql, (err, data) => {
+        if (err) return res.json({ Error: "Fetch Failure" })
+
+        else {
+            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+        }
+    })
+    // res.send("hello");
+
 })
 
 app.post('/register', (req, res) => {
@@ -83,9 +114,10 @@ app.post('/login', (req, res) => {
                 if (response) {
                     const name = data[0].name;
                     const token = jwt.sign({ name, id: data[0].id }, 'jwt-secret-key', { expiresIn: '1d' });
-                    res.cookie('token', token);
-                    console.log(token);
-                    return res.json({ Status: 'Success' })
+                    // console.log(token,"hi");
+                    // res.json({"token":accessToken});
+                    return res.json({ Status: 'Success', token: token });
+                    //    return res.redirect(301,'/home')
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
@@ -96,6 +128,7 @@ app.post('/login', (req, res) => {
         }
     })
 })
+
 
 
 app.get('/register', (req, res) => {
@@ -110,65 +143,8 @@ app.get('/register', (req, res) => {
     })
 })
 
-app.get('/logout', (req, res) => {
-    res.clearCookie('token');
-    return res.json({ Status: "Success" });
-})
-
-
-
-
-app.get('/home', verifyUser, (req, res) => {
-    console.log(req.id);
-    const sql = `SELECT * FROM tasks where user_id = ${req.id}`;
-    db.query(sql, (err, data) => {
-        if (err) return res.json({ Error: "Fetch Failure" })
-        else {
-            return res.json(data);
-        }
-    })
-})
-
-app.post('/home', verifyUser, (req, res) => {
-    const sql = "INSERT INTO tasks (`task_name`,`description`,`user_id`) VALUES(?)";
-    const values = [
-        req.body.taskName,
-        req.body.description,
-        req.id
-    ];
-    db.query(sql, [values], (err, data) => {
-        if (err) return res.json({ Error: "Task adding error" });
-        return res.json({ Status: "Success" });
-    })
-})
-app.listen(5051, () => {
+app.listen(8881, () => {
     console.log("Running...")
 })
 
 
-
-// Database tables
-/*
-
-drop database registration;
-create database registration;
-
-create table login(
-    id int not null AUTO_INCREMENT,
-    name varchar(255),
-    email varchar(255),
-    password varchar(255),
-    created_at timestamp,
-    updated_at timestamp,
-    primary key(id));
-    
-    create table tasks(
-    id int not null AUTO_INCREMENT,
-    task_name varchar(255),
-    description varchar(255),
-    user_id int,
-    created_at timestamp,
-    updated_at timestamp,
-    PRIMARY KEY (id),
-    FOREIGN key(user_id) REFERENCES login(id) on DELETE SET null);
-*/

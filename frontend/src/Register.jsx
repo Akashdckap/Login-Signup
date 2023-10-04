@@ -16,7 +16,7 @@ function Register() {
     const [fetchData, setfetchData] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:8081/register')
+        fetch('http://localhost:8881/register')
             .then(res => res.json())
             // .then(data=>console.log(data))
             .then(data => data.forEach((ele) => {
@@ -77,11 +77,11 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:5051/register', formData)
+            axios.post('http://localhost:8881/register', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
-                        localStorage.setItem('username', formData.name)
-                        localStorage.setItem('email', formData.email)
+                        // localStorage.setItem('username', formData.name)
+                        // localStorage.setItem('email', formData.email)
                         navigate('/login');
                         // console.log(res);
                     } else {
