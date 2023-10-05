@@ -1,30 +1,20 @@
+import React, { useEffect, useState } from "react";
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
-export default function UsersList() {
+export default function AssignUsers (){
+    const [users, setUsers] = useState([]);
 
+    useEffect (() =>{
+        axios.get('http://localhost:5051/assignUsers')
+        .then(res=>{
+            // console.log(res);
+            setUsers(res.data.data);
+        })
+    },[])
 
-    const [userList, setUserList] = useState([]);
-    const navigate = useNavigate()
-    useEffect(() => {
-        axios.get('http://localhost:5051/usersList')
-            .then(res => {
-                if (res.data.Status === "Success") {
-                    setUserList(res.data.data)
-                    navigate('/usersList');
-                }
-                else {
-                    alert(res.data.Error)
-                    navigate('/adminHome');
-                }
-            }).catch(err => console.log(err))
-    }, [])
-
-
-    return (
-        <div>
-            <h1>UsersList</h1>
+    return(
+        <React.Fragment>
+            <h1>Assign users</h1>
             <div>
                 <table className="table wd-75">
                     <thead>
@@ -32,21 +22,25 @@ export default function UsersList() {
                             <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
+                            <th>Select</th>
+                            <th>Done</th>
                         </tr>
                     </thead>
-                    {userList.map((item, index) => {
+                    {users.map((item, index) => {
                         return (
                             <tbody key={index}>
                                 <tr>
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
+                                    <td><input type="checkbox"></input></td>
+                                    <td><button>Submit</button></td>
                                 </tr>
                             </tbody>
                         )
                     })}
                 </table>
             </div>
-        </div>
+        </React.Fragment>
     )
 }

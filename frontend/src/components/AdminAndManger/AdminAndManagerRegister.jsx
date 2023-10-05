@@ -102,7 +102,6 @@ export default function AdminAndManagerRegister() {
 
                     <div className="form-floating mb-3">
                         <select name='role' onChange={handleChange} value={formData.role} className="form-select w-75" id="floatingSelect" aria-label="Floating label select example">
-
                             <option value="None">None</option>
                             <option value="Admin">Admin</option>
                             <option value="Manager">Manager</option>
