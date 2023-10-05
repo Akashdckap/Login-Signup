@@ -55,23 +55,25 @@ app.get('/userHome', verifyUser, (req, res) => {
 })
 
 app.get('/adminHome', verifyUser, (req, res) => {
-    const sql = `SELECT * FROM users`;
-    // const managerList = 'SELECT * FROM adminManager WHERE role = Manager'
-    db.query(sql, (err, data) => {
-        if (err) return res.json({ Error: "Fetch Failure in adminHome router" })
-        else {
-            console.log(data);
-            return res.json({ data, Status: "Success", name: req.name, id: req.id });
-        }
-    })
-    // return res.json({ Status: "Success", name: req.name, id: req.id });
+    return res.json({ Status: "Success", name: req.name, id: req.id });
 })
 
 app.get('/managerHome', verifyUser, (req, res) => {
     return res.json({ Status: "Success", name: req.name, id: req.id });
 })
 
-
+app.get('/usersList', (req, res) => {
+    const sql = 'SELECT * FROM users';
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: 'Can not fetch the user lists' })
+        }
+        else {
+            // console.log(data);
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
 
 
 app.post('/userRegister', (req, res) => {
@@ -187,18 +189,6 @@ app.post('/adminOrManagerLogin', (req, res) => {
     })
 })
 
-// app.get('/userRegister', (req, res) => {
-//     const sql = "SELECT * from login";
-//     db.query(sql, (err, data) => {
-//         if (err) {
-//             return res.json(err)
-//         }
-//         else {
-//             return res.json(data)
-//         }
-
-//     })
-// })
 
 app.post('/userHome', verifyUser, (req, res) => {
     const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
