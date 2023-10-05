@@ -9,6 +9,8 @@ import AdminAndManagerRegister from './components/AdminAndManger/AdminAndManager
 import AdminAndMangerLogin from './components/AdminAndManger/AdminAndMangerLogin'
 import AdminHome from './components/AdminAndManger/AdminHome'
 import ManagerHome from './components/AdminAndManger/ManagerHome'
+import ManagerList from './components/AdminAndManger/ManagerList'
+import UsersList from './components/AdminAndManger/UsersList'
 
 function App() {
 
@@ -23,6 +25,9 @@ function App() {
         <Route path='/adminOrManagerLogin' element={<AdminAndMangerLogin />}></Route>
         <Route path='/adminHome' element={<AdminHome />}></Route>
         <Route path='/managerHome' element={<ManagerHome />}></Route>
+        <Route path='/managerList' element={<ManagerList />}></Route>
+        <Route path='/usersList' element={<UsersList />}></Route>
+
       </Routes>
     </BrowserRouter>
   )

@@ -64,7 +64,11 @@ option {
   border-radius: 5px;
   overflow-y: scroll;
 }
-
+/* 
+.signUp::selection {
+  color: red;
+  background-color: darkmagenta;
+} */
 
 /* .form-control:focus {
   border-style: none;
