@@ -15,34 +15,7 @@ export default function ManagerList() {
             })
     }, [])
 
-    return (
-        <React.Fragment>
-            <div>
-                <h1>ManagerList</h1>
-            </div>
-            <div>
-                {
-                    manager.map((item,index)=>
-                    <div key={index} className='taskContainer'>
-                        <p><span className='text-white'>Manager's Name : </span>{item.name}</p>
-                    </div>)
-                }
-            </div>
 
-        </React.Fragment>
-
-                console.log(res);
-                // if (res.data.Status === "Success") {
-                //     setManagerList(res.data.data)
-                //     navigate('/managerList');
-                // }
-                // else {
-                //     alert(res.data.Error)
-                //     navigate('/adminHome');
-                // }
-            }).catch(err => console.log(err))
-    }, [])
-    console.log(managerList);
     return (
         <div>
             <h1>ManagerList</h1>
@@ -56,14 +29,14 @@ export default function ManagerList() {
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    {managerList.map((item, index) => {
+                    {manager.map((item, index) => {
                         return (
                             <tbody key={index}>
                                 <tr>
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-                                    <td style={{ cursor: 'pointer' }}>Assign</td>
+                                    <button> <td style={{ cursor: 'pointer' }}>Assign</td></button>
                                 </tr>
                             </tbody>
                         )

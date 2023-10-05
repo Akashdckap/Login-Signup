@@ -89,7 +89,7 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 app.get('/adminHome', verifyUser, (req, res) => {
     return res.json({ Status: "Success", name: req.name, id: req.id });
-
+})
 app.get('/usersList', (req, res) => {
     const sql = 'SELECT * FROM users';
     db.query(sql, (err, data) => {
