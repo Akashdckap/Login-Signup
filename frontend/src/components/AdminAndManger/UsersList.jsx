@@ -32,7 +32,6 @@ export default function UsersList() {
                             <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
-                            {/* <th scope="col">Action</th> */}
                         </tr>
                     </thead>
                     {userList.map((item, index) => {
@@ -42,7 +41,7 @@ export default function UsersList() {
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-                                    {/* <td style={{ cursor: 'pointer' }}>Assign</td> */}
+
                                 </tr>
                             </tbody>
                         )

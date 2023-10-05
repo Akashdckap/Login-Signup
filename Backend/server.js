@@ -102,7 +102,18 @@ app.get('/usersList', (req, res) => {
             return res.json({ data, Status: "Success" });
         }
     })
-
+})
+app.get('/assignUsers',(req,res)=>{
+    const sql = 'SELECT * FROM users';
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: 'Can not fetch the user lists' })
+        }
+        else {
+            // console.log(data);
+            return res.json({ data, Status: "Success" });
+        }
+    })
 })
 app.post("/delete", (req, res) => {
     const { deleteId } = req.body;

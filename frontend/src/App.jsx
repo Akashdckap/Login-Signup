@@ -11,6 +11,7 @@ import AdminHome from './components/AdminAndManger/AdminHome'
 import ManagerHome from './components/AdminAndManger/ManagerHome'
 import ManagerList from './components/AdminAndManger/ManagerList'
 import UsersList from './components/AdminAndManger/UsersList'
+import AssignUsers from './components/AdminAndManger/AssignUsers'
 
 function App() {
 
@@ -27,8 +28,8 @@ function App() {
         <Route path='/managerHome' element={<ManagerHome />}></Route>
         <Route path='/managerList' element={<ManagerList />}></Route>
         <Route path='/usersList' element={<UsersList />}></Route>
-        <Route path='/delete/:id' element={<UserHome />}></Route>
-        
+        <Route path='/assignUsers' element={<AssignUsers />}></Route>
+
       </Routes>
     </BrowserRouter>
   )
