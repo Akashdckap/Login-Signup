@@ -89,7 +89,7 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 app.get('/adminHome', verifyUser, (req, res) => {
     return res.json({ Status: "Success", name: req.name, id: req.id });
-
+})
 app.get('/usersList', (req, res) => {
     const sql = 'SELECT * FROM users';
     db.query(sql, (err, data) => {
@@ -101,7 +101,18 @@ app.get('/usersList', (req, res) => {
             return res.json({ data, Status: "Success" });
         }
     })
-
+})
+app.get('/assignUsers',(req,res)=>{
+    const sql = 'SELECT * FROM users';
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: 'Can not fetch the user lists' })
+        }
+        else {
+            // console.log(data);
+            return res.json({ data, Status: "Success" });
+        }
+    })
 })
 app.get('/managerList', (req, res) => {
     const sql = 'SELECT * FROM adminManager WHERE role = Manager';
