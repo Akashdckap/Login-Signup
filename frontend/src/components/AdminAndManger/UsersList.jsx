@@ -1,10 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function UsersList() {
-
-
     const [userList, setUserList] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
@@ -21,12 +19,14 @@ export default function UsersList() {
             }).catch(err => console.log(err))
     }, [])
 
-
     return (
         <div>
-            <h1>UsersList</h1>
+            <div className='d-flex justify-content-around p-3'>
+                <h1>User lists</h1>
+                <Link to='/adminHome'><button className='btn btn-primary'>Back to AdminPage</button></Link>
+            </div>
             <div>
-                <table className="table wd-75">
+                <table className="table table-responsive">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
@@ -41,6 +41,7 @@ export default function UsersList() {
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
+
                                 </tr>
                             </tbody>
                         )

@@ -95,6 +95,15 @@ export default function UserHome() {
     navigate('/userLogin')
   }
 
+
+  const handleDeleteTask = (e) => {
+    const { id } = e.target;
+    axios.post(`http://localhost:5051/delete`, { deleteId: id })
+      .then(res => {
+        window.location.reload();
+      })
+  }
+
   return (
     <div>
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>User Homepage</h1></center>
@@ -124,6 +133,8 @@ export default function UserHome() {
             <div key={index} className='taskContainer'>
               <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
               <p><span className='text-white'>Description : </span>{item.description}</p>
+              <button onClick={handleDeleteTask} id={item.id} className='btn btn-danger'>Delete</button>
+              {/* <button onClick={handleDeleteTask} id={item.id} className='btn btn-success'>Edit</button> */}
             </div>
           )
         }

@@ -70,14 +70,14 @@ app.get('/managerList', (req, res) => {
     })
 })
 
-app.get('/usersList',(req,res)=>{
+app.get('/usersList', (req, res) => {
     const sql = "SELECT * FROM users";
-    db.query(sql,(err,data)=>{
-        if(err){
-            return res.json({Error : "Users fetch failure"});
-        } 
-        else{
-            return res.json({ data, Status:"Success" });
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Users fetch failure" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
         }
     })
 })
@@ -85,6 +85,7 @@ app.get('/usersList',(req,res)=>{
 app.get('/managerHome', verifyUser, (req, res) => {
     return res.json({ Status: "Success", name: req.name, id: req.id });
 })
+
 
 
 app.get('/adminHome', verifyUser, (req, res) => {
@@ -114,6 +115,20 @@ app.get('/assignUsers',(req,res)=>{
         }
     })
 })
+app.post("/delete", (req, res) => {
+    const { deleteId } = req.body;
+    const sql = `DELETE FROM userTasks WHERE id=${deleteId}`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            res.json({ Error: "Can not delete the task" })
+        }
+        else {
+            return res.json({ message: 'task delete successfully' })
+        }
+    })
+})
+
+
 app.get('/managerList', (req, res) => {
     const sql = 'SELECT * FROM adminManager WHERE role = Manager';
     db.query(sql, (err, data) => {
@@ -121,7 +136,7 @@ app.get('/managerList', (req, res) => {
             return res.json({ Error: 'Can not fetch the manager lists' })
         }
         else {
-            console.log(data);
+            // console.log(data);
             return res.json({ data, Status: "Success" });
         }
     })
