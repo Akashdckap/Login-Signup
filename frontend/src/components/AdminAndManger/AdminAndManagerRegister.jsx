@@ -9,7 +9,6 @@ export default function AdminAndManagerRegister() {
         name: '',
         role: '',
         email: '',
-        role: '',
         password: '',
 
     });
@@ -19,7 +18,6 @@ export default function AdminAndManagerRegister() {
         name: '',
         role:'',
         email: '',
-        role: '',
         password: '',
     });
 
@@ -92,7 +90,7 @@ export default function AdminAndManagerRegister() {
             <p className='alertMessage'></p>
             <div className='container w-50 p-20'>
                 <div>
-                    <h2 className='signUp'>Admin Or Manager <span className='text-success'>Register</span></h2>
+                    <h1 className='signUp'>Admin Or Manager <span className='text-success'>Register</span></h1>
                 </div>
                 <form className='container-fluid m-10' onSubmit={handleSubmit}>
                     <div className="form-group mb-3">

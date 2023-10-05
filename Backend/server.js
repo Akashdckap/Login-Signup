@@ -54,13 +54,24 @@ app.get('/userHome', verifyUser, (req, res) => {
     })
 })
 
+app.get('/adminHome', verifyUser, (req, res) => {
+    const sql = `SELECT * FROM users`;
+    // const managerList = 'SELECT * FROM adminManager WHERE role = Manager'
+    db.query(sql, (err, data) => {
+        if (err) return res.json({ Error: "Fetch Failure in adminHome router" })
+        else {
+            console.log(data);
+            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+        }
+    })
+    // return res.json({ Status: "Success", name: req.name, id: req.id });
+})
+
 app.get('/managerHome', verifyUser, (req, res) => {
     return res.json({ Status: "Success", name: req.name, id: req.id });
 })
 
-app.get('/adminHome', verifyUser, (req, res) => {
-    return res.json({ Status: "Success", name: req.name, id: req.id });
-})
+
 
 
 app.post('/userRegister', (req, res) => {
