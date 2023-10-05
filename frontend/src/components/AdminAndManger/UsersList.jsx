@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function UsersList() {
+
+
     const [userList, setUserList] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
@@ -18,6 +20,7 @@ export default function UsersList() {
                 }
             }).catch(err => console.log(err))
     }, [])
+
 
     return (
         <div>
