@@ -103,6 +103,18 @@ app.get('/usersList', (req, res) => {
     })
 
 })
+app.get('/managerList', (req, res) => {
+    const sql = 'SELECT * FROM adminManager WHERE role = Manager';
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: 'Can not fetch the manager lists' })
+        }
+        else {
+            console.log(data);
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
 
 
 app.post('/userRegister', (req, res) => {
