@@ -1,58 +1,30 @@
-
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 export default function ManagerList() {
-    const [manager, setManager] = useState([]);
 
-
+    const [managerList, setManager] = useState([]);
     useEffect(() => {
         axios.get('http://localhost:5051/managerList')
             .then(res => {
-
                 setManager(res.data.data)
-                console.log(res.data.data)
             })
     }, [])
 
     return (
-        <React.Fragment>
-            <div>
-                <h1>ManagerList</h1>
-            </div>
-            <div>
-                {
-                    manager.map((item,index)=>
-                    <div key={index} className='taskContainer'>
-                        <p><span className='text-white'>Manager's Name : </span>{item.name}</p>
-                    </div>)
-                }
-            </div>
-
-        </React.Fragment>
-
-                console.log(res);
-                // if (res.data.Status === "Success") {
-                //     setManagerList(res.data.data)
-                //     navigate('/managerList');
-                // }
-                // else {
-                //     alert(res.data.Error)
-                //     navigate('/adminHome');
-                // }
-            }).catch(err => console.log(err))
-    }, [])
-    console.log(managerList);
-    return (
         <div>
-            <h1>ManagerList</h1>
+            <div className='d-flex justify-content-around p-3'>
+                <h1>ManagerList</h1>
+                <Link to='/adminHome'><button className='btn btn-primary'>Back to AdminPage</button></Link>
+            </div>
             <div>
-                <table className="table wd-75">
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -63,7 +35,7 @@ export default function ManagerList() {
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-                                    <td style={{ cursor: 'pointer' }}>Assign</td>
+                                    <td><button className='btn btn-info'>Assign to</button></td>
                                 </tr>
                             </tbody>
                         )

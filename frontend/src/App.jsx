@@ -27,7 +27,8 @@ function App() {
         <Route path='/managerHome' element={<ManagerHome />}></Route>
         <Route path='/managerList' element={<ManagerList />}></Route>
         <Route path='/usersList' element={<UsersList />}></Route>
-
+        <Route path='/delete/:id' element={<UserHome />}></Route>
+        
       </Routes>
     </BrowserRouter>
   )

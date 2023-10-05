@@ -57,12 +57,12 @@ option {
 
 
 .taskContainer {
-  height: 100px;
+  height: auto;
   width: 20%;
   background-color: turquoise;
   padding: 10px 10px;
   border-radius: 5px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 /* 
 .signUp::selection {
