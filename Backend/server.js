@@ -37,8 +37,10 @@ const verifyUser = (req, res, next) => {
                 res.json({ Error: "Token is not okay" })
             }
             else {
+                // console.log(decoded);
                 req.name = decoded.name;
-                req.id = decoded.id
+                req.id = decoded.id;
+                req.role = decoded.role;
                 next();
             }
         });
@@ -55,23 +57,49 @@ app.get('/userHome', verifyUser, (req, res) => {
 })
 
 app.get('/adminHome', verifyUser, (req, res) => {
-    const sql = `SELECT * FROM users`;
+    const sql = `SELECT * FROM adminManager WHERE id = ${req.id}`;
     // const managerList = 'SELECT * FROM adminManager WHERE role = Manager'
     db.query(sql, (err, data) => {
         if (err) return res.json({ Error: "Fetch Failure in adminHome router" })
         else {
-            console.log(data);
-            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+            // console.log(data);
+            return res.json({ Status: "Success", name: req.name, id: req.id });
         }
     })
     // return res.json({ Status: "Success", name: req.name, id: req.id });
+})
+app.get('/managerList', (req, res) => {
+    const sql = "SELECT * FROM adminManager WHERE role = 'Manager'";
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Fetch Manager Failed" });
+        }
+        else {
+            // console.log(data);
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
+
+app.get('/usersList',(req,res)=>{
+    const sql = "SELECT * FROM users";
+    db.query(sql,(err,data)=>{
+        if(err){
+            return res.json({Error : "Users fetch failure"});
+        } 
+        else{
+            return res.json({ data, Status:"Success" });
+        }
+    })
 })
 
 app.get('/managerHome', verifyUser, (req, res) => {
     return res.json({ Status: "Success", name: req.name, id: req.id });
 })
 
-
+app.get('/adminHome', verifyUser, (req, res) => {
+    return res.json({ Status: "Success", name: req.name, id: req.id });
+})
 
 
 app.post('/userRegister', (req, res) => {
@@ -129,10 +157,8 @@ app.post('/adminOrManagerRegister', (req, res) => {
 
             })
         }
-    });
+    })
 })
-
-
 app.post('/userLogin', (req, res) => {
     const sql = 'SELECT * from users where email = ?'
     db.query(sql, [req.body.email], (err, data) => {
@@ -143,8 +169,9 @@ app.post('/userLogin', (req, res) => {
             bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
                 if (err) return res.json({ Error: 'password compare error' })
                 if (response) {
+                    console.log(response)
                     const name = data[0].name;
-                    const id = data[0].id
+                    const id = data[0].id;
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
                     return res.json({ Status: 'Success', token: token })
                 }
@@ -169,7 +196,6 @@ app.post('/adminOrManagerLogin', (req, res) => {
             bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
                 if (err) return res.json({ Error: "Password compare error" })
                 if (response) {
-                    // console.log(data);
                     const name = data[0].name;
                     const id = data[0].id;
                     const role = data[0].role;
@@ -187,19 +213,6 @@ app.post('/adminOrManagerLogin', (req, res) => {
     })
 })
 
-// app.get('/userRegister', (req, res) => {
-//     const sql = "SELECT * from login";
-//     db.query(sql, (err, data) => {
-//         if (err) {
-//             return res.json(err)
-//         }
-//         else {
-//             return res.json(data)
-//         }
-
-//     })
-// })
-
 app.post('/userHome', verifyUser, (req, res) => {
     const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
@@ -211,7 +224,13 @@ app.post('/userHome', verifyUser, (req, res) => {
         if (err) return res.json({ Error: "Task adding error" });
         return res.json({ Status: "Success" });
     })
+
 })
+
+
+
+
+
 app.listen(5051, () => {
     console.log("Running...")
 });

@@ -13,7 +13,8 @@ export default function AdminAndManagerRegister() {
 
     });
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     const [errors, setErrors] = useState({
         name: '',
         role:'',
