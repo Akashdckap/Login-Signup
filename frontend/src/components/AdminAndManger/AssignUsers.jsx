@@ -1,20 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from 'axios'
+import { Link } from "react-router-dom";
 
-export default function AssignUsers (){
+export default function AssignUsers() {
     const [users, setUsers] = useState([]);
+    // const [clicked, setClickedUser] = useState([]);
 
-    useEffect (() =>{
+    const [assignto, setAssign] = useState({});
+    useEffect(() => {
         axios.get('http://localhost:5051/assignUsers')
-        .then(res=>{
-            // console.log(res);
-            setUsers(res.data.data);
-        })
-    },[])
+            .then(res => {
+                setUsers(res.data.data);
+            })
+            .catch(err => console.log(err))
+    }, [])
 
-    return(
+
+
+    const handleSubmit = (e) => {
+        const { id } = e.target;
+        setAssign({ ["assign_to"]: id });
+    }
+
+    console.log(assignto);
+
+    return (
         <React.Fragment>
-            <h1>Assign users</h1>
+            <div className='d-flex justify-content-around p-3'>
+                <h1>Assign users</h1>
+                <Link to='/managerList'><button className='btn btn-primary'>Back to ManagerList</button></Link>
+            </div>
             <div>
                 <table className="table wd-75">
                     <thead>
@@ -22,19 +37,18 @@ export default function AssignUsers (){
                             <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
-                            <th>Select</th>
-                            <th>Done</th>
+                            <th>Assign to</th>
                         </tr>
                     </thead>
-                    {users.map((item, index) => {
+                    {users.map((user, index) => {
                         return (
-                            <tbody key={index}>
+                            <tbody key={index} className="userList">
                                 <tr>
-                                    <th scope="row">{item.id}</th>
-                                    <td>{item.name}</td>
-                                    <td>{item.email}</td>
-                                    <td><input type="checkbox"></input></td>
-                                    <td><button>Submit</button></td>
+                                    <th scope="row">{user.id}</th>
+                                    <td name='name'>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    {/* <td><input type="bu" name={user.name} id="" value={user.id} onChange={handleList} /></td> */}
+                                    <td><button id={user.id} name={user.name} onClick={handleSubmit}>Assign</button></td>
                                 </tr>
                             </tbody>
                         )

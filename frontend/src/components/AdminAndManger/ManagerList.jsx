@@ -15,7 +15,10 @@ export default function ManagerList() {
 
     return (
         <div>
-            <h1>ManagerList</h1>
+             <div className='d-flex justify-content-around p-3'>
+                <h1>Manager lists</h1>
+                <Link to='/adminHome'><button className='btn btn-primary'>Back to AdminPage</button></Link>
+            </div>
             <div>
                 <table className="table wd-75">
                     <thead>
