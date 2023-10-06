@@ -8,25 +8,42 @@ export default function ManagerList() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:5051/managerList')
+        axios.get(`http://localhost:5051/managerList`)
             .then(res => {
                 setManager(res.data.data)
             })
     }, [])
 
     const handleManagerId = (e) => {
+        // alert("df")
         const { id } = e.target
-        axios.post(`http://localhost:5051/assignUsers`, { managerId : id })
-        .then(res=>{
-            // console.log(res)
-            navigate('/assignUsers')
-            
-        })
+        // navigate(`/assignUsers/${id}`);
+        // axios.get(`http://localhost:5051/assignUsers/${id}`)
+        // .then(res => {
+        //     setManager(res.data.data)
+        // })
+        console.log(id);
+        axios.post('http://localhost:5051/managerList', { managerId: id })
+            .then(res => {
+                if (res.data.Status == "Success") {
+                    console.log("her");
+                    navigate('/assignUsers/'+id);
+        //             axios.get(`http://localhost:5051/assignUsers/${id}`)
+        // .then(res => {
+        //     // setManager(res.data.data)
+        // })
+                }
+                else {
+                    alert(res.data.Error);
+                    navigate('/managerList');
+                }
+            })
+            .catch(err => console.log(err))
     }
 
     return (
         <div>
-             <div className='d-flex justify-content-around p-3'>
+            <div className='d-flex justify-content-around p-3'>
                 <h1>Manager lists</h1>
                 <Link to='/adminHome'><button className='btn btn-primary'>Back to AdminPage</button></Link>
             </div>
@@ -48,7 +65,7 @@ export default function ManagerList() {
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
 
-                                    <td><button id={item.id} onClick={handleManagerId}>Assign User</button></td>
+                                    <td><button id={item.id} name='3' onClick={handleManagerId}>Assign User</button></td>
                                 </tr>
                             </tbody>
                         )

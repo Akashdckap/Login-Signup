@@ -103,7 +103,7 @@ app.get('/usersList', (req, res) => {
         }
     })
 })
-app.get('/assignUsers',(req,res)=>{
+app.get('/assignUsers/:id', (req, res) => {
     const sql = 'SELECT * FROM users';
     db.query(sql, (err, data) => {
         if (err) {
@@ -116,9 +116,20 @@ app.get('/assignUsers',(req,res)=>{
     })
 })
 
-app.post('/assignUsers',(req,res)=>{
-    const { managerId } = req.body
-    console.log(managerId);
+app.post('/managerList', (req, res) => {
+    // const { managerId } = req.body
+    // console.log(managerId);
+    // // const sql = `SELECT * FROM adminManager WHERE id =${managerId}`;
+    // // const sql = `INSERT INTO assignedUsers`;
+    // db.query(sql, (err, data) => {
+    //     if (err) {
+    //         return res.json({ Error: "Getting Manager id is failure" });
+    //     }
+    //     else {
+    //         return res.json({ data, Success: "Success" });
+    //     }
+    // })
+    // console.log(managerId);
     // const sql = "SELECT * FROM adminManager WHERE id = "
 })
 app.post("/delete", (req, res) => {
