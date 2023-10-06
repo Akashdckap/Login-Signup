@@ -115,6 +115,12 @@ app.get('/assignUsers',(req,res)=>{
         }
     })
 })
+
+app.post('/assignUsers',(req,res)=>{
+    const { managerId } = req.body
+    console.log(managerId);
+    // const sql = "SELECT * FROM adminManager WHERE id = "
+})
 app.post("/delete", (req, res) => {
     const { deleteId } = req.body;
     const sql = `DELETE FROM userTasks WHERE id=${deleteId}`;
