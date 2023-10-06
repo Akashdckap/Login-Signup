@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 // import cookieParser from "cookie-parser";
 
-/**git checking */
 const salt = 10;
 
 const app = express();
