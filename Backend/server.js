@@ -103,7 +103,7 @@ app.get('/usersList', (req, res) => {
         }
     })
 })
-app.get('/assignUsers',(req,res)=>{
+app.get('/assignUsers', (req, res) => {
     const sql = 'SELECT * FROM users';
     db.query(sql, (err, data) => {
         if (err) {
@@ -115,12 +115,13 @@ app.get('/assignUsers',(req,res)=>{
         }
     })
 })
-
-app.post('/assignUsers',(req,res)=>{
-    const { managerId } = req.body
-    console.log(managerId);
+app.post('/assignUsers', (req, res) => {
+    const { assignto } = req.body
+    // console.log(assignto);
     // const sql = "SELECT * FROM adminManager WHERE id = "
 })
+
+
 app.post("/delete", (req, res) => {
     const { deleteId } = req.body;
     const sql = `DELETE FROM userTasks WHERE id=${deleteId}`;
@@ -273,9 +274,22 @@ app.post('/userHome', verifyUser, (req, res) => {
     })
 
 })
-
-
-
+app.post('/managerList', (req, res) => {
+    const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
+    const values = [
+        req.body.managerId,
+        req.body.userId
+    ];
+    console.log(values);
+    db.query(sql, [values], (err, data) => {
+        if (err) {
+            return res.json({ Error: "Assigned is error" });
+        }
+        else {
+            return res.json({ Status: "Success" });
+        }
+    })
+})
 
 
 app.listen(5051, () => {
