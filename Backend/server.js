@@ -103,23 +103,6 @@ app.get('/usersList', (req, res) => {
         }
     })
 })
-app.get('/assignUsers', (req, res) => {
-    const sql = 'SELECT * FROM users';
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: 'Can not fetch the user lists' })
-        }
-        else {
-            // console.log(data);
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
-app.post('/assignUsers', (req, res) => {
-    const { assignto } = req.body
-    // console.log(assignto);
-    // const sql = "SELECT * FROM adminManager WHERE id = "
-})
 
 
 app.post("/delete", (req, res) => {
@@ -143,7 +126,6 @@ app.get('/managerList', (req, res) => {
             return res.json({ Error: 'Can not fetch the manager lists' })
         }
         else {
-            // console.log(data);
             return res.json({ data, Status: "Success" });
         }
     })
@@ -207,6 +189,7 @@ app.post('/adminOrManagerRegister', (req, res) => {
         }
     })
 })
+
 app.post('/userLogin', (req, res) => {
     const sql = 'SELECT * from users where email = ?'
     db.query(sql, [req.body.email], (err, data) => {
@@ -293,5 +276,5 @@ app.post('/managerList', (req, res) => {
 
 
 app.listen(5051, () => {
-    console.log("Running...")
+    console.log("Server running on the 5051 port...")
 });

@@ -3,37 +3,36 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function ManagerList() {
-    const [manager, setManager] = useState([]);
+    const [managerList, setManagers] = useState([]);
     const [userList, setUsers] = useState([]);
     const [managerId, setManagerId] = useState('')
 
     useEffect(() => {
         axios.get('http://localhost:5051/managerList')
             .then(res => {
-                setManager(res.data.data)
+                setManagers(res.data.data)
             })
-        axios.get('http://localhost:5051/assignUsers')
+            .catch(err => console.log(err))
+        axios.get('http://localhost:5051/usersList')
             .then(res => {
                 setUsers(res.data.data)
             })
+            .catch(err => console.log(err))
     }, [])
 
     const handleManagerId = (e) => {
         let userListContainer = document.querySelector(".userListContainer")
         userListContainer.style.display = "block";
-
         const { id } = e.target
         setManagerId(id)
     }
 
-    const handleClickAssign = (e) => {
+    const handleUserAssign = (e) => {
         const userId = e.target.id
-
         const formData = {
             managerId: managerId,
             userId: userId
         }
-
         axios.post('http://localhost:5051/managerList', formData)
             .then(res => console.log(res))
             .catch(err => console.log(err))
@@ -55,14 +54,13 @@ export default function ManagerList() {
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    {manager.map((item, index) => {
+                    {managerList.map((item, index) => {
                         return (
                             <tbody key={index}>
                                 <tr>
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-
                                     <td><button id={item.id} onClick={handleManagerId}>Assign User</button></td>
                                 </tr>
                             </tbody>
@@ -90,8 +88,7 @@ export default function ManagerList() {
                                     <th scope="row">{user.id}</th>
                                     <td>{user.name}</td>
                                     <td>{user.email}</td>
-                                    {/* <td><input type="bu" name={user.name} id="" value={user.id} onChange={handleList} /></td> */}
-                                    <td><button id={user.id} name={user.name} onClick={handleClickAssign}>Assign</button></td>
+                                    <td><button id={user.id} name={user.name} onClick={handleUserAssign}>Assign</button></td>
                                 </tr>
                             </tbody>
                         )
