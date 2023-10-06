@@ -19,9 +19,11 @@ export default function AssignUsers() {
 
     const handleSubmit = (e) => {
         const { id } = e.target;
-        setAssign({ ["assign_to"]: id });
+        console.log(id);
+        axios.post('http://localhost:5051/assignUsers', { assignto: id })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
     }
-
     console.log(assignto);
 
     return (
