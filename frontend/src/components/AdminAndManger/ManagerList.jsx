@@ -1,10 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function ManagerList() {
 
     const [manager, setManager] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('http://localhost:5051/managerList')
@@ -12,6 +13,16 @@ export default function ManagerList() {
                 setManager(res.data.data)
             })
     }, [])
+
+    const handleManagerId = (e) => {
+        const { id } = e.target
+        axios.post(`http://localhost:5051/assignUsers`, { managerId : id })
+        .then(res=>{
+            // console.log(res)
+            navigate('/assignUsers')
+            
+        })
+    }
 
     return (
         <div>
@@ -37,8 +48,7 @@ export default function ManagerList() {
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
 
-                                    <td><Link to='/assignUsers'>Assign User</Link ></td>
-
+                                    <td><button id={item.id} onClick={handleManagerId}>Assign User</button></td>
                                 </tr>
                             </tbody>
                         )
