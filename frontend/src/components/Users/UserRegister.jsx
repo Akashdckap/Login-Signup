@@ -79,7 +79,7 @@ function UserRegister() {
         if (validate()) {
             axios.post('http://localhost:5051/userRegister', formData)
                 .then(res => {
-                    if (res.data.Status == "Success") {
+                    if (res.data.Status === "Success") {
                         // localStorage.setItem('username', formData.name)
                         // localStorage.setItem('email', formData.email)
                         navigate('/userLogin');
@@ -91,7 +91,7 @@ function UserRegister() {
                 .catch(err => console.log(err));
         }
         else {
-            console.log("not okay");
+            alert("Validation is not proper")
         }
     }
     return (

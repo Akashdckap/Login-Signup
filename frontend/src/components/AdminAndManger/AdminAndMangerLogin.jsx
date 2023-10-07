@@ -53,22 +53,24 @@ export default function AdminAndMangerLogin() {
         if (validate()) {
             axios.post('http://localhost:5051/adminOrManagerLogin', formData)
                 .then(res => {
+                    let token = res.data.token
                     if (res.data.Status === "Success" && res.data.role === "Admin") {
-                        localStorage.setItem('token', res.data.token)
+                        localStorage.setItem('token', token)
                         navigate('/adminHome');
                     }
                     else if (res.data.Status === "Success" && res.data.role === "Manager") {
-                        localStorage.setItem('token', res.data.token)
+                        localStorage.setItem('token', token)
                         navigate('/managerHome');
                     }
                     else {
                         alert(res.data.Error);
+                        navigate('/adminOrManagerLogin')
                     }
                 })
                 .catch(err => console.log(err));
         }
         else {
-            navigate('/adminOrManagerLogin')
+            alert("validation is not proper")
         }
 
     }

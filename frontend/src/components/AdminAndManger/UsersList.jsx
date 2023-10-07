@@ -23,10 +23,10 @@ export default function UsersList() {
         <div>
             <div className='d-flex justify-content-around p-3'>
                 <h1>User lists</h1>
-                <Link to='/adminHome'><button className='btn btn-primary'>Back to AdminPage</button></Link>
+                <Link to='/adminHome'><button className='btn btn-outline-primary'>Back to AdminPage</button></Link>
             </div>
             <div>
-                <table className="table table-responsive">
+                <table className="table table-responsive table-sm">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
