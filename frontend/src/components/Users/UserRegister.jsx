@@ -90,9 +90,9 @@ function UserRegister() {
                 })
                 .catch(err => console.log(err));
         }
-        else {
-            alert("Validation is not proper")
-        }
+        // else {
+        //     alert("Validation is not proper")
+        // }
     }
     return (
         <div>

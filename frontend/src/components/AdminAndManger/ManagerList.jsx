@@ -38,8 +38,14 @@ export default function ManagerList() {
 
         axios.post('http://localhost:5051/managerList', formData)
             .then(res => {
+                console.log(res);
                 if (res.data.Status === "Success") {
                     alert("User Assigned successfully")
+                    setButtonText("Assigned")
+                }
+                else {
+                    setButtonText("UnAssign")
+                    alert(res.data.Error)
                 }
             })
             .catch(err => {
@@ -80,12 +86,12 @@ export default function ManagerList() {
 
             <div className='userListContainer' style={{ display: "none" }}>
                 <h2>User list</h2>
-                <table className="table table-responsive table-sm">
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
+                            <th scope="col">User Name</th>
+                            <th scope="col">User Email</th>
                             <th>Assign to</th>
                         </tr>
                     </thead>
@@ -96,7 +102,7 @@ export default function ManagerList() {
                                     <th scope="row">{user.id}</th>
                                     <td>{user.name}</td>
                                     <td>{user.email}</td>
-                                    <td><button className='assign btn btn-outline-danger btn-sm' id={user.id} name={user.name} onClick={handleUserAssign}>{buttonText}</button></td>
+                                    <td><input type='button' className='assign btn btn-outline-danger btn-sm' id={user.id} name={user.name} onClick={handleUserAssign} value={buttonText}></input></td>
                                 </tr>
                             </tbody>
                         )

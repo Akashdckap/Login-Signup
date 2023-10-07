@@ -255,10 +255,12 @@ app.post('/managerList', (req, res) => {
     const exists = `SELECT user_id FROM assignedUsers WHERE user_id = ?`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
 
+
     db.query(exists, [req.body.userId], (err, data) => {
 
+
         if (err) throw err;
-        else if (data.length > 0 && data[0].id == data[0].id ) {
+        else if (datas.length > 0 && datas[0].id == datas[0].id) {
             return res.json({ Error: "This user already assigned" });
         }
         else {
@@ -266,12 +268,12 @@ app.post('/managerList', (req, res) => {
                 req.body.managerId,
                 req.body.userId
             ];
-            db.query(sql, [values], (err, data) => {
-                if (err) {
-                    return res.json({ Error: "Assigned is error" });
+            db.query(sql, [values], (error, datas) => {
+                if (error) {
+                    return res.json({ datas, Error: "Assigned is error" });
                 }
                 else {
-                    return res.json({ Status: "Success" });
+                    return res.json({ datas, Status: "Success" });
                 }
             })
         }
