@@ -280,10 +280,19 @@ app.post('/managerList', (req, res) => {
     })
 })
 
-app.post('/users/taskList',(req,res)=>{
+app.post('/managerHome',(req,res)=>{
     // console.log(req.body)
     const { taskId } = req.body
-    const sql = "Select * from users"
+    // console.log(taskId);
+    const sql = `Select * from usersTasks WHERE user_id = ${ taskId }?`;
+    db.query(sql,(err,data)=>{
+        if(err){
+            return res.json({ Error : "Fetching users task throwing error" });
+        }
+        else{
+            return res.json({ data, Status:"Success" })
+        }
+    })
 })
 
 

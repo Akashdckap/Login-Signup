@@ -11,6 +11,7 @@ import AdminHome from './components/AdminAndManger/AdminHome'
 import ManagerHome from './components/AdminAndManger/ManagerHome'
 import ManagerList from './components/AdminAndManger/ManagerList'
 import UsersList from './components/AdminAndManger/UsersList'
+import UsersTaskList from './components/AdminAndManger/UsersTaskList'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         <Route path='/managerHome' element={<ManagerHome />}></Route>
         <Route path='/managerList' element={<ManagerList />}></Route>
         <Route path='/usersList' element={<UsersList />}></Route>
+        <Route path='/users/taskList' element={<UsersTaskList />}></Route>
       </Routes>
     </BrowserRouter>  
   )

@@ -25,12 +25,20 @@ export default function ManagerHome() {
 
   }, [])
 
-  const handleViewTask = (e) => {
-      const { id }  = e.target
-      // console.log(taskid);
-      axios.post('http://localhost:5051/users/taskList',{ taskId : id })
-      .then(res=>console.log(res))
-      .catch(err=>console.log(err))
+  const handleViewTask = (e) =>{
+    const { id } = e.target
+    // console.log(id)
+    axios.post('http://localhost:5051/managerHome',{ taskId : id })
+    .then(res=>{
+      if(res.data.Status == "Success" ){
+        // alert("Hi");;
+        navigate('/users/taskList')
+      }
+      else{
+        console.log("Hello");
+      }
+    })
+    .catch(err=>console.log(err))
   }
 
   const handleDeleteAccount = () => {
