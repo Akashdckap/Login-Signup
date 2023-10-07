@@ -19,6 +19,12 @@ export default function UsersList() {
             }).catch(err => console.log(err))
     }, [])
 
+    const handleViewTask = (e) =>{
+        const { id } = e.target;
+        // console.log(id);
+        navigate(`/viewTasks/${id}`)
+    }
+
     return (
         <div>
             <div className='d-flex justify-content-around p-3'>
@@ -32,6 +38,7 @@ export default function UsersList() {
                             <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
+                            <th scope='col'>Tasks</th>
                         </tr>
                     </thead>
                     {userList.map((item, index) => {
@@ -41,6 +48,7 @@ export default function UsersList() {
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
+                                    <td><button onClick={handleViewTask} id={item.id}>View Task</button></td>
                                 </tr>
                             </tbody>
                         )
