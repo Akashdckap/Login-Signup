@@ -119,19 +119,6 @@ app.post("/delete", (req, res) => {
 })
 
 
-app.get('/managerList', (req, res) => {
-    const sql = 'SELECT * FROM adminManager WHERE role = Manager';
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: 'Can not fetch the manager lists' })
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
-
-
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
     const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
@@ -263,7 +250,7 @@ app.post('/managerList', (req, res) => {
 
     db.query(exists,[req.body.userId],(err,data)=>{
         if (err) throw err;
-        else if (data.length > 0) {
+        else if (data.length > 0 && data[0].id == data[0].id ) {
             return res.json({ Error: "This user already assigned" });
         }
         else{

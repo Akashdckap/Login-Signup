@@ -10,6 +10,7 @@ export default function ManagerHome() {
     let token = localStorage.getItem('token')
     axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
+        console.log(res)
         if (res.data.Status === "Success") {
           setName(res.data.name)
           navigate('/managerHome')
