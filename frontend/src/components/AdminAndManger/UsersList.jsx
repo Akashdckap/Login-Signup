@@ -41,7 +41,6 @@ export default function UsersList() {
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-
                                 </tr>
                             </tbody>
                         )
