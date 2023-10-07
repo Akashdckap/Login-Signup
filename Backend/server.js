@@ -119,17 +119,17 @@ app.post("/delete", (req, res) => {
 })
 
 
-app.get('/managerList', (req, res) => {
-    const sql = 'SELECT * FROM adminManager WHERE role = Manager';
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: 'Can not fetch the manager lists' })
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
+// app.get('/managerList', (req, res) => {
+//     const sql = 'SELECT * FROM adminManager WHERE role = Manager';
+//     db.query(sql, (err, data) => {
+//         if (err) {
+//             return res.json({ Error: 'Can not fetch the manager lists' })
+//         }
+//         else {
+//             return res.json({ data, Status: "Success" });
+//         }
+//     })
+// })
 
 
 app.post('/userRegister', (req, res) => {
@@ -261,17 +261,16 @@ app.post('/managerList', (req, res) => {
     const exists = `SELECT id FROM assignedUsers WHERE id = ?`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
 
-    db.query(exists,[req.body.userId],(err,data)=>{
+    db.query(exists, [req.body.userId], (err, data) => {
         if (err) throw err;
         else if (data.length > 0) {
             return res.json({ Error: "This user already assigned" });
         }
-        else{
+        else {
             const values = [
                 req.body.managerId,
                 req.body.userId
             ];
-        
             db.query(sql, [values], (err, data) => {
                 if (err) {
                     return res.json({ Error: "Assigned is error" });
