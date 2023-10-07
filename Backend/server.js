@@ -302,7 +302,17 @@ app.post('/adminHome/managerList', (req, res) => {
     })
 })
 
-
+app.get('/adminHome/AssignList',(req,res)=>{
+    const sql = 'SELECT * FROM assignedUsers INNER JOIN adminManager ON assignedUsers.manager_id = adminManager.id INNER JOIN userTasks ON adminManager.id = userTasks.user_id'
+    db.query(sql,(err,data)=>{
+        if(err){
+            return res.json({ Error : "Fetching assigned users error" })
+        }
+        else{
+            return res.json({data, Status:"Success"});
+        }
+    })
+})
 
 app.listen(5051, () => {
     console.log("Server running on the 5051 port...")
