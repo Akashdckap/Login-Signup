@@ -249,6 +249,7 @@ app.post('/managerList', (req, res) => {
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
 
     db.query(exists,[req.body.userId],(err,data)=>{
+        // console.log(data);
         if (err) throw err;
         else if (data.length > 0 && data[0].id == data[0].id ) {
             return res.json({ Error: "This user already assigned" });
