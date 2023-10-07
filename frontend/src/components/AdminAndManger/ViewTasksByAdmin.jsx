@@ -1,22 +1,22 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios';
 
-export default function ViewTasks() {
+export default function ViewTasksByAdmin() {
     const [taskList, setTaskList] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
     console.log(id);
 
     useEffect(() => {
-        axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`)
+        axios.get(`http://localhost:5051/adminHome/usersList/viewTasks/${id}`)
             .then(res => {
                 if (res.data.Status === "Success") {
                     setTaskList(res.data.data)
                 }
                 else {
                     alert(res.data.Error)
-                    navigate('/managerHome')
+                    navigate('/adminHome')
                 }
             })
             .catch(err => console.log(err))
@@ -34,7 +34,8 @@ export default function ViewTasks() {
         <div>
             <div className='d-flex justify-content-around p-3'>
                 <h2>View tasks Page</h2>
-                <Link to='/managerHome'><button className='btn btn-outline-success'>Back to ManangerHomepage</button></Link>
+                <Link to='/adminHome/usersList'><button className='btn btn-outline-success'>Back to UserListPage</button></Link>
+                <Link to='/adminHome'><button className='btn btn-outline-primary'>Back to AdminHomePage</button></Link>
             </div>
             <div className='taskMainContainer'>
                 {

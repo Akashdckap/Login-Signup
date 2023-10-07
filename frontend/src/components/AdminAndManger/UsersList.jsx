@@ -6,11 +6,11 @@ export default function UsersList() {
     const [userList, setUserList] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
-        axios.get('http://localhost:5051/usersList')
+        axios.get('http://localhost:5051/adminHome/usersList')
             .then(res => {
                 if (res.data.Status === "Success") {
                     setUserList(res.data.data)
-                    navigate('/usersList');
+                    navigate('/adminHome/usersList');
                 }
                 else {
                     alert(res.data.Error)
@@ -18,6 +18,14 @@ export default function UsersList() {
                 }
             }).catch(err => console.log(err))
     }, [])
+
+
+    const handleViewTask = (e) => {
+        const { id } = e.target
+        navigate(`/adminHome/usersList/viewTasks/${id}`)
+    }
+
+
 
     return (
         <div>
@@ -32,19 +40,24 @@ export default function UsersList() {
                             <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
+                            <th scope="col">View Tasks</th>
                         </tr>
                     </thead>
-                    {userList.map((item, index) => {
-                        return (
-                            <tbody key={index}>
-                                <tr>
-                                    <th scope="row">{item.id}</th>
-                                    <td>{item.name}</td>
-                                    <td>{item.email}</td>
-                                </tr>
-                            </tbody>
-                        )
-                    })}
+                    {
+                        userList.map((item, index) => {
+                            return (
+                                <tbody key={index}>
+                                    <tr>
+                                        <th scope="row">{item.id}</th>
+                                        <td>{item.name}</td>
+                                        <td>{item.email}</td>
+                                        <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id}>View Task</button></td>
+
+                                    </tr>
+                                </tbody>
+                            )
+                        })
+                    }
                 </table>
             </div>
         </div>

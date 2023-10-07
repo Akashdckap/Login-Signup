@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 export default function AdminHome() {
   const [name, setAdminName] = useState('')
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     let token = localStorage.getItem('token')
     axios.get('http://localhost:5051/adminHome', { headers: { Authorization: `Bearer ${token}` } })
@@ -27,18 +27,18 @@ export default function AdminHome() {
   }
   return (
     <React.Fragment>
-    <div>
-      <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Admin Home page</h1></center>
-      <div className='d-flex justify-content-around'>
-        <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
-        <button className='btn btn-outline-danger' onClick={handleDeleteAccount}>Logout</button>
+      <div>
+        <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Admin Home page</h1></center>
+        <div className='d-flex justify-content-around'>
+          <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
+          <button className='btn btn-outline-danger' onClick={handleDeleteAccount}>Logout</button>
+        </div>
+        <div className='d-flex justify-content-center gap-5 p-3'>
+          <Link to='/adminHome/managerList'><button className='btn btn-primary'>Manager List</button></Link>
+          <Link to='/adminHome/usersList'><button className='btn btn-primary'>Users List</button></Link>
+        </div>
       </div>
-      <div className='d-flex justify-content-center gap-5 p-3'>
-        <Link to='/managerList'><button className='btn btn-primary'>Manager List</button></Link>
-        <Link to='/usersList'><button className='btn btn-primary'>Users List</button></Link>
-      </div>
-    </div>
-    <div>
+      <div>
         {/* {
           getData.map((item,index)=>
           <div key={index} className='taskContainer'>
@@ -46,7 +46,7 @@ export default function AdminHome() {
           <p><span className='text-white'>Description : </span>{item.description}</p>
         </div>)
         } */}
-    </div>
+      </div>
     </React.Fragment>
   )
 }
