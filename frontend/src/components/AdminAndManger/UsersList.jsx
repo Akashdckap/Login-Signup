@@ -19,11 +19,11 @@ export default function UsersList() {
             }).catch(err => console.log(err))
     }, [])
 
-
     const handleViewTask = (e) => {
         const { id } = e.target
         navigate(`/adminHome/usersList/viewTasks/${id}`)
     }
+
 
 
 
@@ -40,6 +40,7 @@ export default function UsersList() {
                             <th scope="col">Id</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
+
                             <th scope="col">View Tasks</th>
                         </tr>
                     </thead>
@@ -57,7 +58,7 @@ export default function UsersList() {
                                 </tbody>
                             )
                         })
-                    }
+
                 </table>
             </div>
         </div>

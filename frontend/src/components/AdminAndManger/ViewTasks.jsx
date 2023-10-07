@@ -6,7 +6,7 @@ export default function ViewTasks() {
     const [taskList, setTaskList] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
-    console.log(id);
+    // console.log(id);
 
     useEffect(() => {
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`)
@@ -44,8 +44,9 @@ export default function ViewTasks() {
                             <p><span className='text-white'>Description : </span>{item.description}</p>
                             <button onClick={handleDeleteTask} id={item.id} className='btn btn-outline-danger btn-sm'>Delete</button>
                         </div>
+
                     ) : <h1 className='text-danger'>No tasks for this user</h1>
-                }
+
             </div>
         </div>
     )
