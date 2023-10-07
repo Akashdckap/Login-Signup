@@ -13,6 +13,7 @@ import ManagerList from './components/AdminAndManger/ManagerList'
 import UsersList from './components/AdminAndManger/UsersList'
 
 import ViewTasks from './components/AdminAndManger/ViewTasks'
+import AdminAssignedViews from './components/AdminAndManger/AdminAssignedViews'
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path='/managerList' element={<ManagerList />}></Route>
         <Route path='/usersList' element={<UsersList />}></Route>
         <Route path='/viewTasks/:id' element={<ViewTasks />}></Route>
+        <Route path='/adminHome/AssignList' element={<AdminAssignedViews />}></Route>
       </Routes>
     </BrowserRouter>
   )

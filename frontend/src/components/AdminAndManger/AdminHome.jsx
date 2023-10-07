@@ -36,6 +36,7 @@ export default function AdminHome() {
       <div className='d-flex justify-content-center gap-5 p-3'>
         <Link to='/managerList'><button className='btn btn-primary'>Manager List</button></Link>
         <Link to='/usersList'><button className='btn btn-primary'>Users List</button></Link>
+        <Link to='/adminHome/AssignList'><button className='btn btn-primary'>Assigned members</button></Link>
       </div>
     </div>
     <div>
