@@ -34,8 +34,12 @@ export default function ManagerList() {
             userId: userId
         }
         axios.post('http://localhost:5051/managerList', formData)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
+            .then(res => {
+                alert("Assigned Successfully")
+            })
+            .catch(err => {
+                alert("Not Assigned facing errors")
+            })
     }
 
     return (
