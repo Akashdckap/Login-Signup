@@ -84,12 +84,26 @@ app.get('/usersList', (req, res) => {
 
 app.get('/managerHome', verifyUser, (req, res) => {
     const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
-    db.query(sql,[req.id],(err,data)=>{
-        if(err){
-            return res.json({ Error : "Fetching assigned users error" });
+    db.query(sql, [req.id], (err, data) => {
+        if (err) {
+            return res.json({ Error: "Fetching assigned users error" });
         }
-        else{
-            return res.json({data, Status: "Success", name: req.name, id: req.id });
+        else {
+            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+        }
+    })
+})
+
+app.get('/viewTasks/:id', (req, res) => {
+    const userId = req.params.id
+    // console.log(userId);
+    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Users fetch failure" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
         }
     })
 })
@@ -125,7 +139,6 @@ app.post("/delete", (req, res) => {
         }
     })
 })
-
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
     const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
@@ -280,20 +293,7 @@ app.post('/managerList', (req, res) => {
     })
 })
 
-app.post('/managerHome',(req,res)=>{
-    // console.log(req.body)
-    const { taskId } = req.body
-    // console.log(taskId);
-    const sql = `Select * from usersTasks WHERE user_id = ${ taskId }?`;
-    db.query(sql,(err,data)=>{
-        if(err){
-            return res.json({ Error : "Fetching users task throwing error" });
-        }
-        else{
-            return res.json({ data, Status:"Success" })
-        }
-    })
-})
+
 
 
 
