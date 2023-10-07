@@ -83,7 +83,15 @@ app.get('/usersList', (req, res) => {
 })
 
 app.get('/managerHome', verifyUser, (req, res) => {
-    return res.json({ Status: "Success", name: req.name, id: req.id });
+    const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
+    db.query(sql,[req.id],(err,data)=>{
+        if(err){
+            return res.json({ Error : "Fetching assigned users error" });
+        }
+        else{
+            return res.json({data, Status: "Success", name: req.name, id: req.id });
+        }
+    })
 })
 
 
@@ -245,7 +253,7 @@ app.post('/userHome', verifyUser, (req, res) => {
 
 })
 app.post('/managerList', (req, res) => {
-    const exists = `SELECT id FROM assignedUsers WHERE id = ?`;
+    const exists = `SELECT user_id FROM assignedUsers WHERE user_id = ?`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
 
     db.query(exists,[req.body.userId],(err,data)=>{
@@ -271,6 +279,14 @@ app.post('/managerList', (req, res) => {
         }
     })
 })
+
+app.post('/users/taskList',(req,res)=>{
+    // console.log(req.body)
+    const { taskId } = req.body
+    const sql = "Select * from users"
+})
+
+
 
 
 app.listen(5051, () => {
