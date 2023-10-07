@@ -27,7 +27,7 @@ export default function ManagerHome() {
 
   const handleViewTask = (e) => {
     const { id } = e.target
-    navigate(`/viewTasks/${id}`)
+    navigate(`/managerHome/viewTasks/${id}`)
 
   }
 
@@ -55,18 +55,20 @@ export default function ManagerHome() {
               <th scope="col">View Tasks</th>
             </tr>
           </thead>
-          {userList.map((item, index) => {
-            return (
-              <tbody key={index}>
-                <tr>
-                  <th scope="row">{item.id}</th>
-                  <td>{item.name}</td>
-                  <td>{item.email}</td>
-                  <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id}>View Task</button></td>
-                </tr>
-              </tbody>
-            )
-          })}
+          {
+            userList.length > 0 ? userList.map((item, index) => {
+              return (
+                <tbody key={index}>
+                  <tr>
+                    <th scope="row">{item.id}</th>
+                    <td>{item.name}</td>
+                    <td>{item.email}</td>
+                    <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id}>View Task</button></td>
+                  </tr>
+                </tbody>
+              )
+            }) : <h1 className='text-danger'>You don't have any users</h1>
+          }
         </table>
       </div>
     </React.Fragment>

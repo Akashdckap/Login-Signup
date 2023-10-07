@@ -6,7 +6,7 @@ export default function ManagerList() {
     const [managerList, setManagers] = useState([]);
     const [userList, setUsers] = useState([]);
     const [managerId, setManagerId] = useState('')
-    const [buttonText, setButtonText] = useState('UnAssign');
+    const [buttonText, setButtonText] = useState('Assigned');
 
     useEffect(() => {
         axios.get('http://localhost:5051/managerList')
@@ -27,7 +27,6 @@ export default function ManagerList() {
         const { id } = e.target
         setManagerId(id)
     }
-    // console.log(managerId);
 
     const handleUserAssign = (e) => {
         const userId = e.target.id
@@ -35,16 +34,15 @@ export default function ManagerList() {
             managerId: managerId,
             userId: userId
         }
-
-        axios.post('http://localhost:5051/managerList', formData)
+        axios.post('http://localhost:5051/adminHome/managerList', formData)
             .then(res => {
-                // console.log(res);
+
                 if (res.data.Status === "Success") {
                     alert("User Assigned successfully")
-                    setButtonText("Assigned")
+                    // setButtonText("Assigned")
                 }
                 else {
-                    setButtonText("UnAssign")
+                    // setButtonText("UnAssign")
                     alert(res.data.Error)
                 }
             })
@@ -102,7 +100,7 @@ export default function ManagerList() {
                                     <th scope="row">{user.id}</th>
                                     <td>{user.name}</td>
                                     <td>{user.email}</td>
-                                    <td><input type='button' className='assign btn btn-outline-danger btn-sm' id={user.id} name={user.name} onClick={handleUserAssign} value={buttonText}></input></td>
+                                    <td><input type='button' className='assign btn btn-outline-success btn-sm' id={user.id} name={user.name} onClick={handleUserAssign} value={buttonText}></input></td>
                                 </tr>
                             </tbody>
                         )

@@ -94,7 +94,21 @@ app.get('/managerHome', verifyUser, (req, res) => {
     })
 })
 
-app.get('/viewTasks/:id', (req, res) => {
+app.get('/managerHome/viewTasks/:id', (req, res) => {
+    const userId = req.params.id
+    // console.log(userId);
+    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Users fetch failure" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
+
+app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
     // console.log(userId);
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
@@ -109,11 +123,10 @@ app.get('/viewTasks/:id', (req, res) => {
 })
 
 
-
 app.get('/adminHome', verifyUser, (req, res) => {
     return res.json({ Status: "Success", name: req.name, id: req.id });
 })
-app.get('/usersList', (req, res) => {
+app.get('/adminHome/usersList', (req, res) => {
     const sql = 'SELECT * FROM users';
     db.query(sql, (err, data) => {
         if (err) {
@@ -264,16 +277,12 @@ app.post('/userHome', verifyUser, (req, res) => {
     })
 
 })
-app.post('/managerList', (req, res) => {
+app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT user_id FROM assignedUsers WHERE user_id = ?`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
-
-
     db.query(exists, [req.body.userId], (err, data) => {
-
-
         if (err) throw err;
-        else if (datas.length > 0 && datas[0].id == datas[0].id) {
+        else if (data.length > 0 && data[0].id == data[0].id) {
             return res.json({ Error: "This user already assigned" });
         }
         else {
@@ -281,20 +290,17 @@ app.post('/managerList', (req, res) => {
                 req.body.managerId,
                 req.body.userId
             ];
-            db.query(sql, [values], (error, datas) => {
+            db.query(sql, [values], (error, data) => {
                 if (error) {
-                    return res.json({ datas, Error: "Assigned is error" });
+                    return res.json({ data, Error: "Assigned is error" });
                 }
                 else {
-                    return res.json({ datas, Status: "Success" });
+                    return res.json({ data, Status: "Success" });
                 }
             })
         }
     })
 })
-
-
-
 
 
 
