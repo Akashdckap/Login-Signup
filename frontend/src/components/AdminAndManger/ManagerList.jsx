@@ -33,6 +33,8 @@ export default function ManagerList() {
             managerId: managerId,
             userId: userId
         }
+        let assign = document.querySelector(".assign")
+        assign.innnerText = "Assigned"
         axios.post('http://localhost:5051/managerList', formData)
             .then(res => console.log(res))
             .catch(err => console.log(err))
@@ -42,15 +44,15 @@ export default function ManagerList() {
         <div>
             <div className='d-flex justify-content-around p-3'>
                 <h1>Manager lists</h1>
-                <Link to='/adminHome'><button className='btn btn-primary'>Back to AdminPage</button></Link>
+                <Link to='/adminHome'><button className='btn btn-outline-primary'>Back to AdminPage</button></Link>
             </div>
             <div>
-                <table className="table wd-75">
+                <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
+                            <th scope="col">Manager Name</th>
+                            <th scope="col">Manager Email</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -61,7 +63,7 @@ export default function ManagerList() {
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-                                    <td><button id={item.id} onClick={handleManagerId}>Assign User</button></td>
+                                    <td><button className='btn btn-outline-success btn-sm' id={item.id} onClick={handleManagerId}>Assign User</button></td>
                                 </tr>
                             </tbody>
                         )
@@ -72,7 +74,7 @@ export default function ManagerList() {
 
             <div className='userListContainer' style={{ display: "none" }}>
                 <h2>User list</h2>
-                <table className="table wd-75">
+                <table className="table table-responsive table-sm">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
@@ -88,7 +90,7 @@ export default function ManagerList() {
                                     <th scope="row">{user.id}</th>
                                     <td>{user.name}</td>
                                     <td>{user.email}</td>
-                                    <td><button id={user.id} name={user.name} onClick={handleUserAssign}>Assign</button></td>
+                                    <td><button className=' assign btn btn-outline-success btn-sm' id={user.id} name={user.name} onClick={handleUserAssign}>Assign</button></td>
                                 </tr>
                             </tbody>
                         )

@@ -32,7 +32,7 @@ export default function ManagerHome() {
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>Manager Home page</h1></center>
       <div className='d-flex justify-content-around'>
         <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
-        <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
+        <button className='btn btn-outline-danger' onClick={handleDeleteAccount}>Logout</button>
       </div>
     </div>
   )

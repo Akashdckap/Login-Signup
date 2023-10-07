@@ -109,7 +109,7 @@ export default function UserHome() {
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>User Homepage</h1></center>
       <div className='d-flex justify-content-around'>
         <h3>Welcome to our site <span style={{ color: 'blue' }}>{name}</span></h3>
-        <button className='btn btn-danger' onClick={handleDeleteAccount}>Logout</button>
+        <button className='btn btn-outline-danger' onClick={handleDeleteAccount}>Logout</button>
       </div>
       {/* <h3>{message}</h3> */}
       <Button type="primary" className='ms-5' onClick={showModal}>
@@ -133,7 +133,7 @@ export default function UserHome() {
             <div key={index} className='taskContainer'>
               <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
               <p><span className='text-white'>Description : </span>{item.description}</p>
-              <button onClick={handleDeleteTask} id={item.id} className='btn btn-danger'>Delete</button>
+              <button onClick={handleDeleteTask} id={item.id} className='btn btn-outline-danger btn-sm'>Delete</button>
               {/* <button onClick={handleDeleteTask} id={item.id} className='btn btn-success'>Edit</button> */}
             </div>
           )
