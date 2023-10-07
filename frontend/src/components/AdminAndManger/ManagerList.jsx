@@ -36,8 +36,12 @@ export default function ManagerList() {
         let assign = document.querySelector(".assign")
         assign.innnerText = "Assigned"
         axios.post('http://localhost:5051/managerList', formData)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
+            .then(res => {
+                alert("Assigned Successfully")
+            })
+            .catch(err => {
+                alert("Not Assigned facing errors")
+            })
     }
 
     return (

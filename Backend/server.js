@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 // import cookieParser from "cookie-parser";
 
-/**git checking */
 const salt = 10;
 
 const app = express();
@@ -259,18 +258,28 @@ app.post('/userHome', verifyUser, (req, res) => {
 
 })
 app.post('/managerList', (req, res) => {
+    const exists = `SELECT id FROM assignedUsers WHERE id = ?`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
-    const values = [
-        req.body.managerId,
-        req.body.userId
-    ];
-    console.log(values);
-    db.query(sql, [values], (err, data) => {
-        if (err) {
-            return res.json({ Error: "Assigned is error" });
+
+    db.query(exists,[req.body.userId],(err,data)=>{
+        if (err) throw err;
+        else if (data.length > 0) {
+            return res.json({ Error: "This user already assigned" });
         }
-        else {
-            return res.json({ Status: "Success" });
+        else{
+            const values = [
+                req.body.managerId,
+                req.body.userId
+            ];
+        
+            db.query(sql, [values], (err, data) => {
+                if (err) {
+                    return res.json({ Error: "Assigned is error" });
+                }
+                else {
+                    return res.json({ Status: "Success" });
+                }
+            })
         }
     })
 })
