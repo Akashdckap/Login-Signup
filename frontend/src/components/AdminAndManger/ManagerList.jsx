@@ -6,6 +6,7 @@ export default function ManagerList() {
     const [managerList, setManagers] = useState([]);
     const [userList, setUsers] = useState([]);
     const [managerId, setManagerId] = useState('')
+    const [buttonText, setButtonText] = useState('UnAssign');
 
     useEffect(() => {
         axios.get('http://localhost:5051/managerList')
@@ -26,6 +27,7 @@ export default function ManagerList() {
         const { id } = e.target
         setManagerId(id)
     }
+    // console.log(managerId);
 
     const handleUserAssign = (e) => {
         const userId = e.target.id
@@ -33,11 +35,10 @@ export default function ManagerList() {
             managerId: managerId,
             userId: userId
         }
-        let assign = document.querySelector(".assign")
-        assign.innnerText = "Assigned"
         axios.post('http://localhost:5051/managerList', formData)
             .then(res => {
                 alert("Assigned Successfully")
+                setButtonText("Assigned")
             })
             .catch(err => {
                 alert("Not Assigned facing errors")
@@ -50,7 +51,7 @@ export default function ManagerList() {
                 <h1>Manager lists</h1>
                 <Link to='/adminHome'><button className='btn btn-outline-primary'>Back to AdminPage</button></Link>
             </div>
-            <div>
+            <div className='managerListContainer'>
                 <table className="table">
                     <thead>
                         <tr>
@@ -69,8 +70,7 @@ export default function ManagerList() {
                                     <td>{item.email}</td>
                                     <td><button className='btn btn-outline-success btn-sm' id={item.id} onClick={handleManagerId}>Assign User</button></td>
                                 </tr>
-                            </tbody>
-                        )
+                            </tbody>)
                     })}
                 </table>
             </div>
@@ -94,7 +94,7 @@ export default function ManagerList() {
                                     <th scope="row">{user.id}</th>
                                     <td>{user.name}</td>
                                     <td>{user.email}</td>
-                                    <td><button className=' assign btn btn-outline-success btn-sm' id={user.id} name={user.name} onClick={handleUserAssign}>Assign</button></td>
+                                    <td><button className='assign btn btn-outline-danger btn-sm' id={user.id} name={user.name} onClick={handleUserAssign}>{buttonText}</button></td>
                                 </tr>
                             </tbody>
                         )
