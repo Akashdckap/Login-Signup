@@ -35,6 +35,7 @@ export default function ManagerList() {
             managerId: managerId,
             userId: userId
         }
+
         axios.post('http://localhost:5051/managerList', formData)
             .then(res => {
                 if (res.data.Status === "Success") {
