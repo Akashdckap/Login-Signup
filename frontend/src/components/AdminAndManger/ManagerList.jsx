@@ -37,8 +37,11 @@ export default function ManagerList() {
         }
         axios.post('http://localhost:5051/managerList', formData)
             .then(res => {
-                alert("Assigned Successfully")
-                setButtonText("Assigned")
+
+                if (res.data.Status === "Success") {
+                    alert("User Assigned successfully")
+                }
+
             })
             .catch(err => {
                 alert("Not Assigned facing errors")
