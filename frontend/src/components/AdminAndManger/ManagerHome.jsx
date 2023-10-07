@@ -24,9 +24,11 @@ export default function ManagerHome() {
 
   }, [])
 
+
   const handleViewTask = (e) => {
     const { id } = e.target
     navigate(`/viewTasks/${id}`)
+
   }
 
   const handleDeleteAccount = () => {

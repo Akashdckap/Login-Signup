@@ -293,11 +293,7 @@ app.post('/managerList', (req, res) => {
     })
 })
 
-app.post('/users/taskList', (req, res) => {
-    // console.log(req.body)
-    const { taskId } = req.body
-    const sql = "Select * from users"
-})
+
 
 
 
