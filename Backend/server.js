@@ -70,17 +70,6 @@ app.get('/managerList', (req, res) => {
     })
 })
 
-app.get('/usersList', (req, res) => {
-    const sql = "SELECT * FROM users";
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: "Users fetch failure" });
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
 
 app.get('/managerHome', verifyUser, (req, res) => {
     const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
@@ -152,6 +141,7 @@ app.post("/delete", (req, res) => {
         }
     })
 })
+
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
     const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
@@ -220,7 +210,7 @@ app.post('/userLogin', (req, res) => {
             bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
                 if (err) return res.json({ Error: 'password compare error' })
                 if (response) {
-                    console.log(response)
+                    // console.log(response)
                     const name = data[0].name;
                     const id = data[0].id;
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
@@ -277,12 +267,18 @@ app.post('/userHome', verifyUser, (req, res) => {
     })
 
 })
+
+
 app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT user_id FROM assignedUsers WHERE user_id = ?`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
     db.query(exists, [req.body.userId], (err, data) => {
         if (err) throw err;
         else if (data.length > 0 && data[0].id == data[0].id) {
+            // const bothId = {
+            //     managerId: req.body.managerId,
+            //     userId: req.body.userId
+            // }
             return res.json({ Error: "This user already assigned" });
         }
         else {
@@ -291,13 +287,30 @@ app.post('/adminHome/managerList', (req, res) => {
                 req.body.userId
             ];
             db.query(sql, [values], (error, data) => {
+                const bothId = {
+                    managerId: req.body.managerId,
+                    userId: req.body.userId
+                }
                 if (error) {
-                    return res.json({ data, Error: "Assigned is error" });
+                    return res.json({ bothId, Error: "Assigned is error" });
                 }
                 else {
-                    return res.json({ data, Status: "Success" });
+
+                    return res.json({ bothId, Status: "Success" });
                 }
             })
+        }
+    })
+})
+
+app.get('/usersList', (req, res) => {
+    const sql = "SELECT * FROM users";
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Users fetch failure" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
         }
     })
 })

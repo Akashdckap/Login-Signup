@@ -90,11 +90,11 @@ export default function UserHome() {
       .catch(err => console.log(err));
   }, [])
 
+
   const handleDeleteAccount = () => {
     localStorage.removeItem('token')
     navigate('/userLogin')
   }
-
 
   const handleDeleteTask = (e) => {
     const { id } = e.target;

@@ -4,52 +4,66 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function ManagerList() {
     const [managerList, setManagers] = useState([]);
-    const [userList, setUsers] = useState([]);
-    const [managerId, setManagerId] = useState('')
-    const [buttonText, setButtonText] = useState('Assigned');
-
     useEffect(() => {
         axios.get('http://localhost:5051/managerList')
             .then(res => {
                 setManagers(res.data.data)
             })
             .catch(err => console.log(err))
-        axios.get('http://localhost:5051/usersList')
-            .then(res => {
-                setUsers(res.data.data)
-            })
-            .catch(err => console.log(err))
     }, [])
 
-    const handleManagerId = (e) => {
-        let userListContainer = document.querySelector(".userListContainer")
-        userListContainer.style.display = "block";
-        const { id } = e.target
-        setManagerId(id)
-    }
+    // const handleManagerId = (e) => {
+    //     let { id } = e.target
+    //     navigate(`/adminHome/managerList/userList/${id}`)
+    //     // console.log(e.target);
+    // }
+    // const [managerList, setManagers] = useState([]);
+    // const [userList, setUsers] = useState([]);
+    // const [managerId, setManagerId] = useState('')
+    // const [buttonText, setButtonText] = useState('Unassigned');
 
-    const handleUserAssign = (e) => {
-        const userId = e.target.id
-        const formData = {
-            managerId: managerId,
-            userId: userId
-        }
-        axios.post('http://localhost:5051/adminHome/managerList', formData)
-            .then(res => {
+    // useEffect(() => {
+    //     axios.get('http://localhost:5051/managerList')
+    //         .then(res => {
+    //             setManagers(res.data.data)
+    //         })
+    //         .catch(err => console.log(err))
+    //     axios.get('http://localhost:5051/usersList')
+    //         .then(res => {
+    //             setUsers(res.data.data)
+    //         })
+    //         .catch(err => console.log(err))
+    // }, [])
 
-                if (res.data.Status === "Success") {
-                    alert("User Assigned successfully")
-                    // setButtonText("Assigned")
-                }
-                else {
-                    // setButtonText("UnAssign")
-                    alert(res.data.Error)
-                }
-            })
-            .catch(err => {
-                // alert("Not Assigned facing errors")
-            })
-    }
+    // const handleManagerId = (e) => {
+    //     let userListContainer = document.querySelector(".userListContainer")
+    //     userListContainer.style.display = "block";
+    //     const { id } = e.target
+    //     setManagerId(id)
+    // }
+
+    // const handleUserAssign = (e) => {
+    //     const userId = e.target.id
+    //     const formData = {
+    //         managerId: managerId,
+    //         userId: userId
+    //     }
+    //     axios.post('http://localhost:5051/adminHome/managerList', formData)
+    //         .then(res => {
+
+    //             if (res.data.Status === "Success" && res.data.bothId) {
+    //                 setButtonText("Assigned")
+    //                 alert("User Assigned successfully")
+    //             }
+    //             else {
+    //                 setButtonText("UnAssigned")
+    //                 alert(res.data.Error)
+    //             }
+    //         })
+    //         .catch(err => {
+    //             alert("Not Assigned facing errors")
+    //         })
+    // }
 
     return (
         <div>
@@ -74,14 +88,14 @@ export default function ManagerList() {
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-                                    <td><button className='btn btn-outline-success btn-sm' id={item.id} onClick={handleManagerId}>Assign User</button></td>
+                                    <td><Link to={`/adminHome/managerList/userList/${item.id}`}><button className='btn btn-outline-success btn-sm' id={item.id}>Assign User</button></Link></td>
                                 </tr>
                             </tbody>)
                     })}
                 </table>
             </div>
 
-
+            {/* 
             <div className='userListContainer' style={{ display: "none" }}>
                 <h2>User list</h2>
                 <table className="table">
@@ -106,7 +120,7 @@ export default function ManagerList() {
                         )
                     })}
                 </table>
-            </div>
+            </div> */}
         </div>
 
     )
