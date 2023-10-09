@@ -271,7 +271,6 @@ app.post('/adminHome/managerList', (req, res) => {
     db.query(exists, [req.body.userId], (err, data) => {
         if (err) throw err;
         else if (data.length > 0 && data[0].id == data[0].id) {
-
             return res.json({ Error: "This user already assigned" });
         }
         else {
