@@ -29,15 +29,9 @@ export default function UserListByManger() {
         axios.post('http://localhost:5051/adminHome/managerList', payload)
             .then(res => {
                 if (res.data.Status === "Success") {
-                    // let { managerId, userId } = res.data.bothId;
-                    // let newObject = { managerId: managerId, userId: userId, buttonText: true }
-                    // setAssign(newObject)
                     alert("User assigned successfully")
                 }
                 else {
-                    // let { managerId, userId } = res.data.bothId;
-                    // let newObject = { managerId: managerId, userId: userId, buttonText: false };
-                    // setAssign(newObject);
                     alert(res.data.Error)
                 }
             })
@@ -45,7 +39,7 @@ export default function UserListByManger() {
                 alert("Can not assign the users")
             })
     }
-    // console.log(assign.buttonText ? );
+    // console.log(userList[0].is_assigned);
     return (
         <React.Fragment>
             <div>
@@ -70,7 +64,8 @@ export default function UserListByManger() {
                                         <th scope="row">{user.id}</th>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td><input type='button' className='assign btn btn-outline-success btn-sm' id={user.id} name={user.name} value="assigned" onClick={handleUserAssign}></input></td>
+                                        {/* {console.log(user.is_assigned == 0)} */}
+                                        <td><input type='button' className='assign btn btn-outline-success btn-sm' id={user.id} name={user.name} value={user.is_assigned == 0 ? "Unassigned" : "Assigned"} onClick={handleUserAssign}></input></td>
                                     </tr>)
                             })}
                         </tbody>
