@@ -28,7 +28,6 @@ const verifyUser = (req, res, next) => {
     const token = authHeader ? authHeader.split(' ')[1] : "auth header error";
 
     if (!token) {
-        // console.log(token);
         return res.json({ Error: "You are not authenticated" });
     }
     else {
@@ -37,7 +36,6 @@ const verifyUser = (req, res, next) => {
                 res.json({ Error: "Token is not okay" })
             }
             else {
-                // console.log(decoded);
                 req.name = decoded.name;
                 req.id = decoded.id;
                 req.role = decoded.role;
@@ -64,7 +62,6 @@ app.get('/managerList', (req, res) => {
             return res.json({ Error: "Fetch Manager Failed" });
         }
         else {
-            // console.log(data);
             return res.json({ data, Status: "Success" });
         }
     })
@@ -85,7 +82,6 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 app.get('/managerHome/viewTasks/:id', (req, res) => {
     const userId = req.params.id
-    // console.log(userId);
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     db.query(sql, (err, data) => {
         if (err) {
@@ -99,7 +95,6 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
 
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
-    // console.log(userId);
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     db.query(sql, (err, data) => {
         if (err) {
@@ -122,7 +117,6 @@ app.get('/adminHome/usersList', (req, res) => {
             return res.json({ Error: 'Can not fetch the user lists' })
         }
         else {
-            // console.log(data);
             return res.json({ data, Status: "Success" });
         }
     })
@@ -144,7 +138,7 @@ app.post("/delete", (req, res) => {
 
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
-    const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
+    const sql = "INSERT INTO users (`name`,`email`,`password`,`is_assigned`) VALUES(?)";
     db.query(exists, [req.body.email], (err, data) => {
         if (err) throw err;
         else if (data.length > 0) {
@@ -156,7 +150,8 @@ app.post('/userRegister', (req, res) => {
                 const values = [
                     req.body.name,
                     req.body.email,
-                    hash
+                    hash,
+                    0
                 ];
                 db.query(sql, [values], (err, result) => {
                     if (err) return res.json({ Error: "Inserting datas in server" })
@@ -210,7 +205,6 @@ app.post('/userLogin', (req, res) => {
             bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
                 if (err) return res.json({ Error: 'password compare error' })
                 if (response) {
-                    // console.log(response)
                     const name = data[0].name;
                     const id = data[0].id;
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
@@ -225,6 +219,7 @@ app.post('/userLogin', (req, res) => {
         }
     })
 })
+
 
 app.post('/adminOrManagerLogin', (req, res) => {
     const sql = 'SELECT * FROM adminManager WHERE email = ?';
@@ -254,6 +249,7 @@ app.post('/adminOrManagerLogin', (req, res) => {
     })
 })
 
+
 app.post('/userHome', verifyUser, (req, res) => {
     const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
@@ -268,10 +264,8 @@ app.post('/userHome', verifyUser, (req, res) => {
 
 })
 
-
 app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT user_id FROM assignedUsers WHERE user_id = ?`;
-
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
     const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
     db.query(exists, [req.body.userId], (err, data) => {
@@ -286,10 +280,6 @@ app.post('/adminHome/managerList', (req, res) => {
                 req.body.userId
             ];
             db.query(sql, [values], (error, data) => {
-                // const bothId = {
-                //     managerId: req.body.managerId,
-                //     userId: req.body.userId
-                // }
                 if (error) {
                     return res.json({ Error: "Assigned is error" });
                 }
