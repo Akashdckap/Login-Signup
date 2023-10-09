@@ -39,7 +39,7 @@ export default function UserListByManger() {
                 alert("Can not assign the users")
             })
     }
-    // console.log(assign.buttonText ? );
+    // console.log(userList[0].is_assigned);
     return (
         <React.Fragment>
             <div>
@@ -64,7 +64,8 @@ export default function UserListByManger() {
                                         <th scope="row">{user.id}</th>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td><input type='button' className='assign btn btn-outline-success btn-sm' id={user.id} name={user.name} value="assigned" onClick={handleUserAssign}></input></td>
+                                        {/* {console.log(user.is_assigned == 0)} */}
+                                        <td><input type='button' className='assign btn btn-outline-success btn-sm' id={user.id} name={user.name} value={user.is_assigned == 0 ? "Unassigned" : "Assigned"} onClick={handleUserAssign}></input></td>
                                     </tr>)
                             })}
                         </tbody>

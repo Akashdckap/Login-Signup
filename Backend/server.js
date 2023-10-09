@@ -271,15 +271,13 @@ app.post('/userHome', verifyUser, (req, res) => {
 
 app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT user_id FROM assignedUsers WHERE user_id = ?`;
+
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
     const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
     db.query(exists, [req.body.userId], (err, data) => {
         if (err) throw err;
         else if (data.length > 0 && data[0].id == data[0].id) {
-            // const bothId = {
-            //     managerId: req.body.managerId,
-            //     userId: req.body.userId
-            // }
+
             return res.json({ Error: "This user already assigned" });
         }
         else {
@@ -304,6 +302,7 @@ app.post('/adminHome/managerList', (req, res) => {
                             return res.json({ data, Status: "Success" });
                         }
                     })
+
                 }
             })
         }
