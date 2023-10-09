@@ -15,6 +15,7 @@ import UsersList from './components/AdminAndManger/UsersList'
 import ViewTasks from './components/AdminAndManger/ViewTasks'
 
 import ViewTasksByAdmin from './components/AdminAndManger/ViewTasksByAdmin'
+import UserListByManger from './components/AdminAndManger/UserListByManger'
 
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
         <Route path='/adminHome/usersList' element={<UsersList />}></Route>
         <Route path='/managerHome/viewTasks/:id' element={<ViewTasks />}></Route>
         <Route path='/adminHome/usersList/viewTasks/:id' element={<ViewTasksByAdmin />}></Route>
-
+        <Route path='/adminHome/managerList/userList/:id' element={< UserListByManger/>}></Route>
       </Routes>
     </BrowserRouter>
   )
