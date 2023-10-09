@@ -144,7 +144,7 @@ app.post("/delete", (req, res) => {
 
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
-    const sql = "INSERT INTO users (`name`,`email`,`password`) VALUES(?)";
+    const sql = "INSERT INTO users (`name`,`email`,`password`,`is_assigned`) VALUES(?)";
     db.query(exists, [req.body.email], (err, data) => {
         if (err) throw err;
         else if (data.length > 0) {
@@ -156,7 +156,8 @@ app.post('/userRegister', (req, res) => {
                 const values = [
                     req.body.name,
                     req.body.email,
-                    hash
+                    hash,
+                    0
                 ];
                 db.query(sql, [values], (err, result) => {
                     if (err) return res.json({ Error: "Inserting datas in server" })
@@ -276,10 +277,6 @@ app.post('/adminHome/managerList', (req, res) => {
     db.query(exists, [req.body.userId], (err, data) => {
         if (err) throw err;
         else if (data.length > 0 && data[0].id == data[0].id) {
-            // const bothId = {
-            //     managerId: req.body.managerId,
-            //     userId: req.body.userId
-            // }
             return res.json({ Error: "This user already assigned" });
         }
         else {
@@ -288,10 +285,6 @@ app.post('/adminHome/managerList', (req, res) => {
                 req.body.userId
             ];
             db.query(sql, [values], (error, data) => {
-                // const bothId = {
-                //     managerId: req.body.managerId,
-                //     userId: req.body.userId
-                // }
                 if (error) {
                     return res.json({ Error: "Assigned is error" });
                 }
