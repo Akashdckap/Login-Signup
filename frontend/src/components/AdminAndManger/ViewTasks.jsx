@@ -46,7 +46,7 @@ export default function ViewTasks() {
                         </div>
 
                     ) : <h1 className='text-danger'>No tasks for this user</h1>
-
+                }
             </div>
         </div>
     )
