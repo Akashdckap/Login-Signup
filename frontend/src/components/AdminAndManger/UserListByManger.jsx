@@ -29,15 +29,9 @@ export default function UserListByManger() {
         axios.post('http://localhost:5051/adminHome/managerList', payload)
             .then(res => {
                 if (res.data.Status === "Success") {
-                    // let { managerId, userId } = res.data.bothId;
-                    // let newObject = { managerId: managerId, userId: userId, buttonText: true }
-                    // setAssign(newObject)
                     alert("User assigned successfully")
                 }
                 else {
-                    // let { managerId, userId } = res.data.bothId;
-                    // let newObject = { managerId: managerId, userId: userId, buttonText: false };
-                    // setAssign(newObject);
                     alert(res.data.Error)
                 }
             })
