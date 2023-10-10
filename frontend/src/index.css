@@ -14,6 +14,7 @@ body {
   border-radius: 10px;
   margin: 3pc auto;
   padding: 15px 50px;
+  width: 40%;
 }
 
 
@@ -64,6 +65,7 @@ option {
   border-radius: 5px;
   /* overflow-y: scroll; */
 }
+
 /* 
 .signUp::selection {
   color: red;

@@ -34,7 +34,7 @@ export default function UsersList() {
                 <Link to='/adminHome'><button className='btn btn-outline-primary'>Back to AdminPage</button></Link>
             </div>
             <div>
-                <table className="table table-responsive table-sm">
+                <table className="table container-sm border border-5">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>

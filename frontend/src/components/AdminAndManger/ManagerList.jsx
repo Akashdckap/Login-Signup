@@ -72,7 +72,7 @@ export default function ManagerList() {
                 <Link to='/adminHome'><button className='btn btn-outline-primary'>Back to AdminPage</button></Link>
             </div>
             <div className='managerListContainer'>
-                <table className="table">
+                <table className="table container-sm border border-5">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
