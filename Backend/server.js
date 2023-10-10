@@ -80,18 +80,11 @@ app.get('/managerHome', verifyUser, (req, res) => {
     })
 })
 
-app.get('/managerHome/viewTasks/:id', (req, res) => {
-    const userId = req.params.id;
-    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: "Users fetch failure" });
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
+function validateUserId(){
+   
+}
+
+
 
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
@@ -333,7 +326,7 @@ app.get('/userHome/editTask/:id', (req, res) => {
 app.post('/userHome/editTask/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const { taskName, description } = req.body
-    const sql = "UPDATE userTasks SET task_name = ?,description = ? WHERE id = ?"
+    const sql = `UPDATE userTasks SET task_name = ? and description = ? WHERE id = ?`
     db.query(sql, [taskName, description, taskId], (err, result) => {
         if (err) {
             return res.json({ Error: "Can update the task details" })
