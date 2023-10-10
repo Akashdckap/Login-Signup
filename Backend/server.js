@@ -80,7 +80,8 @@ app.get('/managerHome', verifyUser, (req, res) => {
     })
 })
 
-app.get('/managerHome/viewTasks/:id', (req, res) => {
+app.get('/managerHome/viewTasks/:id',verifyUser, (req, res) => {
+    // console.log(req.id);
     const userId = req.params.id
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     db.query(sql, (err, data) => {
