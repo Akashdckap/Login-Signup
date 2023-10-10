@@ -265,35 +265,29 @@ app.post('/userHome', verifyUser, (req, res) => {
 })
 
 app.post('/adminHome/managerList', (req, res) => {
-    const exists = `SELECT user_id FROM assignedUsers WHERE user_id = ?`;
+    // console.log(req.body.managerId);
+    const exists = `SELECT * FROM assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId};`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
-    const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
-    db.query(exists, [req.body.userId], (err, data) => {
+    // const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
+    db.query(exists,(err, data) => {
         if (err) throw err;
-        else if (data.length > 0 && data[0].id == data[0].id) {
-            return res.json({ Error: "This user already assigned" });
-        }
-        else {
+
+        if(data.length === 0){
             const values = [
                 req.body.managerId,
                 req.body.userId
             ];
-            db.query(sql, [values], (error, data) => {
-                if (error) {
-                    return res.json({ Error: "Assigned is error" });
-                }
-                else {
-                    db.query(sql2, (err, data) => {
-                        if (err) {
-                            return res.json({ Error: "Cannot update in user table" })
-                        }
-                        else {
-                            return res.json({ data, Status: "Success" });
-                        }
-                    })
-
+            db.query(sql,[values],(err,data)=>{
+                // console.log(data);
+                if(err) throw err;
+                else{
+                    return res.json({data, Status:"Success"})
                 }
             })
+
+        }
+        else{
+            return res.json({ Error : "Already Assigned" });
         }
     })
 })
