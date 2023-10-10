@@ -69,6 +69,7 @@ app.get('/managerList', (req, res) => {
 
 
 app.get('/managerHome', verifyUser, (req, res) => {
+    // console.log(data);
     const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
     db.query(sql, [req.id], (err, data) => {
         if (err) {
@@ -80,10 +81,35 @@ app.get('/managerHome', verifyUser, (req, res) => {
     })
 })
 
-function validateUserId(){
-   
-}
 
+// function validateTaskId(req, res, next) {
+//     const taskId = parseInt(req.params.id);
+//     const task = 
+// }
+
+app.get('/managerHome/viewTasks/:id', (req, res) => {
+    // console.log(req.id);
+    const userId = req.params.id;
+    // console.log("managerids", req);
+    // const query = "SELECT * FROM users";
+    // db.query(query, (err, data) => {
+    //     const task = data[0].id === userId
+    //     if (!task) {
+    //         return res.status(404).json({ error: 'This user not for this manager' });
+    //     } else {
+    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Users fetch failure" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
+        }
+    });
+    //     }
+    // })
+})
+// db.end();
 
 
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
@@ -261,25 +287,24 @@ app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT * FROM assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId};`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
     // const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
-    db.query(exists,(err, data) => {
+    db.query(exists, (err, data) => {
         if (err) throw err;
 
-        if(data.length === 0){
+        if (data.length === 0) {
             const values = [
                 req.body.managerId,
                 req.body.userId
             ];
-            db.query(sql,[values],(err,data)=>{
+            db.query(sql, [values], (err, data) => {
                 // console.log(data);
-                if(err) throw err;
-                else{
-                    return res.json({data, Status:"Success"})
+                if (err) throw err;
+                else {
+                    return res.json({ data, Status: "Success" })
                 }
             })
-
         }
-        else{
-            return res.json({ Error : "Already Assigned" });
+        else {
+            return res.json({ Error: "Already Assigned" });
         }
     })
 })
