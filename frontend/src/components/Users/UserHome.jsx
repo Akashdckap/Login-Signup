@@ -133,8 +133,10 @@ export default function UserHome() {
             <div key={index} className='taskContainer'>
               <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
               <p><span className='text-white'>Description : </span>{item.description}</p>
-              <button onClick={handleDeleteTask} id={item.id} className='btn btn-outline-danger btn-sm'>Delete</button>
-              {/* <button onClick={handleDeleteTask} id={item.id} className='btn btn-success'>Edit</button> */}
+              <div className='d-flex justify-content-center gap-3'>
+                <button onClick={handleDeleteTask} id={item.id} className='btn btn-outline-danger btn-sm'>Delete</button>
+                <Link to={`/userHome/editTask/${item.id}`}><button id={item.id} className='btn btn-outline-success btn-sm'>Edit</button></Link>
+              </div>
             </div>
           )
         }

@@ -81,7 +81,7 @@ app.get('/managerHome', verifyUser, (req, res) => {
 })
 
 app.get('/managerHome/viewTasks/:id', (req, res) => {
-    const userId = req.params.id
+    const userId = req.params.id;
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     db.query(sql, (err, data) => {
         if (err) {
@@ -261,7 +261,6 @@ app.post('/userHome', verifyUser, (req, res) => {
         if (err) return res.json({ Error: "Task adding error" });
         return res.json({ Status: "Success" });
     })
-
 })
 
 app.post('/adminHome/managerList', (req, res) => {
@@ -319,6 +318,35 @@ app.get('/adminHome/AssignList', (req, res) => {
         }
         else {
             return res.json({ data, Status: "Success" });
+        }
+    })
+})
+
+
+app.get('/userHome/editTask/:id', (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const sql = `SELECT * FROM userTasks WHERE id = ${taskId}`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Fetching assigned users error" })
+        }
+        else {
+            return res.json({ data, Status: "Success" });
+        }
+    })
+});
+
+
+app.post('/userHome/editTask/:id', (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const { taskName, description } = req.body
+    const sql = "UPDATE userTasks SET task_name = ?,description = ? WHERE id = ?"
+    db.query(sql, [taskName, description, taskId], (err, result) => {
+        if (err) {
+            return res.json({ Error: "Can update the task details" })
+        }
+        else {
+            return res.json({ result, Status: "Success", SuccessStatus: "Data Updated Successfully" })
         }
     })
 })

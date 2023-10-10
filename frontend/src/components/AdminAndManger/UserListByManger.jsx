@@ -48,7 +48,7 @@ export default function UserListByManger() {
                     <Link to='/adminHome/managerList'><button className='btn btn-outline-success'>Back to ManangerList</button></Link>
                 </div>
                 <div className='userListContainer'>
-                    <table className="table">
+                    <table className="table container-sm border border-5">
                         <thead>
                             <tr>
                                 <th scope="col">Id</th>

@@ -16,6 +16,7 @@ import ViewTasks from './components/AdminAndManger/ViewTasks'
 
 import ViewTasksByAdmin from './components/AdminAndManger/ViewTasksByAdmin'
 import UserListByManger from './components/AdminAndManger/UserListByManger'
+import EditTask from './components/Users/EditTask'
 
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
         <Route path='/userHome' element={<UserHome />}></Route>
         <Route path='/userRegister' element={<UserRegister />}></Route>
         <Route path='/userLogin' element={<UserLogin />}></Route>
+        <Route path='/userHome/editTask/:id' element={<EditTask />}></Route>
+
         <Route path='/adminOrManagerRegister' element={<AdminAndManagerRegister />}></Route>
         <Route path='/adminOrManagerLogin' element={<AdminAndMangerLogin />}></Route>
         <Route path='/adminHome' element={<AdminHome />}></Route>
@@ -36,7 +39,7 @@ function App() {
         <Route path='/adminHome/usersList' element={<UsersList />}></Route>
         <Route path='/managerHome/viewTasks/:id' element={<ViewTasks />}></Route>
         <Route path='/adminHome/usersList/viewTasks/:id' element={<ViewTasksByAdmin />}></Route>
-        <Route path='/adminHome/managerList/userList/:id' element={< UserListByManger/>}></Route>
+        <Route path='/adminHome/managerList/userList/:id' element={< UserListByManger />}></Route>
       </Routes>
     </BrowserRouter>
   )
