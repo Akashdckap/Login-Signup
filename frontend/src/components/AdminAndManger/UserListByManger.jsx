@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios';
+import Item from 'antd/es/list/Item';
 
 export default function UserListByManger() {
 
     const [userList, setUsers] = useState([]);
     const [managerId, setManagerId] = useState('')
-    // const [buttonText, setButtonText] = useState('Unassigned');
+    const [bothId, setBothId] = useState([])
+    const [buttonText, setButtonText] = useState('Assign');
 
     // const [assign, setAssign] = useState([])
     const { id } = useParams();
@@ -20,7 +22,6 @@ export default function UserListByManger() {
             .catch(err => console.log(err))
     }, [])
 
-
     const handleUserAssign = (e) => {
         const payload = {
             managerId: managerId,
@@ -28,13 +29,15 @@ export default function UserListByManger() {
         }
         axios.post('http://localhost:5051/adminHome/managerList', payload)
             .then(res => {
-                if (res.data.Status === "Success") {
-                    alert("User assigned successfully")
-                    window.location.reload(true)
-                }
-                else {
-                    alert(res.data.Error)
-                }
+                console.log(res);
+                // if (res.data.Status === "Success") {
+                //     alert("User assigned successfully")
+                //     window.location.reload(true)
+                // }
+                // else {
+                //     alert(res.data.NOtMatchError)
+                //     setButtonText("Assigned")
+                // }
             })
             .catch(err => {
                 alert("Can not assign the users")
@@ -55,6 +58,7 @@ export default function UserListByManger() {
                                 <th scope="col">User Name</th>
                                 <th scope="col">User Email</th>
                                 <th>Assign to</th>
+                                {/* <th>id</th> */}
                             </tr>
                         </thead>
                         <tbody className="userList">
@@ -64,7 +68,10 @@ export default function UserListByManger() {
                                         <th scope="row">{user.id}</th>
                                         <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td><input type='button' className={user.is_assigned == 0 ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-success btn-sm'} id={user.id} name={user.name} value={user.is_assigned == 0 ? "Assign" : "Assigned"} onClick={handleUserAssign}></input></td>
+                                        <td><input type='button' className='btn btn-outline-success btn-sm' id={user.id} name={user.name} value={buttonText} onClick={handleUserAssign}></input></td>
+                                        {/* <td><input type='button' className={user.is_assigned == 0 ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-success btn-sm'} id={user.id} name={user.name} value={user.is_assigned == 0 ? "Assign" : "Assigned"} onClick={handleUserAssign}></input></td> */}
+                                        {/* <td><input type='button' id={bothId.managerId} name={user.name} value={bothId.managerId && bothId.userId ? "Assign" : "Assigned"} onClick={handleUserAssign}></input></td> */}
+                                        {/* <td>{bothId.managerId && bothId.user}</td> */}
                                     </tr>)
                             })}
                         </tbody>

@@ -26,7 +26,6 @@ const db = mysql.createConnection({
 const verifyUser = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader ? authHeader.split(' ')[1] : "auth header error";
-
     if (!token) {
         return res.json({ Error: "You are not authenticated" });
     }
@@ -81,14 +80,10 @@ app.get('/managerHome', verifyUser, (req, res) => {
     })
 })
 
-// function validateTaskId(req, res, next) {
-//     const taskId = parseInt(req.params.id);
-//     const task = 
-// }
-
-app.get('/managerHome/viewTasks/:id', (req, res) => {
+app.get('/managerHome/viewTask/:id', (req, res) => {
     // console.log(req.id);
     const userId = req.params.id;
+    // const checkURIId = 'SELECT id FROM users;'
     // console.log("managerids", req);
     // const query = "SELECT * FROM users";
     // db.query(query, (err, data) => {
@@ -96,19 +91,23 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
     //     if (!task) {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
-    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    db.query(sql, (err, data) => {
+
+    const sql = `SELECT * FROM userTasks WHERE user_id = ?`;
+    db.query(sql, [userId], (err, data) => {
+        // console.log(data[0].id);
+        // console.log(data[0].id);
+        // console.log();
         if (err) {
-            return res.json({ Error: "Users fetch failure" });
+            return res.json({ Error: "can not fetch the userList" });
         }
+        // if (userId != data[0].id) {
+        //     return res.json({ NOtMatchError: "This id is not your user" })
+        // }
         else {
             return res.json({ data, Status: "Success" });
         }
     });
-    //     }
-    // })
 })
-// db.end();
 
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
@@ -280,24 +279,33 @@ app.post('/userHome', verifyUser, (req, res) => {
     })
 })
 
+
 app.post('/adminHome/managerList', (req, res) => {
     // console.log(req.body.managerId);
-    const exists = `SELECT * FROM assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId};`;
+    // console.log("userid------------", req.body.userId);
+    const check = `SELECT * FROM assignedUsers JOIN users on users.id = assignedUsers.user_id WHERE assignedUsers.manager_id = ${req.body.managerId}`
+
+    // const exists = `SELECT * FROM assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId}`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
     // const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
-    db.query(exists, (err, data) => {
+    db.query(check, (err, data) => {
+        // console.log(data);
         if (err) throw err;
-
         if (data.length === 0) {
             const values = [
                 req.body.managerId,
                 req.body.userId
             ];
-            db.query(sql, [values], (err, data) => {
-                // console.log(data);
+            db.query(sql, [values], (err, bothId) => {
+                // console.log(bothId);
                 if (err) throw err;
                 else {
-                    return res.json({ data, Status: "Success" })
+                    bothId = {
+                        managerId: req.body.managerId,
+                        userId: req.body.userId
+                    }
+                    // console.log(bothId);
+                    return res.json({ bothId, Status: "Success" })
                 }
             })
         }

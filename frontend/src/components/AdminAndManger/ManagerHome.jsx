@@ -7,6 +7,9 @@ export default function ManagerHome() {
   const [name, setName] = useState('')
   const navigate = useNavigate();
   const [userList, setUsers] = useState([]);
+
+  axios.defaults.withCredentials = true;
+
   useEffect(() => {
     let token = localStorage.getItem('token')
     axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}` } })
@@ -27,7 +30,7 @@ export default function ManagerHome() {
 
   const handleViewTask = (e) => {
     const { id } = e.target
-    navigate(`/managerHome/viewTasks/${id}`)
+    navigate(`/managerHome/viewTask/${id}`)
 
   }
 
@@ -46,7 +49,7 @@ export default function ManagerHome() {
         <button className='btn btn-outline-danger' onClick={handleDeleteAccount}>Logout</button>
       </div>
       <div>
-        <table className="table table-responsive table-sm">
+        <table className="table container-sm border border-5">
           <thead>
             <tr>
               <th scope="col">Id</th>
