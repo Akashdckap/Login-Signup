@@ -11,9 +11,12 @@ export default function UserListByManger() {
     useEffect(() => {
         axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
+
+
                 
                 setUsers(res.data.data)
                 setBothId(res.data.right)
+
             })
             .catch(err => console.log(err))
     }, []);
@@ -41,6 +44,7 @@ export default function UserListByManger() {
                 }
                 else {
                     alert(res.data.Error)
+
                 }
 
             })

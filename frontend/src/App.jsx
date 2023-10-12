@@ -38,7 +38,9 @@ function App() {
 
         <Route path='/adminHome/managerList' element={<ManagerList />}></Route>
         <Route path='/adminHome/usersList' element={<UsersList />}></Route>
-        <Route path='/managerHome/viewTask/:id' element={<ViewTasks />}></Route>
+
+        <Route path='/managerHome/viewTasks/:id/:managerId' element={<ViewTasks />}></Route>
+
         <Route path='/adminHome/usersList/viewTasks/:id' element={<ViewTasksByAdmin />}></Route>
         <Route path='/adminHome/managerList/userList/:id' element={< UserListByManger />}></Route>
       </Routes>

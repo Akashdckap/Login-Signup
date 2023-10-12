@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 export default function ManagerHome() {
   const [name, setName] = useState('')
   const navigate = useNavigate();
+  const [managerId, setId] = useState('')
   const [userList, setUsers] = useState([]);
 
   axios.defaults.withCredentials = true;
@@ -16,6 +17,7 @@ export default function ManagerHome() {
       .then(res => {
         if (res.data.Status === "Success") {
           setName(res.data.name)
+          setId(res.data.id)
           setUsers(res.data.data)
           navigate('/managerHome')
         }
@@ -27,10 +29,12 @@ export default function ManagerHome() {
 
   }, [])
 
-
+  // console.log("managerId----------", managerId);
   const handleViewTask = (e) => {
     const { id } = e.target
-    navigate(`/managerHome/viewTask/${id}`)
+
+    navigate(`/managerHome/viewTasks/${id}/${managerId}`)
+
 
   }
 
