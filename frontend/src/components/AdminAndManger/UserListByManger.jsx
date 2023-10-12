@@ -7,8 +7,10 @@ export default function UserListByManger() {
 
     const [userList, setUsers] = useState([]);
     const [managerId, setManagerId] = useState('')
-    const [bothId, setBothId] = useState([])
-    const [buttonText, setButtonText] = useState('Assign');
+
+
+    const [exits, setExits] = useState({});
+    // const [buttonText, setButtonText] = useState('Unassigned');
 
     // const [assign, setAssign] = useState([])
     const { id } = useParams();
@@ -16,6 +18,7 @@ export default function UserListByManger() {
     useEffect(() => {
         axios.get('http://localhost:5051/usersList')
             .then(res => {
+                // console.log(res)
                 setManagerId(id)
                 setUsers(res.data.data)
             })
@@ -32,17 +35,51 @@ export default function UserListByManger() {
                 console.log(res);
                 // if (res.data.Status === "Success") {
                 //     alert("User assigned successfully")
-                //     window.location.reload(true)
+
+                //     // window.location.reload(true)
                 // }
                 // else {
-                //     alert(res.data.NOtMatchError)
-                //     setButtonText("Assigned")
+
+                //     alert(res.data.Error)
+                //     // let exitsId = {};
+                //     // exitsId.userId = res.data.userId;
+
+                //     // setExits(exitsId)
+
                 // }
             })
             .catch(err => {
                 alert("Can not assign the users")
             })
     }
+
+
+    // const load = (userId) =>{
+    //     const payload = {
+    //         managerId: managerId,
+    //         userId: userId
+    //     }
+    //     axios.post('http://localhost:5051/adminHome/managerList', payload)
+    //         .then(res => {
+    //             if (res.data.Status === "Success") {
+    //                 alert("User assigned successfully")
+    //                 window.location.reload(true)
+    //             }
+    //             else {
+
+
+    //                 let exitsId = {};
+    //                 exitsId.userId = res.data.userId;
+
+    //                 setExits(exitsId)
+    //             }
+    //         })
+    //         .catch(err => {
+    //             alert("Can not assign the users")
+    //         })
+    // }
+
+
     return (
         <React.Fragment>
             <div>
@@ -63,15 +100,15 @@ export default function UserListByManger() {
                         </thead>
                         <tbody className="userList">
                             {userList.map((user, index) => {
+
                                 return (
                                     <tr key={index}>
                                         <th scope="row">{user.id}</th>
-                                        <td>{user.name}</td>
+                                        <td>{user.user_name}</td>
                                         <td>{user.email}</td>
-                                        <td><input type='button' className='btn btn-outline-success btn-sm' id={user.id} name={user.name} value={buttonText} onClick={handleUserAssign}></input></td>
-                                        {/* <td><input type='button' className={user.is_assigned == 0 ? 'btn btn-outline-danger btn-sm' : 'btn btn-outline-success btn-sm'} id={user.id} name={user.name} value={user.is_assigned == 0 ? "Assign" : "Assigned"} onClick={handleUserAssign}></input></td> */}
-                                        {/* <td><input type='button' id={bothId.managerId} name={user.name} value={bothId.managerId && bothId.userId ? "Assign" : "Assigned"} onClick={handleUserAssign}></input></td> */}
-                                        {/* <td>{bothId.managerId && bothId.user}</td> */}
+
+                                        <td><input type='button' value="Assign" id={user.id} onClick={handleUserAssign}></input></td>
+
                                     </tr>)
                             })}
                         </tbody>
