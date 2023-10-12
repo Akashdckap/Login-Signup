@@ -9,18 +9,20 @@ export default function UserListByManger() {
     const [managerId, setManagerId] = useState('')
 
 
+
     const [exits, setExits] = useState({});
+
     // const [buttonText, setButtonText] = useState('Unassigned');
 
     // const [assign, setAssign] = useState([])
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get('http://localhost:5051/usersList')
+        axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
-                // console.log(res)
-                setManagerId(id)
-                setUsers(res.data.data)
+                console.log(res)
+                // setManagerId(id)
+                setUsers(res.data.right)
             })
             .catch(err => console.log(err))
     }, [])
@@ -33,20 +35,20 @@ export default function UserListByManger() {
         axios.post('http://localhost:5051/adminHome/managerList', payload)
             .then(res => {
                 console.log(res);
-                // if (res.data.Status === "Success") {
-                //     alert("User assigned successfully")
 
-                //     // window.location.reload(true)
-                // }
-                // else {
+                if (res.data.Status === "Success") {
+                    alert("User assigned successfully")
+                    // window.location.reload(true)
+                }
+                else {
 
-                //     alert(res.data.Error)
-                //     // let exitsId = {};
-                //     // exitsId.userId = res.data.userId;
+                    alert(res.data.Error)
+                    // let exitsId = {};
+                    // exitsId.userId = res.data.userId;
 
-                //     // setExits(exitsId)
+                    // setExits(exitsId)
+                }
 
-                // }
             })
             .catch(err => {
                 alert("Can not assign the users")
