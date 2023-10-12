@@ -18,11 +18,24 @@ body {
 }
 
 
+button.close {
+  border-style: none;
+  background-color: white;
+}
+
+button.close:hover {
+  color: rgb(236, 102, 102);
+}
 
 .signUp::selection {
   color: white;
   background-color: black;
 }
+
+span.closePopHub {
+  font-size: 28px;
+}
+
 
 /* select {
   padding: 8px;
