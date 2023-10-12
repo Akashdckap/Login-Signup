@@ -61,7 +61,7 @@ export default function ManagerHome() {
                 <tbody key={index}>
                   <tr>
                     <th scope="row">{item.id}</th>
-                    <td>{item.name}</td>
+                    <td>{item.user_name}</td>
                     <td>{item.email}</td>
                     <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id}>View Task</button></td>
                   </tr>
