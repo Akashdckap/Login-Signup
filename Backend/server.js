@@ -93,23 +93,24 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
     //     if (!task) {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
-    // console.log(userId == data[0].id)
-    const sql = `SELECT * FROM userTasks WHERE user_id = ?`;
-    db.query(sql, [userId], (err, data) => {
-        // console.log(data[0].id);
-        // console.log(data[0].id);
-        // console.log();
-        if (err) {
-            return res.json({ Error: "can not fetch the userList" });
-        }
 
-        // if (userId != data[0].id) {
-        //     return res.json({ NOtMatchError: "This id is not your user" })
-        // }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    });
+
+    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+    console.log(userId)
+
+        db.query(sql, (err, data) => {
+            if (err) {
+                return res.json({ Error: "Users fetch failure" });
+            }
+            else {
+                return res.json({ data, Status: "Success" });
+            }
+        });
+
+    //     }
+    // })
+
+
 })
 
 
@@ -319,20 +320,36 @@ app.post('/adminHome/managerList', (req, res) => {
     })
 })
 
-app.get('/usersList', (req, res) => {
+app.get('/usersList/:id', (req, res) => {
+
+    // console.log("Manager id-----------------",req.params.id);
+    const managerId = req.params.id
+    const assignedUsers = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${managerId}`
     const sql = "SELECT * FROM users";
+    // const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
+    // console.log(checking);
+
     // const sql = `Select * from assignedUsers INNER JOIN adminManager on assignedUsers.manager_id = adminManager.id INNER JOIN users on assignedUsers.user_id = user_id`;
     // const sql = `select * from assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId}`
 
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: "Users fetch failure" });
+    db.query(assignedUsers,(wrong,right)=>{
+        if(wrong){
+            console.log("no")
         }
-        else {
-            // console.log(data)
-            return res.json({ data, Status: "Success" });
+        else{
+            // console.log("yes")
+            db.query(sql, (err, data) => {
+                if (err) {
+                    return res.json({ Error: "Users fetch failure" });
+                }
+                else {
+                    // console.log(data)
+                    return res.json({ data, right, Status: "Success" });
+                }
+            })
         }
     })
+    
 })
 
 app.get('/adminHome/AssignList', (req, res) => {
