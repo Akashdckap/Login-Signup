@@ -26,7 +26,6 @@ const db = mysql.createConnection({
 const verifyUser = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader ? authHeader.split(' ')[1] : "auth header error";
-
     if (!token) {
         return res.json({ Error: "You are not authenticated" });
     }
@@ -82,14 +81,11 @@ app.get('/managerHome', verifyUser, (req, res) => {
 })
 
 
-// function validateTaskId(req, res, next) {
-//     const taskId = parseInt(req.params.id);
-//     const task = 
-// }
-
 app.get('/managerHome/viewTasks/:id', (req, res) => {
+
     // console.log(req.id);
     const userId = req.params.id;
+    // const checkURIId = 'SELECT id FROM users;'
     // console.log("managerids", req);
     // const query = "SELECT * FROM users";
     // db.query(query, (err, data) => {
@@ -97,6 +93,7 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
     //     if (!task) {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
+
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     console.log(userId)
 
@@ -111,8 +108,8 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
 
     //     }
     // })
+
 })
-// db.end();
 
 
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
@@ -284,25 +281,30 @@ app.post('/userHome', verifyUser, (req, res) => {
     })
 })
 
+
 app.post('/adminHome/managerList', (req, res) => {
     // console.log(req.body.managerId);
+
     // console.log(req.body.userId);
     const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
+
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
     const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
 
-    // const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
+
 
     db.query(exists, (err, data) => {
+
         if (err) throw err;
         if (data.length === 0) {
             const values = [
                 req.body.managerId,
                 req.body.userId
             ];
-            db.query(sql, [values], (err, data) => {
-                // console.log(data);
+            db.query(sql, [values], (err, bothId) => {
+                // console.log(bothId);
                 if (err) throw err;
+
                 // return res.json({ data, Status: "Success" })
                 db.query(checking,(wrong,right)=>{
                     if(wrong){
@@ -313,6 +315,7 @@ app.post('/adminHome/managerList', (req, res) => {
                         return res.json({ right, Status: "Success" })
                     }
                 })
+
             })
         }
         else {

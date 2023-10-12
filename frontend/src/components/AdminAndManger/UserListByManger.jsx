@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios';
+import Item from 'antd/es/list/Item';
 
 export default function UserListByManger() {
 
@@ -8,7 +9,9 @@ export default function UserListByManger() {
     const [managerId, setManagerId] = useState('')
 
 
-    // const [exits, setExits] = useState({});
+
+    const [exits, setExits] = useState({});
+
     // const [buttonText, setButtonText] = useState('Unassigned');
 
     // const [assign, setAssign] = useState([])
@@ -24,7 +27,6 @@ export default function UserListByManger() {
             .catch(err => console.log(err))
     }, [])
 
-
     const handleUserAssign = (e) => {
         const payload = {
             managerId: managerId,
@@ -33,6 +35,7 @@ export default function UserListByManger() {
         axios.post('http://localhost:5051/adminHome/managerList', payload)
             .then(res => {
                 console.log(res);
+
                 if (res.data.Status === "Success") {
                     alert("User assigned successfully")
                     // window.location.reload(true)
@@ -45,6 +48,7 @@ export default function UserListByManger() {
 
                     // setExits(exitsId)
                 }
+
             })
             .catch(err => {
                 alert("Can not assign the users")
@@ -93,6 +97,7 @@ export default function UserListByManger() {
                                 <th scope="col">User Name</th>
                                 <th scope="col">User Email</th>
                                 <th>Assign to</th>
+                                {/* <th>id</th> */}
                             </tr>
                         </thead>
                         <tbody className="userList">
@@ -103,7 +108,9 @@ export default function UserListByManger() {
                                         <th scope="row">{user.id}</th>
                                         <td>{user.user_name}</td>
                                         <td>{user.email}</td>
+
                                         <td><input type='button' value="Assign" id={user.id} onClick={handleUserAssign}></input></td>
+
                                     </tr>)
                             })}
                         </tbody>
