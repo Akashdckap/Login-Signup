@@ -9,7 +9,7 @@ export default function ViewTasks() {
     // console.log(id);
 
     useEffect(() => {
-        axios.get(`http://localhost:5051/managerHome/viewTask/${id}`)
+        axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`)
             .then(res => {
                 console.log(res);
                 if (res.data.Status === "Success") {
