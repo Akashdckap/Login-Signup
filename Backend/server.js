@@ -94,6 +94,7 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
 
+
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     console.log(userId)
 
@@ -108,6 +109,7 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
 
     //     }
     // })
+
 
 })
 
@@ -283,16 +285,9 @@ app.post('/userHome', verifyUser, (req, res) => {
 
 
 app.post('/adminHome/managerList', (req, res) => {
-    // console.log(req.body.managerId);
-
-    // console.log(req.body.userId);
     const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
-
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
     const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
-
-
-
     db.query(exists, (err, data) => {
 
         if (err) throw err;
@@ -306,11 +301,11 @@ app.post('/adminHome/managerList', (req, res) => {
                 if (err) throw err;
 
                 // return res.json({ data, Status: "Success" })
-                db.query(checking,(wrong,right)=>{
-                    if(wrong){
-                        return res.json({Error : "manager id does not exists"})
+                db.query(checking, (wrong, right) => {
+                    if (wrong) {
+                        return res.json({ Error: "manager id does not exists" })
                     }
-                    else{
+                    else {
                         // console.log("hi");
                         return res.json({ right, Status: "Success" })
                     }
@@ -321,25 +316,7 @@ app.post('/adminHome/managerList', (req, res) => {
         else {
             return res.json({ Error: "Already Assigned" });
         }
-        // if (data.length > 0) {
-        //     return res.json({
-        //         exits:"the user already assigned you",
-        //         userId: req.body.userId
-        //     })
-        // }
-        // else {
-        //     const values = [
-        //         req.body.managerId,
-        //         req.body.userId
-        //     ];
-        //     db.query(sql, [values], (err, data) => {
-        //         // console.log(data);
-        //         if (err) throw err;
-        //         else {
-        //             return res.json({ data, Status: "Success" })
-        //         }
-        //     })
-        // }
+
     })
 })
 
@@ -414,6 +391,7 @@ app.post('/userHome/editTask/:id', (req, res) => {
             return res.json({ result, Status: "Success", SuccessStatus: "Data Updated Successfully" })
         }
     })
+
 })
 
 app.listen(5051, () => {

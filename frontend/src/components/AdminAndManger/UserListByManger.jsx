@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios';
-import Item from 'antd/es/list/Item';
+// import Item from 'antd/es/list/Item';
 
 export default function UserListByManger() {
 
     const [userList, setUsers] = useState([]);
+    const [setId, setBothId] = useState([]);
     const [managerId, setManagerId] = useState('')
-
-
 
     const [exits, setExits] = useState({});
 
@@ -54,32 +53,6 @@ export default function UserListByManger() {
                 alert("Can not assign the users")
             })
     }
-
-
-    // const load = (userId) =>{
-    //     const payload = {
-    //         managerId: managerId,
-    //         userId: userId
-    //     }
-    //     axios.post('http://localhost:5051/adminHome/managerList', payload)
-    //         .then(res => {
-    //             if (res.data.Status === "Success") {
-    //                 alert("User assigned successfully")
-    //                 window.location.reload(true)
-    //             }
-    //             else {
-
-
-    //                 let exitsId = {};
-    //                 exitsId.userId = res.data.userId;
-
-    //                 setExits(exitsId)
-    //             }
-    //         })
-    //         .catch(err => {
-    //             alert("Can not assign the users")
-    //         })
-    // }
 
 
     return (
