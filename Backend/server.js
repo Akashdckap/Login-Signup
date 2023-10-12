@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -56,7 +56,7 @@ app.get('/userHome', verifyUser, (req, res) => {
 
 
 app.get('/managerList', (req, res) => {
-    const sql = "SELECT * FROM adminManager WHERE role = 'Manager'";
+    const sql = `SELECT * FROM adminManager WHERE role = 'Manager'`;
     db.query(sql, (err, data) => {
         if (err) {
             return res.json({ Error: "Fetch Manager Failed" });
@@ -157,7 +157,7 @@ app.post("/delete", (req, res) => {
 
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
-    const sql = "INSERT INTO users (`name`,`email`,`password`,`is_assigned`) VALUES(?)";
+    const sql = "INSERT INTO users (`user_name`,`email`,`password`) VALUES(?)";
     db.query(exists, [req.body.email], (err, data) => {
         if (err) throw err;
         else if (data.length > 0) {
@@ -169,8 +169,7 @@ app.post('/userRegister', (req, res) => {
                 const values = [
                     req.body.name,
                     req.body.email,
-                    hash,
-                    0
+                    hash
                 ];
                 db.query(sql, [values], (err, result) => {
                     if (err) return res.json({ Error: "Inserting datas in server" })
@@ -284,12 +283,15 @@ app.post('/userHome', verifyUser, (req, res) => {
 
 app.post('/adminHome/managerList', (req, res) => {
     // console.log(req.body.managerId);
-    const exists = `SELECT * FROM assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId};`;
+    // console.log(req.body.userId);
+    const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
+    const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
+
     // const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
+
     db.query(exists, (err, data) => {
         if (err) throw err;
-
         if (data.length === 0) {
             const values = [
                 req.body.managerId,
@@ -298,24 +300,54 @@ app.post('/adminHome/managerList', (req, res) => {
             db.query(sql, [values], (err, data) => {
                 // console.log(data);
                 if (err) throw err;
-                else {
-                    return res.json({ data, Status: "Success" })
-                }
+                // return res.json({ data, Status: "Success" })
+                db.query(checking,(wrong,right)=>{
+                    if(wrong){
+                        return res.json({Error : "manager id does not exists"})
+                    }
+                    else{
+                        // console.log("hi");
+                        return res.json({ right, Status: "Success" })
+                    }
+                })
             })
         }
         else {
             return res.json({ Error: "Already Assigned" });
         }
+        // if (data.length > 0) {
+        //     return res.json({
+        //         exits:"the user already assigned you",
+        //         userId: req.body.userId
+        //     })
+        // }
+        // else {
+        //     const values = [
+        //         req.body.managerId,
+        //         req.body.userId
+        //     ];
+        //     db.query(sql, [values], (err, data) => {
+        //         // console.log(data);
+        //         if (err) throw err;
+        //         else {
+        //             return res.json({ data, Status: "Success" })
+        //         }
+        //     })
+        // }
     })
 })
 
 app.get('/usersList', (req, res) => {
     const sql = "SELECT * FROM users";
+    // const sql = `Select * from assignedUsers INNER JOIN adminManager on assignedUsers.manager_id = adminManager.id INNER JOIN users on assignedUsers.user_id = user_id`;
+    // const sql = `select * from assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId}`
+
     db.query(sql, (err, data) => {
         if (err) {
             return res.json({ Error: "Users fetch failure" });
         }
         else {
+            // console.log(data)
             return res.json({ data, Status: "Success" });
         }
     })
