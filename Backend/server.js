@@ -112,8 +112,6 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
 
 
 })
-
-
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
@@ -287,7 +285,7 @@ app.post('/userHome', verifyUser, (req, res) => {
 app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
-    const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
+    // const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
     db.query(exists, (err, data) => {
 
         if (err) throw err;
@@ -296,20 +294,21 @@ app.post('/adminHome/managerList', (req, res) => {
                 req.body.managerId,
                 req.body.userId
             ];
-            db.query(sql, [values], (err, bothId) => {
+            db.query(sql, [values], (err, data) => {
                 // console.log(bothId);
                 if (err) throw err;
+                return res.json({ data, Status: "Success" })
 
                 // return res.json({ data, Status: "Success" })
-                db.query(checking, (wrong, right) => {
-                    if (wrong) {
-                        return res.json({ Error: "manager id does not exists" })
-                    }
-                    else {
-                        // console.log("hi");
-                        return res.json({ right, Status: "Success" })
-                    }
-                })
+                // db.query(checking, (wrong, right) => {
+                //     if (wrong) {
+                //         return res.json({ Error: "manager id does not exists" })
+                //     }
+                //     else {
+                //         // console.log("hi");
+                //         return res.json({ right, Status: "Success" })
+                //     }
+                // })
 
             })
         }
