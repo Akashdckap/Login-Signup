@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Modal } from "antd";
 
 
 export default function UserHome() {
+
+  const [searchText, setSearchText] = useState('')
+  // const [filteredItems, setFilteredItems] = useState([])
+
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState('');
+
+  // const [time, setTime] = useState([])
   const [name, setName] = useState('');
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     taskName: '',
     description: '',
@@ -20,6 +26,8 @@ export default function UserHome() {
     taskName: '',
     description: '',
   });
+
+  // console.log("task name", formData);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -55,7 +63,9 @@ export default function UserHome() {
     if (validate()) {
       axios.post('http://localhost:5051/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
+          // console.log(res);
           if (res.data.Status === "Success") {
+            // setTime(new Date())
             setMessage(res.data.Status);
           }
           else {
@@ -64,20 +74,23 @@ export default function UserHome() {
         })
         .catch(err => console.log(err));
       setIsModalOpen(false);
-      window.location.reload(true)
+      // window.location.reload(true)
     }
     else {
       console.log("not okay");
     }
   }
+  // console.log(time);
+  // console.log("task name", formData);
 
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
+    // console.log(new Date());
     let token = localStorage.getItem('token')
     axios.get('http://localhost:5051/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         if (res.data.Status === "Success") {
           setName(res.data.name);
           setStoreData(res.data.data)
@@ -100,9 +113,26 @@ export default function UserHome() {
     const { id } = e.target;
     axios.post(`http://localhost:5051/delete`, { deleteId: id })
       .then(res => {
+        // console.log(res);
         window.location.reload();
+        if (res.data.message === "task delete successfully") {
+          navigate('/userHome')
+        }
       })
   }
+
+  // storeData.filter(item => {
+  //   console.log(item.task_name);
+  // })
+  const handleSearch = (e) => {
+    setSearchText(e.target.value)
+    const filterData = storeData.filter(item => {
+      item.taskName.toLowerCase().includes(e.target.value.toLowerCase())
+      // console.log(item.taskName);()
+    });
+    setStoreData(filterData)
+  }
+  // console.log(storeData);
 
   return (
     <div>
@@ -112,9 +142,25 @@ export default function UserHome() {
         <button className='btn btn-outline-danger' onClick={handleDeleteAccount}>Logout</button>
       </div>
       {/* <h3>{message}</h3> */}
-      <Button type="primary" className='ms-5' onClick={showModal}>
-        Add task
-      </Button>
+      <div className='d-flex  justify-content-start align-items-center gap-5'>
+        <Button type="primary" className='ms-5' onClick={showModal}>
+          Add task
+        </Button>
+        <input type="text" onChange={handleSearch}
+          value={searchText}
+          className="form-control w-25" id="exampleInputEmail1" placeholder="search tasks" />
+      </div>
+
+      {/* <input
+        type="text"
+        placeholder="Search..."
+        value={searchText}
+        onChange={(e) => {
+          setSearchText(e.target.value);
+          // handleSearch(e.target.value);
+        }}
+      /> */}
+
       <Modal title="Task Form" open={isModalOpen} okText={"submit"} onCancel={handleCancel} onOk={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="exampleFormControlInput1" className="form-label">Task name</label>
@@ -133,13 +179,35 @@ export default function UserHome() {
             <div key={index} className='taskContainer'>
               <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
               <p><span className='text-white'>Description : </span>{item.description}</p>
+              {/* <p><span className='text-white'>Created at : </span>{time}</p> */}
               <div className='d-flex justify-content-center gap-3'>
-                <button onClick={handleDeleteTask} id={item.id} className='btn btn-outline-danger btn-sm'>Delete</button>
+                <Link to={`/userHome/${item.id}`}><button type="button" id={item.id} className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Delete</button></Link>
                 <Link to={`/userHome/editTask/${item.id}`}><button id={item.id} className='btn btn-outline-success btn-sm'>Edit</button></Link>
               </div>
             </div>
           )
         }
+      </div>
+
+      {/* <!-- Modal --> */}
+      <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalCenterTitle">Task Delete</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" className='closePopHub'>&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <h5>Are you sure to delete this task ?</h5>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-outline-danger btn-sm" data-dismiss="modal">Cancel</button>
+              <button type="button" id={id} onClick={handleDeleteTask} className="btn btn-outline-success btn-sm">Delete</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

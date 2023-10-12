@@ -13,6 +13,7 @@ export default function ViewTasks() {
     useEffect(() => {
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}/${managerId}`)
             .then(res => {
+                console.log(res);
                 if (res.data.Status === "Success") {
                     setTaskList(res.data.data)
                 }

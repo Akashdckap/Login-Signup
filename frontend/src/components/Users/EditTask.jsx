@@ -9,6 +9,7 @@ function EditTask() {
     const { id } = useParams();
     const naviagate = useNavigate();
 
+
     useEffect(() => {
         axios.get(`http://localhost:5051/userHome/editTask/${id}`)
             .then((response) => {
@@ -30,10 +31,13 @@ function EditTask() {
     const handleUpdateTask = (e) => {
         e.preventDefault();
         axios.post(`http://localhost:5051/userHome/editTask/${id}`, { taskName: taskName, description: description })
-            .then(res => console.log(res))
+            .then(res => {
+                if (res.data.Status == "Success") {
+                    naviagate("/userHome")
+                }
+            })
             .catch(err => console.log(err))
     }
-
     return (
         <div>
             <div className='d-flex justify-content-around p-3'>
@@ -41,7 +45,7 @@ function EditTask() {
                 <Link to='/userHome'><button className='btn btn-outline-primary'>Back to UserHomePage</button></Link>
             </div>
             <div className='wd-25 container'>
-                <form onClick={handleUpdateTask}>
+                <form onSubmit={handleUpdateTask}>
                     <div className="mb-3">
                         <label className="form-label">Task Name</label>
                         <input type="text" className="form-control" onChange={handleTaskNameChange} value={taskName} name='taskName' />
@@ -50,7 +54,7 @@ function EditTask() {
                         <label className="form-label">Description</label>
                         <input type="text" className="form-control" onChange={handelDescriptionChange} value={description} name='description' />
                     </div>
-                    <Link to='/userHome'><button type="submit" className="btn btn-primary">Update Task</button></Link>
+                    <button type="submit" className="btn btn-primary">Update Task</button>
                 </form>
             </div>
         </div>
