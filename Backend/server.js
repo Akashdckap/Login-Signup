@@ -16,6 +16,9 @@ app.use(cors({
 }));
 // app.use(cookieParser());
 
+
+
+
 const db = mysql.createConnection({
     host: "localhost",
     user: "dckap",
@@ -54,6 +57,14 @@ app.get('/userHome', verifyUser, (req, res) => {
     })
 })
 
+// const verifiedUser = (req,res,next) => {
+//     const url = req.path;
+//     console.log(url)
+//     // if(url != url){
+//     //     return res.status(403).send("Access Denied");
+//     // }
+//     next();
+// };
 
 app.get('/managerList', (req, res) => {
     const sql = `SELECT * FROM adminManager WHERE role = 'Manager'`;
@@ -87,8 +98,12 @@ app.get('/managerHome', verifyUser, (req, res) => {
 //     const task = 
 // }
 
-app.get('/managerHome/viewTasks/:id', (req, res) => {
+
+
+
+app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
     // console.log(req.id);
+    const managerId = req.params.managerId;
     const userId = req.params.id;
     // console.log("managerids", req);
     // const query = "SELECT * FROM users";
@@ -98,16 +113,25 @@ app.get('/managerHome/viewTasks/:id', (req, res) => {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    console.log(userId)
-
-        db.query(sql, (err, data) => {
-            if (err) {
-                return res.json({ Error: "Users fetch failure" });
-            }
-            else {
-                return res.json({ data, Status: "Success" });
-            }
-        });
+    const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
+    // console.log(userId)
+    db.query(exists,(err,data)=>{
+        if(err) throw err;
+        else if(data.length == 0){
+            return res.json({NotAuth  : "You are not authenticated", Error : "Undefined"});
+        }
+        else {
+            db.query(sql, (err, data) => {
+                if (err) {
+                    return res.json({ Error: "Users fetch failure" });
+                }
+                else {
+                    return res.json({ data, Status: "Success" });
+                }
+            });
+        }
+    })
+    
 
     //     }
     // })
@@ -289,7 +313,7 @@ app.post('/adminHome/managerList', (req, res) => {
     // console.log(req.body.userId);
     const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
-    const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
+    // const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
 
     // const sql2 = `UPDATE users SET is_assigned = 1 WHERE id = ${req.body.userId}`;
 
@@ -303,16 +327,18 @@ app.post('/adminHome/managerList', (req, res) => {
             db.query(sql, [values], (err, data) => {
                 // console.log(data);
                 if (err) throw err;
-                // return res.json({ data, Status: "Success" })
-                db.query(checking,(wrong,right)=>{
-                    if(wrong){
-                        return res.json({Error : "manager id does not exists"})
-                    }
-                    else{
-                        // console.log("hi");
-                        return res.json({ right, Status: "Success" })
-                    }
-                })
+                else {
+                    return res.json({ data, Status: "Success" })
+                }
+                // db.query(checking,(wrong,right)=>{
+                //     if(wrong){
+                //         return res.json({Error : "manager id does not exists"})
+                //     }
+                //     else{
+                //         // console.log("hi");
+                //         return res.json({ right, Status: "Success" })
+                //     }
+                // })
             })
         }
         else {
@@ -352,11 +378,9 @@ app.get('/usersList/:id', (req, res) => {
     // const sql = `Select * from assignedUsers INNER JOIN adminManager on assignedUsers.manager_id = adminManager.id INNER JOIN users on assignedUsers.user_id = user_id`;
     // const sql = `select * from assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId}`
 
-    db.query(assignedUsers,(wrong,right)=>{
-        if(wrong){
-            console.log("no")
-        }
-        else{
+    db.query(assignedUsers, (wrong, right) => {
+        if (wrong) throw wrong;
+        else {
             // console.log("yes")
             db.query(sql, (err, data) => {
                 if (err) {
@@ -369,7 +393,7 @@ app.get('/usersList/:id', (req, res) => {
             })
         }
     })
-    
+
 })
 
 app.get('/adminHome/AssignList', (req, res) => {

@@ -17,9 +17,9 @@ export default function UserListByManger() {
     useEffect(() => {
         axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
-                console.log(res)
-                // setManagerId(id)
-                setUsers(res.data.right)
+                // console.log(res)
+                setManagerId(id)
+                setUsers(res.data.data)
             })
             .catch(err => console.log(err))
     }, [])
@@ -40,10 +40,7 @@ export default function UserListByManger() {
                 else {
 
                     alert(res.data.Error)
-                    // let exitsId = {};
-                    // exitsId.userId = res.data.userId;
-
-                    // setExits(exitsId)
+                
                 }
             })
             .catch(err => {
