@@ -6,8 +6,6 @@ export default function ViewTasks() {
     const [taskList, setTaskList] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
-    // console.log("user--------id-------------", id);
-
     useEffect(() => {
         axios.get(`http://localhost:5051/viewTasks/${id}`)
             .then(res => {

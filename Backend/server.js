@@ -3,12 +3,14 @@ import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+
 import { LocalStorage } from "node-localstorage";
 // import localStorage from 'node-localstorage';
 // localStorage = new localStorage();
 // localStorage.getItem("manager_id")
 // import localStorage from 'localStorage'
 global.localStorage = new LocalStorage('./managerHome');
+
 
 // import cookieParser from "cookie-parser";
 
@@ -22,6 +24,7 @@ app.use(cors({
     credentials: true
 }));
 // app.use(cookieParser());
+app.use(bodyParser.json());
 
 
 
@@ -110,7 +113,6 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 
 
-
 app.get('/viewTasks/:id', (req, res) => {
     // console.log("manager_id--------------------", localStorage.getItem("manager_id"));
     // console.log(req.id);
@@ -121,6 +123,7 @@ app.get('/viewTasks/:id', (req, res) => {
     const userId = req.params.id;
     // console.log("userid -----------------", userId);
     // console.log("mangerid ------------------", localStorage.getItem("manager_id"));
+
     // const checkURIId = 'SELECT id FROM users;'
     // console.log("managerids", req);
     // const query = "SELECT * FROM users";
@@ -129,6 +132,7 @@ app.get('/viewTasks/:id', (req, res) => {
     //     if (!task) {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
+
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     const exists = `SELECT * FROM assignedUsers WHERE manager_id = 3 AND user_id = ${userId}`;
     // console.log(userId)
@@ -148,7 +152,44 @@ app.get('/viewTasks/:id', (req, res) => {
             });
         }
     })
+    // const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+
+    // db.query(sql, (err, data) => {
+    //     if (err) {
+    //         return res.json({ Error: "Users fetch failure" });
+    //     }
+    //     else {
+    //         return res.json({ data, Status: "Success" });
+    //     }
+    // });
+    // const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
+    // const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+
+    // console.log(userId)
+    // db.query(exists, (err, data) => {
+    //     if (err) throw err;
+    //     else if (data.length == 0) {
+    //         return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
+    //     }
+    //     else {
+    //         db.query(sql, (err, data) => {
+    //             if (err) {
+    //                 return res.json({ Error: "Users fetch failure" });
+    //             }
+    //             else {
+    //                 return res.json({ data, Status: "Success" });
+    //             }
+    //         });
+    //     }
+    // })
+
+
+
+
+
 })
+
+
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
@@ -341,7 +382,7 @@ app.post('/adminHome/managerList', (req, res) => {
                     return res.json({ data, Status: "Success" })
                 }
 
-                return res.json({ data, Status: "Success" })
+                // return res.json({ data, Status: "Success" })
 
                 // return res.json({ data, Status: "Success" })
                 // db.query(checking, (wrong, right) => {
