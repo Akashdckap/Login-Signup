@@ -87,12 +87,12 @@ export default function UserHome() {
 
   useEffect(() => {
     // console.log(new Date());
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem('user_token')
     axios.get('http://localhost:5051/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         console.log(res);
         if (res.data.Status === "Success") {
-          setName(res.data.name);
+          setName(res.data.user_name);
           setStoreData(res.data.data)
           navigate('/userHome');
         } else {
@@ -105,7 +105,9 @@ export default function UserHome() {
 
 
   const handleDeleteAccount = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('user_id')
+    localStorage.removeItem('user_name')
+    localStorage.removeItem('user_token')
     navigate('/userLogin')
   }
 

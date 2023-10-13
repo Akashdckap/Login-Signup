@@ -98,7 +98,6 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 
 app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
-
     // console.log(req.id);
     const managerId = req.params.managerId;
     const userId = req.params.id;
@@ -115,10 +114,10 @@ app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
     const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
     // console.log(userId)
-    db.query(exists,(err,data)=>{
-        if(err) throw err;
-        else if(data.length == 0){
-            return res.json({NotAuth  : "You are not authenticated", Error : "Undefined"});
+    db.query(exists, (err, data) => {
+        if (err) throw err;
+        else if (data.length == 0) {
+            return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
         }
         else {
             db.query(sql, (err, data) => {
@@ -131,7 +130,7 @@ app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
             });
         }
     })
-    
+
 
     //     }
     // })
@@ -249,10 +248,11 @@ app.post('/userLogin', (req, res) => {
             bcrypt.compare(req.body.password.toString(), data[0].password, (err, response) => {
                 if (err) return res.json({ Error: 'password compare error' })
                 if (response) {
-                    const name = data[0].name;
+                    const name = data[0].user_name;
+                    // console.log(name);
                     const id = data[0].id;
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
-                    return res.json({ Status: 'Success', token: token })
+                    return res.json({ Status: 'Success', user_id: id, user_name: name, token: token, })
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
@@ -280,7 +280,7 @@ app.post('/adminOrManagerLogin', (req, res) => {
                     const id = data[0].id;
                     const role = data[0].role;
                     const token = jwt.sign({ name, id }, 'jwt-secret-key', { expiresIn: '1d' });
-                    return res.json({ Status: 'Success', token: token, role: role })
+                    return res.json({ Status: 'Success', name: name, id: id, token: token, role: role })
                 }
                 else {
                     return res.json({ Error: 'Password not matched' })
@@ -359,7 +359,6 @@ app.get('/usersList/:id', (req, res) => {
     const sql = "SELECT * FROM users";
     // const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
     // console.log(checking);
-
     // const sql = `Select * from assignedUsers INNER JOIN adminManager on assignedUsers.manager_id = adminManager.id INNER JOIN users on assignedUsers.user_id = user_id`;
     // const sql = `select * from assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId}`
 

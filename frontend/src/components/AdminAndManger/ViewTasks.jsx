@@ -4,14 +4,14 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 export default function ViewTasks() {
     const [taskList, setTaskList] = useState([]);
-    const { id, managerId } = useParams();
+    const { id } = useParams();
     const [error, setError] = useState('')
     // const {  } = useParams();
     const navigate = useNavigate();
     // console.log(id);
 
     useEffect(() => {
-        axios.get(`http://localhost:5051/managerHome/viewTasks/${id}/${managerId}`)
+        axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`)
             .then(res => {
                 console.log(res);
                 if (res.data.Status === "Success") {
@@ -52,7 +52,7 @@ export default function ViewTasks() {
                     ) : <h1 className='text-danger'>No tasks for this user</h1>
                 }
                 {/* <h1>{error}</h1> */}
-            </div> 
+            </div>
         </div>
     )
 }

@@ -5,32 +5,18 @@ import axios from 'axios';
 export default function UserListByManger() {
     const [userList, setUsers] = useState([]);
     const [setId, setBothId] = useState([]);
-
     const { id } = useParams();
 
     useEffect(() => {
         axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
-
-
-                
+                console.log(res);
                 setUsers(res.data.data)
                 setBothId(res.data.right)
-
             })
             .catch(err => console.log(err))
     }, []);
 
-    // console.log("setId", setId);
-    // console.log("managerIdm----", id);
-
-    // let users = setId.filter(ele => ele);
-    // console.log(users);
-
-    //id.user_id == 1 ? "already assigned" : "newly assign"
-
-
-    // useEffect(() => {
     const handleUserAssign = (e) => {
         const payload = {
             managerId: id,
@@ -52,8 +38,6 @@ export default function UserListByManger() {
                 alert("Can not assign the users")
             })
     }
-    // handleUserAssign()
-    // }, [])
 
     let idx = [];
     setId.filter(id => idx.push(id.user_id));
@@ -82,7 +66,9 @@ export default function UserListByManger() {
                                         <th scope="row">{user.id}</th>
                                         <td>{user.user_name}</td>
                                         <td>{user.email}</td>
-                                        <td><input type='button' className={idx.filter(id => id == user.id) == user.id ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} value={idx.filter(id => id == user.id) == user.id ? "Unassign" : "Assign"} id={user.id} onClick={handleUserAssign}></input></td>
+
+                                        <td><input type='button' className={idx.find(id => id == user.id) == user.id ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} value={idx.filter(id => id == user.id) == user.id ? "Unassign" : "Assign"} id={user.id} onClick={handleUserAssign}></input></td>
+
                                     </tr>)
                             })}
                         </tbody>
