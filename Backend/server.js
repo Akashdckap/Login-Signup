@@ -3,6 +3,18 @@ import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import bodyParser from "body-parser";
+
+import { LocalStorage } from 'node-localstorage';
+
+
+const localStorage = new LocalStorage('./scratch');
+
+
+
+
+
+
 // import cookieParser from "cookie-parser";
 
 const salt = 10;
@@ -15,6 +27,7 @@ app.use(cors({
     credentials: true
 }));
 // app.use(cookieParser());
+app.use(bodyParser.json());
 
 
 
@@ -97,10 +110,17 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 
 
-app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
-    // console.log(req.id);
-    const managerId = req.params.managerId;
-    const userId = req.params.id;
+app.post('/managerHome/viewTasks/', (req, res) => {
+    // console.log("k");
+    // console.log(localStorage.getItem("manager_id"));
+    // const managerId = req.params.managerId;
+    // console.log(req.body.id)
+
+
+   
+    const managerId = req.body.managerId;
+
+    res.json({managerId:managerId})
     // const checkURIId = 'SELECT id FROM users;'
     // console.log("managerids", req);
     // const query = "SELECT * FROM users";
@@ -109,33 +129,48 @@ app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
     //     if (!task) {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
+    // const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
 
+    // db.query(sql, (err, data) => {
+    //     if (err) {
+    //         return res.json({ Error: "Users fetch failure" });
+    //     }
+    //     else {
+    //         return res.json({ data, Status: "Success" });
+    //     }
+    // });
+    // const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
+    // const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
 
-    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
     // console.log(userId)
-    db.query(exists, (err, data) => {
-        if (err) throw err;
-        else if (data.length == 0) {
-            return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
-        }
-        else {
-            db.query(sql, (err, data) => {
-                if (err) {
-                    return res.json({ Error: "Users fetch failure" });
-                }
-                else {
-                    return res.json({ data, Status: "Success" });
-                }
-            });
-        }
-    })
-
-
+    // db.query(exists, (err, data) => {
+    //     if (err) throw err;
+    //     else if (data.length == 0) {
+    //         return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
+    //     }
+    //     else {
+    //         db.query(sql, (err, data) => {
+    //             if (err) {
+    //                 return res.json({ Error: "Users fetch failure" });
+    //             }
+    //             else {
+    //                 return res.json({ data, Status: "Success" });
+    //             }
+    //         });
     //     }
     // })
 
 
+
+
+
+})
+
+app.get('/managerHome/viewTasks/:id',(req,res)=>{
+   
+
+    console.log(req);
+   
 })
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
