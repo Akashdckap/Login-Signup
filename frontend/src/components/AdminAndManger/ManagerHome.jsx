@@ -33,19 +33,7 @@ export default function ManagerHome() {
   // console.log("managerId----------", managerId);
   const handleViewTask = (e) => {
     const { id } = e.target
-
-    navigate(`/managerHome/viewTasks/${id}`)
-
-    let item = window.localStorage.getItem("manager_id");
-
-    // let list = {managerId:item,userId:id};
-    axios.post(`http://localhost:5051/managerHome/viewTasks/`,{
-        managerId:item,
-        userId : id
-    }).then(res=>{
-      // console.log(res);
-    })
-
+    navigate(`/viewTasks/${id}`)
 
   }
 

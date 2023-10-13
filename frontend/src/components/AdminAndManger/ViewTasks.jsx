@@ -5,15 +5,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 export default function ViewTasks() {
     const [taskList, setTaskList] = useState([]);
     const { id } = useParams();
-    const [error, setError] = useState('')
-    // const {  } = useParams();
     const navigate = useNavigate();
-    // console.log(id);
-    // console.log(localStorage.getItem("manager_id"));
     useEffect(() => {
-        axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`)
+        axios.get(`http://localhost:5051/viewTasks/${id}`)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 if (res.data.Status === "Success") {
                     setTaskList(res.data.data)
                 }
@@ -24,7 +20,9 @@ export default function ViewTasks() {
                 }
             })
             .catch(err => console.log(err))
-    }, [])
+    }, []);
+
+    // console.log("manager_id------------", localStorage.getItem("manager_id"));
 
     const handleDeleteTask = (e) => {
         const { id } = e.target;
