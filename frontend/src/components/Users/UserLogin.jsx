@@ -52,8 +52,10 @@ export default function UserLogin() {
                 .then(res => {
                     // console.log(res);
                     if (res.data.Status === "Success") {
-                        localStorage.setItem('token', res.data.token)
-                        navigate('/userHome');
+                        localStorage.setItem('user_id', res.data.user_id)
+                        localStorage.setItem('user_name', res.data.user_name)
+                        localStorage.setItem('user_token', res.data.token)
+                        navigate("/userHome")
                     } else {
                         alert(res.data.Error);
                     }
