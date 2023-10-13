@@ -9,7 +9,7 @@ export default function ViewTasks() {
     // const {  } = useParams();
     const navigate = useNavigate();
     // console.log(id);
-
+    // console.log(localStorage.getItem("manager_id"));
     useEffect(() => {
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`)
             .then(res => {
