@@ -14,6 +14,7 @@ export default function UserHome() {
 
   // const [time, setTime] = useState([])
   const [name, setName] = useState('');
+  console.log(name);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();

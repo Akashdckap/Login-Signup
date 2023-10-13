@@ -3,14 +3,14 @@ import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+// import bodyParser from ''
 
-import { LocalStorage } from "node-localstorage";
+// import { LocalStorage } from "node-localstorage";
 // import localStorage from 'node-localstorage';
 // localStorage = new localStorage();
 // localStorage.getItem("manager_id")
 // import localStorage from 'localStorage'
-global.localStorage = new LocalStorage('./managerHome');
-
+// global.localStorage = new LocalStorage('./managerHome');
 
 // import cookieParser from "cookie-parser";
 
@@ -24,7 +24,7 @@ app.use(cors({
     credentials: true
 }));
 // app.use(cookieParser());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 
 
@@ -57,12 +57,12 @@ const verifyUser = (req, res, next) => {
     }
 }
 app.get('/userHome', verifyUser, (req, res) => {
-    console.log("user id from localstorege------", localStorage.getItem("user_id"));
+    // console.log("user id from localstorege------", localStorage.getItem("user_id"));
     const sql = `SELECT * FROM userTasks where user_id = ${req.id}`;
     db.query(sql, (err, data) => {
         if (err) return res.json({ Error: "Fetch Failure in userhome router" })
         else {
-            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+            return res.json({ data, Status: "Success", user_name: req.name, id: req.id });
         }
     })
 })
@@ -90,7 +90,7 @@ app.get('/managerList', (req, res) => {
 
 
 app.get('/managerHome', verifyUser, (req, res) => {
-    console.log("manager_id--------------------", localStorage.getItem("manager_id"));
+    // console.log("manager_id--------------------", localStorage.getItem("manager_id"));
 
     // console.log(data);
     // console.log("managerid --------------------", req.id);
@@ -141,6 +141,7 @@ app.get('/viewTasks/:id', (req, res) => {
         else if (data.length == 0) {
             return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
         }
+
         else {
             db.query(sql, (err, data) => {
                 if (err) {
