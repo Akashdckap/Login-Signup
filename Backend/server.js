@@ -329,7 +329,7 @@ app.post('/adminHome/managerList', (req, res) => {
                     return res.json({ data, Status: "Success" })
                 }
 
-                return res.json({ data, Status: "Success" })
+                // return res.json({ data, Status: "Success" })
 
                 // return res.json({ data, Status: "Success" })
                 // db.query(checking, (wrong, right) => {

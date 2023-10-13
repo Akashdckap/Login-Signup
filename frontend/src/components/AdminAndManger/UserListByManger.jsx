@@ -66,7 +66,9 @@ export default function UserListByManger() {
                                         <th scope="row">{user.id}</th>
                                         <td>{user.user_name}</td>
                                         <td>{user.email}</td>
+
                                         <td><input type='button' className={idx.find(id => id == user.id) == user.id ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} value={idx.filter(id => id == user.id) == user.id ? "Unassign" : "Assign"} id={user.id} onClick={handleUserAssign}></input></td>
+
                                     </tr>)
                             })}
                         </tbody>
