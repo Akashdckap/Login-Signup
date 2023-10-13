@@ -6,7 +6,7 @@ export default function AdminHome() {
   const [name, setAdminName] = useState('')
   const navigate = useNavigate();
   useEffect(() => {
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem('admin_token')
     axios.get('http://localhost:5051/adminHome', { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         // console.log(res);
@@ -22,7 +22,9 @@ export default function AdminHome() {
       })
   }, [])
   const handleDeleteAccount = () => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('admin_id')
+    localStorage.removeItem('admin_name')
+    localStorage.removeItem('admin_token')
     navigate('/adminOrManagerLogin')
   }
   return (

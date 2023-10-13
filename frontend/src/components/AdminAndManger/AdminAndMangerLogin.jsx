@@ -55,11 +55,15 @@ export default function AdminAndMangerLogin() {
                 .then(res => {
                     let token = res.data.token
                     if (res.data.Status === "Success" && res.data.role === "Admin") {
-                        localStorage.setItem('token', token)
+                        localStorage.setItem('admin_id', res.data.id)
+                        localStorage.setItem('admin_name', res.data.name)
+                        localStorage.setItem('admin_token', token)
                         navigate('/adminHome');
                     }
                     else if (res.data.Status === "Success" && res.data.role === "Manager") {
-                        localStorage.setItem('token', token)
+                        localStorage.setItem('manager_id', res.data.id)
+                        localStorage.setItem('manager_name', res.data.name)
+                        localStorage.setItem('manager_token', token)
                         navigate('/managerHome');
                     }
                     else {
