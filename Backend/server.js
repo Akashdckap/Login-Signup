@@ -98,7 +98,6 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 
 app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
-
     // console.log(req.id);
     const managerId = req.params.managerId;
     const userId = req.params.id;
