@@ -32,10 +32,7 @@ export default function ManagerHome() {
   // console.log("managerId----------", managerId);
   const handleViewTask = (e) => {
     const { id } = e.target
-
-    navigate(`/managerHome/viewTasks/${id}`)
-
-
+    navigate(`/viewTasks/${id}`)
   }
 
   const handleDeleteAccount = () => {

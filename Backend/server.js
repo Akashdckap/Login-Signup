@@ -3,6 +3,13 @@ import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { LocalStorage } from "node-localstorage";
+// import localStorage from 'node-localstorage';
+// localStorage = new localStorage();
+// localStorage.getItem("manager_id")
+// import localStorage from 'localStorage'
+global.localStorage = new LocalStorage('./managerHome');
+
 // import cookieParser from "cookie-parser";
 
 const salt = 10;
@@ -47,6 +54,7 @@ const verifyUser = (req, res, next) => {
     }
 }
 app.get('/userHome', verifyUser, (req, res) => {
+    console.log("user id from localstorege------", localStorage.getItem("user_id"));
     const sql = `SELECT * FROM userTasks where user_id = ${req.id}`;
     db.query(sql, (err, data) => {
         if (err) return res.json({ Error: "Fetch Failure in userhome router" })
@@ -79,8 +87,14 @@ app.get('/managerList', (req, res) => {
 
 
 app.get('/managerHome', verifyUser, (req, res) => {
+    console.log("manager_id--------------------", localStorage.getItem("manager_id"));
+
     // console.log(data);
-    const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
+    // console.log("managerid --------------------", req.id);
+    // const managerId = localStorage.getItem("manager_id");
+    // console.log("mangerid line no:84 in server------------------", managerId);
+    // localStorage.setItem("manager_id", req.id)
+    const sql = `SELECT * FROM assignedUsers     LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
     db.query(sql, [req.id], (err, data) => {
         if (err) {
             return res.json({ Error: "Fetching assigned users error" });
@@ -97,10 +111,16 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 
 
-app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
+app.get('/viewTasks/:id', (req, res) => {
+    // console.log("manager_id--------------------", localStorage.getItem("manager_id"));
     // console.log(req.id);
-    const managerId = req.params.managerId;
+    // res.status(500).send('Internal Server Error');
+    // console.log(req.id);
+    // const managerId = localStorage.getItem("manager_id");
+    // console.log("mangerid ------------------", managerId);
     const userId = req.params.id;
+    // console.log("userid -----------------", userId);
+    // console.log("mangerid ------------------", localStorage.getItem("manager_id"));
     // const checkURIId = 'SELECT id FROM users;'
     // console.log("managerids", req);
     // const query = "SELECT * FROM users";
@@ -109,10 +129,8 @@ app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
     //     if (!task) {
     //         return res.status(404).json({ error: 'This user not for this manager' });
     //     } else {
-
-
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
+    const exists = `SELECT * FROM assignedUsers WHERE manager_id = 3 AND user_id = ${userId}`;
     // console.log(userId)
     db.query(exists, (err, data) => {
         if (err) throw err;
@@ -130,12 +148,6 @@ app.get('/managerHome/viewTasks/:id/:managerId', (req, res) => {
             });
         }
     })
-
-
-    //     }
-    // })
-
-
 })
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
