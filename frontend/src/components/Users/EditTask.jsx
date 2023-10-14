@@ -1,4 +1,3 @@
-// import React from 'react'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
@@ -21,12 +20,12 @@ function EditTask() {
             });
     }, []);
 
-    const handleTaskNameChange = (e) => {
-        setTaskName(e.target.value)
-    }
-    const handelDescriptionChange = (e) => {
-        setDescription(e.target.value)
-    }
+    // const handleTaskNameChange = (e) => {
+    //     setTaskName(e.target.value)
+    // }
+    // const handelDescriptionChange = (e) => {
+    //     setDescription(e.target.value)
+    // }
 
     const handleUpdateTask = (e) => {
         e.preventDefault();
@@ -48,11 +47,11 @@ function EditTask() {
                 <form onSubmit={handleUpdateTask}>
                     <div className="mb-3">
                         <label className="form-label">Task Name</label>
-                        <input type="text" className="form-control" onChange={handleTaskNameChange} value={taskName} name='taskName' />
+                        <input type="text" className="form-control" onChange={(e) => setTaskName(e.target.value)} value={taskName} name='taskName' />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Description</label>
-                        <input type="text" className="form-control" onChange={handelDescriptionChange} value={description} name='description' />
+                        <input type="text" className="form-control" onChange={(e) => setDescription(e.target.value)} value={description} name='description' />
                     </div>
                     <button type="submit" className="btn btn-primary">Update Task</button>
                 </form>

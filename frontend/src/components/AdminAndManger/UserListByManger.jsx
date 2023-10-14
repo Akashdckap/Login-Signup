@@ -4,14 +4,16 @@ import axios from 'axios';
 
 export default function UserListByManger() {
     const [userList, setUsers] = useState([]);
-    const [setId, setBothId] = useState([]);
+    // const [setId, setBothId] = useState([]);
     const { id } = useParams();
 
     useEffect(() => {
         axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
                 // console.log(res);
+                // setBothId(res.data.right)
                 setUsers(res.data.finalArray)
+
             })
             .catch(err => console.log(err))
     }, []);
@@ -39,6 +41,9 @@ export default function UserListByManger() {
             })
     }
 
+    // let idx = [];
+    // setId.filter(id => idx.push(id.user_id));
+
     return (
         <React.Fragment>
             <div>
@@ -64,7 +69,7 @@ export default function UserListByManger() {
                                         <th scope="row">{user.id}</th>
                                         <td>{user.user_name}</td>
                                         <td>{user.email}</td>
-                                        <td><input type='button'  value={user.status ? "UnAssign" : "Assign"} className={user.status ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} id={user.id} onClick={handleUserAssign}></input></td>
+                                        <td><input type='button' value={user.status ? "UnAssign" : "Assign"} className={user.status ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} id={user.id} onClick={handleUserAssign}></input></td>
 
                                         {/* <td><input type='button' className={idx.find(id => id == user.id) == user.id ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} value={idx.filter(id => id == user.id) == user.id ? "Unassign" : "Assign"} id={user.id} onClick={handleUserAssign}></input></td> */}
 
