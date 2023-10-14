@@ -152,17 +152,6 @@ export default function UserHome() {
           value={searchText}
           className="form-control w-25" id="exampleInputEmail1" placeholder="search tasks" />
       </div>
-
-      {/* <input
-        type="text"
-        placeholder="Search..."
-        value={searchText}
-        onChange={(e) => {
-          setSearchText(e.target.value);
-          // handleSearch(e.target.value);
-        }}
-      /> */}
-
       <Modal title="Task Form" open={isModalOpen} okText={"submit"} onCancel={handleCancel} onOk={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="exampleFormControlInput1" className="form-label">Task name</label>

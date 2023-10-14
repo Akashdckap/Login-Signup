@@ -59,12 +59,12 @@ const verifyUser = (req, res, next) => {
     }
 }
 app.get('/userHome', verifyUser, (req, res) => {
-    console.log("user id from localstorege------", localStorage.getItem("user_id"));
+    // console.log("user id from localstorege------", localStorage.getItem("user_id"));
     const sql = `SELECT * FROM userTasks where user_id = ${req.id}`;
     db.query(sql, (err, data) => {
         if (err) return res.json({ Error: "Fetch Failure in userhome router" })
         else {
-            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+            return res.json({ data, Status: "Success", user_name: req.name, id: req.id });
         }
     })
 })
@@ -358,7 +358,7 @@ app.post('/userHome', verifyUser, (req, res) => {
 app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
-    
+
     db.query(exists, (err, data) => {
 
         if (err) throw err;
@@ -389,7 +389,7 @@ app.get('/usersList/:id', (req, res) => {
     // console.log("ManagerId", managerId)
     const assignedUsers = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${managerId}`
     const sql = "SELECT * FROM users";
-    
+
     db.query(assignedUsers, (wrong, right) => {
         if (wrong) throw wrong;
         else {
@@ -414,7 +414,7 @@ app.get('/usersList/:id', (req, res) => {
 
                     let finalArray = [...Matchresult, ...UnMatchresult]
 
-                    return res.json({finalArray, Status:"Success"})
+                    return res.json({ finalArray, Status: "Success" })
 
                 }
             })
@@ -454,7 +454,7 @@ app.get('/userHome/editTask/:id', (req, res) => {
 app.post('/userHome/editTask/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const { taskName, description } = req.body
-    const sql = `UPDATE userTasks SET task_name = ? and description = ? WHERE id = ?`
+    const sql = `UPDATE userTasks SET task_name = ?, description = ? WHERE id = ?`
     db.query(sql, [taskName, description, taskId], (err, result) => {
         if (err) {
             return res.json({ Error: "Can update the task details" })
