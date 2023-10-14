@@ -58,14 +58,12 @@ export default function UserHome() {
   }
 
   const handleSubmit = (e) => {
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem('user_token')
     e.preventDefault();
     if (validate()) {
       axios.post('http://localhost:5051/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
-          // console.log(res);
           if (res.data.Status === "Success") {
-            // setTime(new Date())
             setMessage(res.data.Status);
           }
           else {
@@ -74,7 +72,7 @@ export default function UserHome() {
         })
         .catch(err => console.log(err));
       setIsModalOpen(false);
-      // window.location.reload(true)
+      window.location.reload(true)
     }
     else {
       console.log("not okay");
