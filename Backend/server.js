@@ -5,12 +5,12 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 // import bodyParser from ''
 
-// import { LocalStorage } from "node-localstorage";
+import { LocalStorage } from "node-localstorage";
 // import localStorage from 'node-localstorage';
 // localStorage = new localStorage();
 // localStorage.getItem("manager_id")
 // import localStorage from 'localStorage'
-// global.localStorage = new LocalStorage('./managerHome');
+global.localStorage = new LocalStorage('./scratch');
 
 // import cookieParser from "cookie-parser";
 
@@ -91,6 +91,7 @@ app.get('/managerList', (req, res) => {
 
 app.get('/managerHome', verifyUser, (req, res) => {
     // console.log("manager_id--------------------", localStorage.getItem("manager_id"));
+    console.log("manager id ------new --------", localStorage.getItem("manager_id"));
 
     // console.log(data);
     // console.log("managerid --------------------", req.id);
@@ -183,11 +184,6 @@ app.get('/viewTasks/:id', (req, res) => {
     //         });
     //     }
     // })
-
-
-
-
-
 })
 
 
@@ -401,7 +397,6 @@ app.post('/adminHome/managerList', (req, res) => {
         else {
             return res.json({ Error: "Already Assigned" });
         }
-
     })
 })
 
@@ -462,18 +457,22 @@ app.get('/userHome/editTask/:id', (req, res) => {
 
 
 app.post('/userHome/editTask/:id', (req, res) => {
+    // console.log();
     const taskId = parseInt(req.params.id);
+    // console.log("taskId------------", taskId);
     const { taskName, description } = req.body
-    const sql = `UPDATE userTasks SET task_name = ? and description = ? WHERE id = ?`
+    // console.log(req.body.taskName);
+    // const query = "SELECT id FROM userTasks WHERE user_id"
+    const sql = `UPDATE userTasks SET task_name = ?, description = ? WHERE id = ? `
     db.query(sql, [taskName, description, taskId], (err, result) => {
         if (err) {
+            console.log(err);
             return res.json({ Error: "Can update the task details" })
         }
         else {
             return res.json({ result, Status: "Success", SuccessStatus: "Data Updated Successfully" })
         }
     })
-
 })
 
 app.listen(5051, () => {

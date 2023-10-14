@@ -7,14 +7,11 @@ import { Button, Modal } from "antd";
 export default function UserHome() {
 
   const [searchText, setSearchText] = useState('')
-  // const [filteredItems, setFilteredItems] = useState([])
 
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState('');
 
-  // const [time, setTime] = useState([])
   const [name, setName] = useState('');
-  console.log(name);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
@@ -28,7 +25,6 @@ export default function UserHome() {
     description: '',
   });
 
-  // console.log("task name", formData);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -64,9 +60,7 @@ export default function UserHome() {
     if (validate()) {
       axios.post('http://localhost:5051/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
-          // console.log(res);
           if (res.data.Status === "Success") {
-            // setTime(new Date())
             setMessage(res.data.Status);
           }
           else {
@@ -75,23 +69,19 @@ export default function UserHome() {
         })
         .catch(err => console.log(err));
       setIsModalOpen(false);
-      // window.location.reload(true)
     }
     else {
       console.log("not okay");
     }
   }
-  // console.log(time);
-  // console.log("task name", formData);
+
 
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    // console.log(new Date());
     let token = localStorage.getItem('user_token')
     axios.get('http://localhost:5051/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        console.log(res);
         if (res.data.Status === "Success") {
           setName(res.data.user_name);
           setStoreData(res.data.data)
@@ -116,27 +106,23 @@ export default function UserHome() {
     const { id } = e.target;
     axios.post(`http://localhost:5051/delete`, { deleteId: id })
       .then(res => {
-        // console.log(res);
         window.location.reload();
         if (res.data.message === "task delete successfully") {
           navigate('/userHome')
         }
       })
   }
-
-  // storeData.filter(item => {
-  //   console.log(item.task_name);
-  // })
+  
   const handleSearch = (e) => {
     setSearchText(e.target.value)
-    const filterData = storeData.filter(item => {
-      item.taskName.toLowerCase().includes(e.target.value.toLowerCase())
-      // console.log(item.taskName);()
-    });
-    setStoreData(filterData)
+    const data = storeData.filter(ite => {
+      ite.task_name.toLowerCase().includes(e.target.value.toLowerCase())
+    })
+    // console.log(data);
+    setStoreData(data)
   }
-  // console.log(storeData);
 
+  console.log(storeData);
   return (
     <div>
       <center><h1 style={{ color: 'ThreeDDarkShadow' }}>User Homepage</h1></center>
@@ -153,17 +139,6 @@ export default function UserHome() {
           value={searchText}
           className="form-control w-25" id="exampleInputEmail1" placeholder="search tasks" />
       </div>
-
-      {/* <input
-        type="text"
-        placeholder="Search..."
-        value={searchText}
-        onChange={(e) => {
-          setSearchText(e.target.value);
-          // handleSearch(e.target.value);
-        }}
-      /> */}
-
       <Modal title="Task Form" open={isModalOpen} okText={"submit"} onCancel={handleCancel} onOk={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="exampleFormControlInput1" className="form-label">Task name</label>

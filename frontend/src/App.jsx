@@ -11,12 +11,10 @@ import AdminHome from './components/AdminAndManger/AdminHome'
 import ManagerHome from './components/AdminAndManger/ManagerHome'
 import ManagerList from './components/AdminAndManger/ManagerList'
 import UsersList from './components/AdminAndManger/UsersList'
-
 import ViewTasks from './components/AdminAndManger/ViewTasks'
-
 import ViewTasksByAdmin from './components/AdminAndManger/ViewTasksByAdmin'
-import UserListByManger from './components/AdminAndManger/UserListByManger'
 import EditTask from './components/Users/EditTask'
+import AssignUserListByAdmin from './components/AdminAndManger/AssignUserListByAdmin'
 
 
 function App() {
@@ -42,7 +40,7 @@ function App() {
         <Route path='/viewTasks/:id' element={<ViewTasks />}></Route>
 
         <Route path='/adminHome/usersList/viewTasks/:id' element={<ViewTasksByAdmin />}></Route>
-        <Route path='/adminHome/managerList/userList/:id' element={< UserListByManger />}></Route>
+        <Route path='/adminHome/managerList/userList/:id' element={< AssignUserListByAdmin />}></Route>
       </Routes>
     </BrowserRouter>
   )

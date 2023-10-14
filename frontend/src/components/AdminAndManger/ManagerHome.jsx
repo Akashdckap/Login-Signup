@@ -14,7 +14,7 @@ export default function ManagerHome() {
   useEffect(() => {
     let token = localStorage.getItem('manager_token')
     // let id = localStorage.getItem('manager_id')
-    axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}`} })
+    axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         if (res.data.Status === "Success") {
           setName(res.data.name)
@@ -29,7 +29,7 @@ export default function ManagerHome() {
       })
 
   }, [])
-
+  // console.log("managerid -------------------", localStorage.getItem("manager_id"));
   // console.log("managerId----------", managerId);
   const handleViewTask = (e) => {
     const { id } = e.target
@@ -75,7 +75,7 @@ export default function ManagerHome() {
                   </tr>
                 </tbody>
               )
-            }) : <h1 className='text-danger'>You don't have any users</h1>
+            }) : <h2 className='text-danger'>You don't have any users</h2>
           }
         </table>
       </div>

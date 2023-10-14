@@ -9,20 +9,18 @@ export default function ViewTasks() {
     useEffect(() => {
         axios.get(`http://localhost:5051/viewTasks/${id}`)
             .then(res => {
-                // console.log(res);
                 if (res.data.Status === "Success") {
                     setTaskList(res.data.data)
                 }
                 else {
                     alert(res.data.NoAuth)
-                    // setError(res.data.Error)
                     navigate('/managerHome')
                 }
             })
             .catch(err => console.log(err))
     }, []);
 
-    // console.log("manager_id------------", localStorage.getItem("manager_id"));
+    // console.log("manager_id-in viewTask-----------", localStorage.getItem("manager_id"));
 
     const handleDeleteTask = (e) => {
         const { id } = e.target;
