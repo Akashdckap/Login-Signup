@@ -70,6 +70,7 @@ app.get('/userHome', verifyUser, (req, res) => {
 })
 
 
+
 app.get('/managerList', (req, res) => {
     const sql = `SELECT * FROM adminManager WHERE role = 'Manager'`;
     db.query(sql, (err, data) => {
