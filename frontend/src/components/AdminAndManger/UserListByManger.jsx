@@ -16,6 +16,7 @@ export default function UserListByManger() {
             .catch(err => console.log(err))
     }, []);
 
+    // Here are the user assign function 
     const handleUserAssign = (e) => {
         const payload = {
             managerId: id,
