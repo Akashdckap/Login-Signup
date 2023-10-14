@@ -432,7 +432,8 @@ app.get('/adminHome/AssignList', (req, res) => {
         else {
             return res.json({ data, Status: "Success" });
         }
-    })
+    });
+
 })
 
 
