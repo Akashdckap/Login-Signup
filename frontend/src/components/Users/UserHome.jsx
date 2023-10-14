@@ -67,7 +67,7 @@ export default function UserHome() {
             setMessage(res.data.Status);
           }
           else {
-            alert("Error in store data")
+            alert(res.data.Error)
           }
         })
         .catch(err => console.log(err));

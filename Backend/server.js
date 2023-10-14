@@ -345,7 +345,7 @@ app.post('/adminOrManagerLogin', (req, res) => {
 
 
 app.post('/userHome', verifyUser, (req, res) => {
-    console.log(req.body);
+
     const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
         req.body.taskName,
@@ -354,7 +354,7 @@ app.post('/userHome', verifyUser, (req, res) => {
     ];
     db.query(sql, [values], (err, data) => {
         if (err) return res.json({ Error: "Task adding error" });
-        return res.json({ Status: "Success" });
+        return res.json({data, status: "Success" });
     })
 })
 
