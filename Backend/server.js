@@ -3,13 +3,15 @@ import mysql from "mysql";
 import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import _ from 'lodash';
 
-import { LocalStorage } from "node-localstorage";
+// import bodyParser from "body-parser"
+// import { LocalStorage } from "node-localstorage";
 // import localStorage from 'node-localstorage';
 // localStorage = new localStorage();
 // localStorage.getItem("manager_id")
 // import localStorage from 'localStorage'
-global.localStorage = new LocalStorage('./managerHome');
+// global.localStorage = new LocalStorage('./managerHome');
 
 
 // import cookieParser from "cookie-parser";
@@ -24,7 +26,7 @@ app.use(cors({
     credentials: true
 }));
 // app.use(cookieParser());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 
 
@@ -67,14 +69,6 @@ app.get('/userHome', verifyUser, (req, res) => {
     })
 })
 
-// const verifiedUser = (req,res,next) => {
-//     const url = req.path;
-//     console.log(url)
-//     // if(url != url){
-//     //     return res.status(403).send("Access Denied");
-//     // }
-//     next();
-// };
 
 app.get('/managerList', (req, res) => {
     const sql = `SELECT * FROM adminManager WHERE role = 'Manager'`;
@@ -90,14 +84,8 @@ app.get('/managerList', (req, res) => {
 
 
 app.get('/managerHome', verifyUser, (req, res) => {
-    console.log("manager_id--------------------", localStorage.getItem("manager_id"));
 
-    // console.log(data);
-    // console.log("managerid --------------------", req.id);
-    // const managerId = localStorage.getItem("manager_id");
-    // console.log("mangerid line no:84 in server------------------", managerId);
-    // localStorage.setItem("manager_id", req.id)
-    const sql = `SELECT * FROM assignedUsers     LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
+    const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
     db.query(sql, [req.id], (err, data) => {
         if (err) {
             return res.json({ Error: "Fetching assigned users error" });
@@ -114,43 +102,54 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 
 app.get('/viewTasks/:id', (req, res) => {
-    // console.log("manager_id--------------------", localStorage.getItem("manager_id"));
-    // console.log(req.id);
-    // res.status(500).send('Internal Server Error');
-    // console.log(req.id);
-    // const managerId = localStorage.getItem("manager_id");
-    // console.log("mangerid ------------------", managerId);
+    // console.log(req.id)
     const userId = req.params.id;
-    // console.log("userid -----------------", userId);
-    // console.log("mangerid ------------------", localStorage.getItem("manager_id"));
-
-    // const checkURIId = 'SELECT id FROM users;'
-    // console.log("managerids", req);
-    // const query = "SELECT * FROM users";
-    // db.query(query, (err, data) => {
-    //     const task = data[0].id === userId
-    //     if (!task) {
-    //         return res.status(404).json({ error: 'This user not for this manager' });
-    //     } else {
 
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    const exists = `SELECT * FROM assignedUsers WHERE manager_id = 3 AND user_id = ${userId}`;
-    // console.log(userId)
-    db.query(exists, (err, data) => {
+    const sql2 = `SELECT * FROM assignedUsers WHERE user_id = ${userId}`;
+    const exists = `SELECT * FROM assignedUsers WHERE manager_id = ? AND user_id = ${userId}`;
+
+    db.query(sql2, (err, data) => {
         if (err) throw err;
-        else if (data.length == 0) {
-            return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
-        }
-        else {
-            db.query(sql, (err, data) => {
-                if (err) {
-                    return res.json({ Error: "Users fetch failure" });
-                }
-                else {
-                    return res.json({ data, Status: "Success" });
-                }
-            });
-        }
+        const managerId = data[0].manager_id;
+        console.log(managerId);
+        db.query(exists, managerId, (wrong, right) => {
+            console.log(right);
+            if (wrong) {
+                console.log("Hello");
+            }
+            else if (right.length == 0) {
+                return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
+            }
+            else {
+                db.query(sql, (err, data) => {
+                    if (err) {
+                        return res.json({ Error: "Users fetch failure" });
+                    }
+                    else {
+                        return res.json({ data, Status: "Success" });
+                    }
+                })
+            }
+        })
+
+        // const exists = `SELECT * FROM assignedUsers WHERE manager_id = 3 AND user_id = ${userId}`;
+        // console.log(userId)
+        // db.query(exists, (err, data) => {
+        //     if (err) throw err;
+        //     else if (data.length == 0) {
+        //         return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
+        //     }
+        // else {
+        // db.query(sql, (err, data) => {
+        //     if (err) {
+        //         return res.json({ Error: "Users fetch failure" });
+        //     }
+        //     else {
+        //         return res.json({ data, Status: "Success" });
+        //     }
+        // });
+        // }
     })
     // const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
 
@@ -183,12 +182,7 @@ app.get('/viewTasks/:id', (req, res) => {
     //     }
     // })
 
-
-
-
-
 })
-
 
 app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
     const userId = req.params.id
@@ -377,8 +371,10 @@ app.post('/adminHome/managerList', (req, res) => {
             db.query(sql, [values], (err, data) => {
                 // console.log(bothId);
                 if (err) throw err;
-
+                // console.log(data);
                 else {
+                    // console.log(json({data}));
+
                     return res.json({ data, Status: "Success" })
                 }
 
@@ -407,7 +403,8 @@ app.post('/adminHome/managerList', (req, res) => {
 app.get('/usersList/:id', (req, res) => {
 
     // console.log("Manager id-----------------",req.params.id);
-    const managerId = req.params.id
+    const managerId = req.params.id;
+    // console.log("ManagerId", managerId)
     const assignedUsers = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${managerId}`
     const sql = "SELECT * FROM users";
     // const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
@@ -419,13 +416,38 @@ app.get('/usersList/:id', (req, res) => {
         if (wrong) throw wrong;
         else {
             // console.log("yes")
+            console.log(right)
+
             db.query(sql, (err, data) => {
                 if (err) {
                     return res.json({ Error: "Users fetch failure" });
                 }
                 else {
+
+
+                    // const result = _.differenceWith(data, right, _.isEqual);
+
+                    // console.log(result);
+
+                    // var Obj3 = _.differenceWith(data, right,(o1, o2) => o1.id == o2.user_id);
+                    // console.log(Obj3);
                     // console.log(data)
-                    return res.json({ data, right, Status: "Success" });
+
+                    let Matchresult = data.filter(o1 => right.some(o2 => o1.id === o2.user_id));
+
+                    Matchresult = Matchresult.map(t => ({ ...t, status: true }))
+                    // console.log(Matchresult);
+
+
+                    let UnMatchresult = _.differenceWith(data, right, (o1, o2) => o1['id'] === o2['user_id']);
+
+                    UnMatchresult = UnMatchresult.map(f => ({ ...f, status: false }))
+
+
+                    let finalArray = [...Matchresult, ...UnMatchresult]
+
+                    return res.json({finalArray, Status:"Success"})
+
                 }
             })
         }

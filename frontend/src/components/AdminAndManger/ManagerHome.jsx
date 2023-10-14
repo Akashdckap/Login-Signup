@@ -71,7 +71,7 @@ export default function ManagerHome() {
                     <th scope="row">{item.id}</th>
                     <td>{item.user_name}</td>
                     <td>{item.email}</td>
-                    <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id}>View Task</button></td>
+                    <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id} data-set={managerId}>View Task</button></td>
                   </tr>
                 </tbody>
               )
