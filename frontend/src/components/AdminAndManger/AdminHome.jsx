@@ -9,10 +9,8 @@ export default function AdminHome() {
     let token = localStorage.getItem('admin_token')
     axios.get('http://localhost:5051/adminHome', { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
-        // console.log(res);
         if (res.data.Status === "Success") {
           setAdminName(res.data.name)
-          // getStoreData(res.data.data)
           navigate('/adminHome')
         }
         else {
@@ -39,16 +37,6 @@ export default function AdminHome() {
           <Link to='/adminHome/managerList'><button className='btn btn-primary'>Manager List</button></Link>
           <Link to='/adminHome/usersList'><button className='btn btn-primary'>Users List</button></Link>
         </div>
-      </div>
-
-      <div>
-        {/* {
-          getData.map((item,index)=>
-          <div key={index} className='taskContainer'>
-          <p><span className='text-white'>Manager Name : </span>{item.name}</p>
-          <p><span className='text-white'>Description : </span>{item.description}</p>
-        </div>)
-        } */}
       </div>
     </React.Fragment>
   )
