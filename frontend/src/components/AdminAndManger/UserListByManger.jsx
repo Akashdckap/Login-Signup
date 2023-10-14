@@ -10,9 +10,8 @@ export default function UserListByManger() {
     useEffect(() => {
         axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 setUsers(res.data.finalArray)
-                // setBothId(res.data.right)
             })
             .catch(err => console.log(err))
     }, []);
@@ -39,8 +38,6 @@ export default function UserListByManger() {
             })
     }
 
-    // let idx = [];
-    // setId.filter(id => idx.push(id.user_id));
     return (
         <React.Fragment>
             <div>

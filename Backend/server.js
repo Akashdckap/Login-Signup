@@ -358,8 +358,7 @@ app.post('/userHome', verifyUser, (req, res) => {
 app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
-    // const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
-
+    
     db.query(exists, (err, data) => {
 
         if (err) throw err;
@@ -373,24 +372,8 @@ app.post('/adminHome/managerList', (req, res) => {
                 if (err) throw err;
                 // console.log(data);
                 else {
-                    // console.log(json({data}));
-
                     return res.json({ data, Status: "Success" })
                 }
-
-                // return res.json({ data, Status: "Success" })
-
-                // return res.json({ data, Status: "Success" })
-                // db.query(checking, (wrong, right) => {
-                //     if (wrong) {
-                //         return res.json({ Error: "manager id does not exists" })
-                //     }
-                //     else {
-                //         // console.log("hi");
-                //         return res.json({ right, Status: "Success" })
-                //     }
-                // })
-
             })
         }
         else {
@@ -402,16 +385,11 @@ app.post('/adminHome/managerList', (req, res) => {
 
 app.get('/usersList/:id', (req, res) => {
 
-    // console.log("Manager id-----------------",req.params.id);
     const managerId = req.params.id;
     // console.log("ManagerId", managerId)
     const assignedUsers = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${managerId}`
     const sql = "SELECT * FROM users";
-    // const checking = `SELECT * FROM assignedUsers inner join users on assignedUsers.user_id = users.id WHERE assignedUsers.manager_id = ${req.body.managerId}`;
-    // console.log(checking);
-    // const sql = `Select * from assignedUsers INNER JOIN adminManager on assignedUsers.manager_id = adminManager.id INNER JOIN users on assignedUsers.user_id = user_id`;
-    // const sql = `select * from assignedUsers WHERE manager_id=${req.body.managerId} and user_id =${req.body.userId}`
-
+    
     db.query(assignedUsers, (wrong, right) => {
         if (wrong) throw wrong;
         else {
@@ -424,20 +402,10 @@ app.get('/usersList/:id', (req, res) => {
                 }
                 else {
 
-
-                    // const result = _.differenceWith(data, right, _.isEqual);
-
-                    // console.log(result);
-
-                    // var Obj3 = _.differenceWith(data, right,(o1, o2) => o1.id == o2.user_id);
-                    // console.log(Obj3);
-                    // console.log(data)
-
                     let Matchresult = data.filter(o1 => right.some(o2 => o1.id === o2.user_id));
 
                     Matchresult = Matchresult.map(t => ({ ...t, status: true }))
                     // console.log(Matchresult);
-
 
                     let UnMatchresult = _.differenceWith(data, right, (o1, o2) => o1['id'] === o2['user_id']);
 
