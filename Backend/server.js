@@ -4,8 +4,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import _ from 'lodash';
-
-// import bodyParser from "body-parser"
+import bodyParser from "body-parser"
 // import { LocalStorage } from "node-localstorage";
 // import localStorage from 'node-localstorage';
 // localStorage = new localStorage();
@@ -26,7 +25,7 @@ app.use(cors({
     credentials: true
 }));
 // app.use(cookieParser());
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 
 
@@ -343,6 +342,7 @@ app.post('/adminOrManagerLogin', (req, res) => {
 
 
 app.post('/userHome', verifyUser, (req, res) => {
+    // console.log(req.id);
     const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
         req.body.taskName,
@@ -351,7 +351,7 @@ app.post('/userHome', verifyUser, (req, res) => {
     ];
     db.query(sql, [values], (err, data) => {
         if (err) return res.json({ Error: "Task adding error" });
-        return res.json({ Status: "Success" });
+        return res.json({data, status: "Success" });
     })
 })
 
