@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import _ from 'lodash';
 import bodyParser from "body-parser"
+
 // import { LocalStorage } from "node-localstorage";
 // import localStorage from 'node-localstorage';
 // localStorage = new localStorage();
@@ -24,6 +25,8 @@ app.use(cors({
     methods: ["POST", "GET"],
     credentials: true
 }));
+app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(bodyParser.json())
 // app.use(cookieParser());
 app.use(bodyParser.json());
 
@@ -342,7 +345,7 @@ app.post('/adminOrManagerLogin', (req, res) => {
 
 
 app.post('/userHome', verifyUser, (req, res) => {
-    // console.log(req.id);
+
     const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
         req.body.taskName,
