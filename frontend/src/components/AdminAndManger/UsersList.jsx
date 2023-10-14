@@ -23,10 +23,6 @@ export default function UsersList() {
         const { id } = e.target
         navigate(`/adminHome/usersList/viewTasks/${id}`)
     }
-
-
-
-
     return (
         <div>
             <div className='d-flex justify-content-around p-3'>
