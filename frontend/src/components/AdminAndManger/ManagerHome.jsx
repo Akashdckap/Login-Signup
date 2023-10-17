@@ -13,6 +13,7 @@ export default function ManagerHome() {
 
   useEffect(() => {
     let token = localStorage.getItem('manager_token')
+
     axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         if (res.data.Status === "Success") {
@@ -71,6 +72,5 @@ export default function ManagerHome() {
         </table>
       </div>
     </React.Fragment>
-
   )
 }

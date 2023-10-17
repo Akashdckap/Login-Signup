@@ -7,7 +7,6 @@ function EditTask() {
     const [description, setDescription] = useState('')
     const { id } = useParams();
     const naviagate = useNavigate();
-
     useEffect(() => {
         axios.get(`http://localhost:5051/userHome/editTask/${id}`)
             .then((response) => {
