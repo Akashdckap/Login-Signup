@@ -1,26 +1,27 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 
-export default function AdminAssignedViews () {
-    const [getData,setData] = useState([]);
-    useEffect (()=>{
-        axios.get('http://localhost:5051/adminHome/AssignList')
-    .then(res=>{
-        if(res.data.Status == "Success"){
-            console.log(res.data.data)
-            setData(res.data.data);
-        }
-    })
-    .catch(res=>console.log(res))
-    },[]);
-    
+export default function AdminAssignedViews() {
+    const [getData, setData] = useState([]);
+    useEffect(() => {
+        let token = localStorage.getItem('admin_token')
+        axios.get('http://localhost:5051/adminHome/AssignList', { headers: { Authorization: `Bearer ${token}` } })
+            .then(res => {
+                if (res.data.Status == "Success") {
+                    console.log(res.data.data)
+                    setData(res.data.data);
+                }
+            })
+            .catch(res => console.log(res))
+    }, []);
 
 
-    return(
+
+    return (
         <React.Fragment>
             <div>Hello Admin</div>
             <div>
-            <table className="table table-responsive table-sm">
+                <table className="table table-responsive table-sm">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>

@@ -102,8 +102,8 @@ app.get('/managerHome', verifyUser, (req, res) => {
 
 
 
-app.get('/viewTasks/:id', (req, res) => {
-    // console.log(req.id)
+app.get('/managerHome/viewTasks/:id', verifyUser, (req, res) => {
+    // console.log("managerid from line no 106", req.id)
     const userId = req.params.id;
 
     const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
@@ -113,9 +113,9 @@ app.get('/viewTasks/:id', (req, res) => {
     db.query(sql2, (err, data) => {
         if (err) throw err;
         const managerId = data[0].manager_id;
-        console.log(managerId);
+        // console.log(managerId);
         db.query(exists, managerId, (wrong, right) => {
-            console.log(right);
+            // console.log(right);
             if (wrong) {
                 console.log("Hello");
             }
@@ -322,6 +322,7 @@ app.post('/adminHome/managerList', (req, res) => {
             db.query(sql, [values], (err, data) => {
                 if (err) throw err;
                 else {
+                    console.log('data in the 325 line', data);
                     return res.json({ data, Status: "Success" })
                 }
             })
@@ -342,7 +343,7 @@ app.get('/usersList/:id', (req, res) => {
     db.query(assignedUsers, (wrong, right) => {
         if (wrong) throw wrong;
         else {
-            console.log(right)
+            // console.log(right)
 
             db.query(sql, (err, data) => {
                 if (err) {

@@ -10,6 +10,7 @@ export default function UserListByManger() {
     useEffect(() => {
         axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
+                console.log(res);
                 // setBothId(res.data.right)
                 setUsers(res.data.finalArray)
 
@@ -25,14 +26,15 @@ export default function UserListByManger() {
         }
         axios.post('http://localhost:5051/adminHome/managerList', payload)
             .then(res => {
-                if (res.data.Status === "Success") {
-                    alert("User assigned successfully")
-                    window.location.reload(true)
-                }
-                else {
-                    alert(res.data.Error)
+                console.log(res);
+                // if (res.data.Status === "Success") {
+                //     alert("User assigned successfully")
+                //     window.location.reload(true)
+                // }
+                // else {
+                //     alert(res.data.Error)
 
-                }
+                // }
 
             })
             .catch(err => {

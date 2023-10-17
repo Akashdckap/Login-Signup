@@ -4,20 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function AdminAndManagerRegister() {
-
     const [formData, setFormData] = useState({
         name: '',
         role: '',
         email: '',
         password: '',
-
     });
-
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({
         name: '',
-        role:'',
+        role: '',
         email: '',
         password: '',
     });

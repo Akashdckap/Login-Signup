@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 export default function ManagerHome() {
@@ -13,8 +13,7 @@ export default function ManagerHome() {
 
   useEffect(() => {
     let token = localStorage.getItem('manager_token')
-    // let id = localStorage.getItem('manager_id')
-    axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}`} })
+    axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         if (res.data.Status === "Success") {
           setName(res.data.name)
@@ -29,13 +28,6 @@ export default function ManagerHome() {
       })
 
   }, [])
-
-  // console.log("managerId----------", managerId);
-  const handleViewTask = (e) => {
-    const { id } = e.target
-    navigate(`/viewTasks/${id}`)
-
-  }
 
   const handleDeleteAccount = () => {
     localStorage.removeItem('manager_id')
@@ -71,8 +63,7 @@ export default function ManagerHome() {
                     <th scope="row">{item.id}</th>
                     <td>{item.user_name}</td>
                     <td>{item.email}</td>
-                    <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id} data-set={managerId}>View Task</button></td>
-                  </tr>
+                    <td><Link to={`/managerHome/viewTasks/${item.id}`}><button className='btn btn-outline-success btn-sm' id={item.id} data-set={managerId}>View Task</button></Link></td>                  </tr>
                 </tbody>
               )
             }) : <h1 className='text-danger'>You don't have any users</h1>
