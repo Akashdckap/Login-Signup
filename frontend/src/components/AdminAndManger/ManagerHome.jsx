@@ -14,7 +14,7 @@ export default function ManagerHome() {
   useEffect(() => {
     let token = localStorage.getItem('manager_token')
     // let id = localStorage.getItem('manager_id')
-    axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}`} })
+    axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
         if (res.data.Status === "Success") {
           setName(res.data.name)
@@ -31,10 +31,10 @@ export default function ManagerHome() {
   }, [])
 
   // console.log("managerId----------", managerId);
+  // console.log("tokn",localStorage.getItem("manager_id"));
   const handleViewTask = (e) => {
     const { id } = e.target
-    navigate(`/viewTasks/${id}`)
-
+    navigate(`/managerHome/viewTasks/${id}`)
   }
 
   const handleDeleteAccount = () => {
@@ -80,6 +80,5 @@ export default function ManagerHome() {
         </table>
       </div>
     </React.Fragment>
-
   )
 }

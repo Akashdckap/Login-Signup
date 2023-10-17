@@ -6,14 +6,7 @@ import bcrypt from "bcrypt";
 import _ from 'lodash';
 import bodyParser from "body-parser"
 
-// import { LocalStorage } from "node-localstorage";
-// import localStorage from 'node-localstorage';
-// localStorage = new localStorage();
-// localStorage.getItem("manager_id")
-// import localStorage from 'localStorage'
-// global.localStorage = new LocalStorage('./managerHome');
-
-
+const PORT = 5051;
 // import cookieParser from "cookie-parser";
 
 const salt = 10;
@@ -25,14 +18,13 @@ app.use(cors({
     methods: ["POST", "GET"],
     credentials: true
 }));
-app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(bodyParser.json())
+
+// While using cookie storage we used cookieParser
 // app.use(cookieParser());
 app.use(bodyParser.json());
 
 
-
-
+//DataBase connection with MySQL
 const db = mysql.createConnection({
     host: "localhost",
     user: "dckap",
@@ -40,196 +32,7 @@ const db = mysql.createConnection({
     database: 'adminUsers'
 });
 
-const verifyUser = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader ? authHeader.split(' ')[1] : "auth header error";
-    if (!token) {
-        return res.json({ Error: "You are not authenticated" });
-    }
-    else {
-        jwt.verify(token, "jwt-secret-key", (err, decoded) => {
-            if (err) {
-                res.json({ Error: "Token is not okay" })
-            }
-            else {
-                req.name = decoded.name;
-                req.id = decoded.id;
-                req.role = decoded.role;
-                next();
-            }
-        });
-    }
-}
-app.get('/userHome', verifyUser, (req, res) => {
-    // console.log("user id from localstorege------", localStorage.getItem("user_id"));
-    const sql = `SELECT * FROM userTasks where user_id = ${req.id}`;
-    db.query(sql, (err, data) => {
-        if (err) return res.json({ Error: "Fetch Failure in userhome router" })
-        else {
-            return res.json({ data, Status: "Success", user_name: req.name, id: req.id });
-        }
-    })
-})
-
-
-
-app.get('/managerList', (req, res) => {
-    const sql = `SELECT * FROM adminManager WHERE role = 'Manager'`;
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: "Fetch Manager Failed" });
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
-
-
-app.get('/managerHome', verifyUser, (req, res) => {
-
-    const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
-    db.query(sql, [req.id], (err, data) => {
-        if (err) {
-            return res.json({ Error: "Fetching assigned users error" });
-        }
-        else {
-            return res.json({ data, Status: "Success", name: req.name, id: req.id });
-        }
-    })
-})
-
-
-
-
-
-
-app.get('/viewTasks/:id', (req, res) => {
-    // console.log(req.id)
-    const userId = req.params.id;
-
-    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    const sql2 = `SELECT * FROM assignedUsers WHERE user_id = ${userId}`;
-    const exists = `SELECT * FROM assignedUsers WHERE manager_id = ? AND user_id = ${userId}`;
-
-    db.query(sql2, (err, data) => {
-        if (err) throw err;
-        const managerId = data[0].manager_id;
-        console.log(managerId);
-        db.query(exists, managerId, (wrong, right) => {
-            console.log(right);
-            if (wrong) {
-                console.log("Hello");
-            }
-            else if (right.length == 0) {
-                return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
-            }
-            else {
-                db.query(sql, (err, data) => {
-                    if (err) {
-                        return res.json({ Error: "Users fetch failure" });
-                    }
-                    else {
-                        return res.json({ data, Status: "Success" });
-                    }
-                })
-            }
-        })
-
-        // const exists = `SELECT * FROM assignedUsers WHERE manager_id = 3 AND user_id = ${userId}`;
-        // console.log(userId)
-        // db.query(exists, (err, data) => {
-        //     if (err) throw err;
-        //     else if (data.length == 0) {
-        //         return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
-        //     }
-        // else {
-        // db.query(sql, (err, data) => {
-        //     if (err) {
-        //         return res.json({ Error: "Users fetch failure" });
-        //     }
-        //     else {
-        //         return res.json({ data, Status: "Success" });
-        //     }
-        // });
-        // }
-    })
-    // const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-
-    // db.query(sql, (err, data) => {
-    //     if (err) {
-    //         return res.json({ Error: "Users fetch failure" });
-    //     }
-    //     else {
-    //         return res.json({ data, Status: "Success" });
-    //     }
-    // });
-    // const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
-    // const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-
-    // console.log(userId)
-    // db.query(exists, (err, data) => {
-    //     if (err) throw err;
-    //     else if (data.length == 0) {
-    //         return res.json({ NotAuth: "You are not authenticated", Error: "Undefined" });
-    //     }
-    //     else {
-    //         db.query(sql, (err, data) => {
-    //             if (err) {
-    //                 return res.json({ Error: "Users fetch failure" });
-    //             }
-    //             else {
-    //                 return res.json({ data, Status: "Success" });
-    //             }
-    //         });
-    //     }
-    // })
-
-})
-
-app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
-    const userId = req.params.id
-    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: "Users fetch failure" });
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
-
-
-app.get('/adminHome', verifyUser, (req, res) => {
-    return res.json({ Status: "Success", name: req.name, id: req.id });
-})
-app.get('/adminHome/usersList', (req, res) => {
-    const sql = 'SELECT * FROM users';
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: 'Can not fetch the user lists' })
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    })
-})
-
-
-app.post("/delete", (req, res) => {
-    const { deleteId } = req.body;
-    const sql = `DELETE FROM userTasks WHERE id=${deleteId}`;
-    db.query(sql, (err, data) => {
-        if (err) {
-            res.json({ Error: "Can not delete the task" })
-        }
-        else {
-            return res.json({ message: 'task delete successfully' })
-        }
-    })
-})
-
+// Storing new user data in Database
 app.post('/userRegister', (req, res) => {
     const exists = "SELECT * FROM users WHERE email = ?"
     const sql = "INSERT INTO users (`user_name`,`email`,`password`) VALUES(?)";
@@ -259,7 +62,7 @@ app.post('/userRegister', (req, res) => {
 })
 
 
-
+// Admin or Manager Register
 app.post('/adminOrManagerRegister', (req, res) => {
     const exists = "SELECT * FROM adminManager WHERE email = ?";
     const sql = "INSERT INTO adminManager (`name`,`role`,`email`,`password`) VALUES(?)";
@@ -288,6 +91,7 @@ app.post('/adminOrManagerRegister', (req, res) => {
     })
 })
 
+// User login
 app.post('/userLogin', (req, res) => {
     const sql = 'SELECT * from users where email = ?'
     db.query(sql, [req.body.email], (err, data) => {
@@ -314,7 +118,7 @@ app.post('/userLogin', (req, res) => {
     })
 })
 
-
+// Admin or Manager Login
 app.post('/adminOrManagerLogin', (req, res) => {
     const sql = 'SELECT * FROM adminManager WHERE email = ?';
 
@@ -343,9 +147,31 @@ app.post('/adminOrManagerLogin', (req, res) => {
     })
 })
 
+/*After generating the token. The token is decoded here and storing in req. When we call the
+verifyUser function we the get Data of an User or Manager or Admin by calling this function; */
+const verifyUser = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader ? authHeader.split(' ')[1] : "auth header error";
+    if (!token) {
+        return res.json({ Error: "You are not authenticated" });
+    }
+    else {
+        jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+            if (err) {
+                res.json({ Error: "Token is not okay" })
+            }
+            else {
+                req.name = decoded.name;
+                req.id = decoded.id;
+                req.role = decoded.role;
+                next();
+            }
+        });
+    }
+}
 
+// After Logged in user can add task [Inserting tasks]
 app.post('/userHome', verifyUser, (req, res) => {
-
     const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
     const values = [
         req.body.taskName,
@@ -354,11 +180,35 @@ app.post('/userHome', verifyUser, (req, res) => {
     ];
     db.query(sql, [values], (err, data) => {
         if (err) return res.json({ Error: "Task adding error" });
-        return res.json({data, status: "Success" });
+        return res.json({ data, Status: "Success" });
     })
 })
 
+// User viewing their task;
+app.get('/userHome', verifyUser, (req, res) => {
+    const sql = `SELECT * FROM userTasks where user_id = ${req.id}`;
+    db.query(sql, (err, data) => {
+        if (err) return res.json({ Error: "Fetch Failure in userhome router" })
+        else {
+            return res.json({ data, Status: "Success", user_name: req.name, id: req.id });
+        }
+    })
+})
 
+// Showing manager list for the admin after clicking the manager list
+app.get('/managerList', (req, res) => {
+    const sql = `SELECT * FROM adminManager WHERE role = 'Manager'`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Fetch Manager Failed" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
+
+// Assiging user for a manager
 app.post('/adminHome/managerList', (req, res) => {
     const exists = `SELECT * FROM assignedUsers WHERE manager_id= ${req.body.managerId} and user_id = ${req.body.userId}`;
     const sql = "INSERT INTO assignedUsers (`manager_id`,`user_id`) VALUES(?)";
@@ -387,6 +237,80 @@ app.post('/adminHome/managerList', (req, res) => {
     })
 })
 
+// Admin Homepage
+app.get('/adminHome', verifyUser, (req, res) => {
+    return res.json({ Status: "Success", name: req.name, id: req.id });
+})
+
+// Manager Home page 
+app.get('/managerHome', verifyUser, (req, res) => {
+    // console.log(req)
+    const sql = `SELECT * FROM assignedUsers LEFT JOIN users ON assignedUsers.user_id = users.id WHERE manager_id = ?`
+    db.query(sql, [req.id], (err, data) => {
+        if (err) {
+            return res.json({ Error: "Fetching assigned users error" });
+        }
+        else {
+            return res.json({ data, Status: "Success", name: req.name, id: req.id });
+        }
+    })
+})
+
+// Manager view for users task and stopping the manager who are not assigned to the manager 
+app.get('/managerHome/viewTasks/:id', verifyUser, (req, res) => {
+    const managerId = req.id;
+    const userId = req.params.id;
+
+    const exists = `SELECT * FROM assignedUsers WHERE manager_id = ${managerId} AND user_id = ${userId}`;
+    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+
+    db.query(exists, (err, data) => {
+        if (err) throw err;
+        else if (data.length == 0) {
+            return res.json({ Error: "You are not authenticated to view this user task" });
+        }
+        else {
+            db.query(sql, (err, data) => {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    return res.json({ data, Status: "Success" });
+                }
+            })
+        }
+
+    })
+})
+
+// Admin viewing users list after clicking users list btn
+app.get('/adminHome/usersList', (req, res) => {
+    const sql = 'SELECT * FROM users';
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: 'Can not fetch the user lists' })
+        }
+        else {
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
+
+// Admin view task of the specified user
+app.get('/adminHome/usersList/viewTasks/:id', (req, res) => {
+    const userId = req.params.id
+    const sql = `SELECT * FROM userTasks WHERE user_id = ${userId}`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            return res.json({ Error: "Users fetch failure" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
+
+// Specific user list to the assigned manager
 app.get('/usersList/:id', (req, res) => {
 
     const managerId = req.params.id;
@@ -427,20 +351,7 @@ app.get('/usersList/:id', (req, res) => {
 
 })
 
-app.get('/adminHome/AssignList', (req, res) => {
-    const sql = 'SELECT * FROM assignedUsers INNER JOIN adminManager ON assignedUsers.manager_id = adminManager.id INNER JOIN userTasks ON adminManager.id = userTasks.user_id'
-    db.query(sql, (err, data) => {
-        if (err) {
-            return res.json({ Error: "Fetching assigned users error" })
-        }
-        else {
-            return res.json({ data, Status: "Success" });
-        }
-    });
-
-})
-
-
+// Getting userId for edit Purpose through Params
 app.get('/userHome/editTask/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const sql = `SELECT * FROM userTasks WHERE id = ${taskId}`;
@@ -454,7 +365,7 @@ app.get('/userHome/editTask/:id', (req, res) => {
     })
 });
 
-
+// After Edit updating the column through use Params Id
 app.post('/userHome/editTask/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const { taskName, description } = req.body
@@ -470,6 +381,23 @@ app.post('/userHome/editTask/:id', (req, res) => {
 
 })
 
-app.listen(5051, () => {
-    console.log("Server running on the 5051 port...")
+
+// Deleting task of the user
+app.post("/delete", (req, res) => {
+    const { deleteId } = req.body;
+    const sql = `DELETE FROM userTasks WHERE id=${deleteId}`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            res.json({ Error: "Can not delete the task" })
+        }
+        else {
+            return res.json({ message: 'task delete successfully' })
+        }
+    })
+})
+
+
+// Running Port...
+app.listen(PORT, () => {
+    console.log(`Server running on the ${PORT} port...`)
 });
