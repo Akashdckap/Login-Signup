@@ -8,10 +8,10 @@ export default function ViewTasks() {
     const navigate = useNavigate();
     const token = localStorage.getItem('manager_token')
     useEffect(() => {
+
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                console.log(res)
-                // console.log(res);
+//                 console.log(res)
                 if (res.data.Status === "Success") {
                     setTaskList(res.data.data)
                 }
@@ -23,8 +23,6 @@ export default function ViewTasks() {
             })
             .catch(err => console.log(err))
     }, []);
-
-    // console.log("manager_id------------", localStorage.getItem("manager_id"));
 
     const handleDeleteTask = (e) => {
         const { id } = e.target;

@@ -6,7 +6,6 @@ export default function ViewTasksByAdmin() {
     const [taskList, setTaskList] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
-    // console.log(id);
 
     useEffect(() => {
         axios.get(`http://localhost:5051/adminHome/usersList/viewTasks/${id}`)

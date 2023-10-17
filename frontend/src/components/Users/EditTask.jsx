@@ -7,8 +7,6 @@ function EditTask() {
     const [description, setDescription] = useState('')
     const { id } = useParams();
     const naviagate = useNavigate();
-    // console.log("userid--------------", localStorage.getItem("user_id"));
-
     useEffect(() => {
         axios.get(`http://localhost:5051/userHome/editTask/${id}`)
             .then((response) => {
@@ -19,13 +17,6 @@ function EditTask() {
                 console.error('Error fetching item:', error);
             });
     }, []);
-
-    // const handleTaskNameChange = (e) => {
-    //     setTaskName(e.target.value)
-    // }
-    // const handelDescriptionChange = (e) => {
-    //     setDescription(e.target.value)
-    // }
 
     const handleUpdateTask = (e) => {
         e.preventDefault();

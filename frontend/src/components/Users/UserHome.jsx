@@ -5,14 +5,11 @@ import { Button, Modal } from "antd";
 
 
 export default function UserHome() {
-
   const [searchText, setSearchText] = useState('')
   // const [filteredItems, setFilteredItems] = useState([])
-
+  // const [time, setTime] = useState([])
   const [auth, setAuth] = useState(false);
   const [message, setMessage] = useState('');
-
-  // const [time, setTime] = useState([])
   const [name, setName] = useState('');
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,14 +75,10 @@ export default function UserHome() {
       console.log("not okay");
     }
   }
-  
-  // console.log(time);
-  // console.log("task name", formData);
 
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
-    // console.log(new Date());
     let token = localStorage.getItem('user_token')
     axios.get('http://localhost:5051/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
@@ -121,6 +114,7 @@ export default function UserHome() {
         }
       })
   }
+  
 
   // storeData.filter(item => {
   //   console.log(item.task_name);

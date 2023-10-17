@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, json, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function UserRegister() {
@@ -13,18 +13,6 @@ function UserRegister() {
         email: '',
         password: '',
     });
-    const [fetchData, setfetchData] = useState([])
-
-    // useEffect(() => {
-    //     fetch('http://localhost:6000/register')
-    //         .then(res => res.json())
-    //         // .then(data=>console.log(data))
-    //         .then(data => data.forEach((ele) => {
-    //             console.log(ele);
-    //             setfetchData(ele)
-    //         }))
-    //         .catch(err => err.json())
-    // }, [])
 
     const validate = () => {
         let newErrors = { ...errors };
@@ -52,11 +40,6 @@ function UserRegister() {
             isVaild = false;
         }
 
-        if (formData.email == fetchData.email) {
-            newErrors.email = 'Email id alreay exits';
-            isVaild = false;
-        }
-
         if (formData.password.length < 7 && formData.password.trim() !== "") {
             newErrors.password = 'Password must be at least 8 characters long';
             isVaild = false;
@@ -80,19 +63,13 @@ function UserRegister() {
             axios.post('http://localhost:5051/userRegister', formData)
                 .then(res => {
                     if (res.data.Status === "Success") {
-                        // localStorage.setItem('username', formData.name)
-                        // localStorage.setItem('email', formData.email)
                         navigate('/userLogin');
-                        // console.log(res);
                     } else {
                         alert(res.data.Error);
                     }
                 })
                 .catch(err => console.log(err));
         }
-        // else {
-        //     alert("Validation is not proper")
-        // }
     }
     return (
         <div>

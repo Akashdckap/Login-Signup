@@ -4,20 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function AdminAndManagerRegister() {
-
     const [formData, setFormData] = useState({
         name: '',
         role: '',
         email: '',
         password: '',
-
     });
-
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({
         name: '',
-        role:'',
+        role: '',
         email: '',
         password: '',
     });
@@ -41,12 +38,6 @@ export default function AdminAndManagerRegister() {
             newErrors.email = 'Email must be at least 8 characters long';
             isVaild = false;
         }
-
-        // if (formData.email == fetchData.email) {
-        //     newErrors.email = 'Email id alreay exits';
-        //     isVaild = false;
-        // }
-
         if (formData.password.length < 7 && formData.password.trim() !== "") {
             newErrors.password = 'Password must be at least 8 characters long';
             isVaild = false;
@@ -67,14 +58,12 @@ export default function AdminAndManagerRegister() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-
             axios.post('http://localhost:5051/adminOrManagerRegister', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
                         localStorage.setItem('username', formData.name)
                         localStorage.setItem('email', formData.email)
                         navigate('/adminOrManagerLogin');
-                        // console.log(res);
                     } else {
                         alert(res.data.Error);
                     }
