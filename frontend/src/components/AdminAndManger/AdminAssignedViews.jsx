@@ -15,8 +15,6 @@ export default function AdminAssignedViews() {
             .catch(res => console.log(res))
     }, []);
 
-
-
     return (
         <React.Fragment>
             <div>Hello Admin</div>

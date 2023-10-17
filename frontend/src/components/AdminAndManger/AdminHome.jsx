@@ -19,6 +19,8 @@ export default function AdminHome() {
         }
       })
   }, [])
+
+  // Below the function for the delete a task 
   const handleDeleteAccount = () => {
     localStorage.removeItem('admin_id')
     localStorage.removeItem('admin_name')
