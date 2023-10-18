@@ -8,7 +8,7 @@ export default function ViewTasks() {
     const [taskList, setTaskList] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { id } = useParams();
-    const [error, setError] = useState('')
+    // const [error, setError] = useState('')
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -50,7 +50,7 @@ export default function ViewTasks() {
         return isVaild;
     }
 
-    
+
     const handleSubmit = (e) => {
         let token = localStorage.getItem('manager_token')
         e.preventDefault();
@@ -77,7 +77,6 @@ export default function ViewTasks() {
     useEffect(() => {
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-                //                 console.log(res)
                 if (res.data.Status === "Success") {
                     setTaskList(res.data.data)
                 }
@@ -114,12 +113,35 @@ export default function ViewTasks() {
                         <div key={index} className='taskContainer'>
                             <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
                             <p><span className='text-white'>Description : </span>{item.description}</p>
+                            <p><span className='text-white'>Status: </span>{item.status}</p>
                             <button onClick={handleDeleteTask} id={item.id} className='btn btn-outline-danger btn-sm'>Delete</button>
                         </div>
 
                     ) : <h1 className='text-danger'>No tasks for this user</h1>
                 }
             </div>
+            <Modal title="Task Form" open={isModalOpen} okText={"submit"} onCancel={handleCancel} onOk={handleSubmit}>
+                <div className="mb-3">
+                    <label htmlFor="exampleFormControlInput1" className="form-label">Task name</label>
+                    <input type="text" className="form-control" onChange={handleChange} value={formData.taskName} id="exampleFormControlInput1" placeholder="Enter a task name" name='taskName' />
+                    {errors.taskName ? <span className="error">{errors.taskName}</span> : ""}
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
+                    <textarea className="form-control" onChange={handleChange} value={formData.description} id="exampleFormControlTextarea1" rows="3" placeholder='Type something' name='description'></textarea>
+                    {errors.description ? <span className="error">{errors.description}</span> : ""}
+                </div>
+                <div className="form-floating mb-3">
+                    <select name='status' onChange={handleChange} value={formData.status} className="form-select w-100" id="floatingSelect" aria-label="Floating label select example">
+                        <option value="Status">Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Started">Started</option>
+                        <option value="Progress">Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <label htmlFor="floatingSelect">Task Status</label>
+                </div>
+            </Modal>
         </div>
     )
 }

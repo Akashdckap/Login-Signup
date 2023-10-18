@@ -61,6 +61,7 @@ export default function UserHome() {
     if (validate()) {
       axios.post('http://localhost:5051/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
+          // console.log(res);
           if (res.data.Status === "Success") {
             setMessage(res.data.Status);
           }
@@ -76,7 +77,7 @@ export default function UserHome() {
       console.log("not okay");
     }
   }
-
+  // console.log(formData);
   axios.defaults.withCredentials = true;
 
   useEffect(() => {
@@ -157,13 +158,13 @@ export default function UserHome() {
           <textarea className="form-control" onChange={handleChange} value={formData.description} id="exampleFormControlTextarea1" rows="3" placeholder='Type something' name='description'></textarea>
           {errors.description ? <span className="error">{errors.description}</span> : ""}
         </div>
-        <div className="form-floating mb-10">
+        <div className="form-floating mb-3">
           <select name='status' onChange={handleChange} value={formData.status} className="form-select w-100" id="floatingSelect" aria-label="Floating label select example">
-            <option value="Select">Select</option>
-            <option value="Completed">Completed</option>
+            <option value="Status">Status</option>
+            <option value="Pending">Pending</option>
             <option value="Started">Started</option>
             <option value="Progress">Progress</option>
-            <option value="Not yet start">Not yet start</option>
+            <option value="Completed">Completed</option>
           </select>
           <label htmlFor="floatingSelect">Task Status</label>
         </div>
