@@ -27,15 +27,13 @@ export default function UserListByManger() {
         axios.post('http://localhost:5051/adminHome/managerList', payload)
             .then(res => {
                 console.log(res);
-                // if (res.data.Status === "Success") {
-                //     alert("User assigned successfully")
-                //     window.location.reload(true)
-                // }
-                // else {
-                //     alert(res.data.Error)
-
-                // }
-
+                if (res.data.Status === "Success") {
+                    alert("User assigned successfully")
+                    window.location.reload(true)
+                }
+                else {
+                    alert(res.data.Error)
+                }
             })
             .catch(err => {
                 alert("Can not assign the users")

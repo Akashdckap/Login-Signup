@@ -227,7 +227,6 @@ app.post('/adminHome/managerList', (req, res) => {
             db.query(sql, [values], (err, data) => {
                 if (err) throw err;
                 else {
-                    console.log('data in the 325 line', data);
                     return res.json({ data, Status: "Success" })
                 }
             })
