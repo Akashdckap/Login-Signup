@@ -20,8 +20,8 @@ export default function ViewTasks() {
                     setTaskList(res.data.data)
                 }
                 else {
-                    // alert(res.data.Error)
-                    setError(res.data.Error)
+                    alert(res.data.Error)
+                    // setError(res.data.Error)
                     // console.log(res.data.Error);
                     // navigate(`/managerHome`)
                 }
