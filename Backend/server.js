@@ -171,11 +171,15 @@ const verifyUser = (req, res, next) => {
 
 // After Logged in user can add task [Inserting tasks]
 app.post('/userHome', verifyUser, (req, res) => {
-    const sql = "INSERT INTO userTasks (`task_name`,`description`,`user_id`) VALUES(?)";
+    const userId = req.id;
+
+    const sql = "INSERT INTO userTasks (`task_name`,`description`,`status`,user_id`,`added_by`) VALUES(?)";
     const values = [
         req.body.taskName,
         req.body.description,
-        req.id
+        req.body.status,
+        userId,
+        userId
     ];
     db.query(sql, [values], (err, data) => {
         if (err) return res.json({ Error: "Task adding error" });
@@ -391,6 +395,55 @@ app.post("/delete", (req, res) => {
     })
 })
 
+//Manager adding task to a user
+app.post('/managerHome/viewTasks/:id', verifyUser, (req, res) => {
+    const userId = req.params.id;
+    const managerId = req.id;
+
+    console.log("userId,----------------", userId);
+    console.log("umanagerId,----------------", managerId);
+
+
+    const sql = 'INSERT INTO userTasks (`task_name`,`description`,`status`,`user_id`,`added_by`) VALUES(?)';
+    const values = [
+        req.body.taskName,
+        req.body.description,
+        req.body.status,
+        userId,
+        managerId
+    ];
+
+    db.query(sql, [values], (err, data) => {
+        if (err) {
+            return res.json({ Error: "Unable to store data" });
+        }
+        else {
+            return res.json({ data, Status: "Success" });
+        }
+    })
+})
+
+//Admin adding task to a user
+app.post('/adminHome/usersList/viewTasks/:id', verifyUser, (req, res) => {
+    const userId = req.params.id;
+    const managerId = req.id;
+    const sql = 'INSERT INTO userTasks (`task_name`,`description`,`status`,`user_id`,`added_by`) VALUES(?)';
+    const values = [
+        req.body.taskName,
+        req.body.description,
+        req.body.status,
+        userId,
+        managerId
+    ];
+
+    db.query(sql, [values], (err, data) => {
+        if (err){
+            return res.json({ Error : "Unable to store data" })
+        }
+
+        return res.json({ data, Status: "Success" });
+    })
+})
 
 // Running Port...
 app.listen(PORT, () => {
