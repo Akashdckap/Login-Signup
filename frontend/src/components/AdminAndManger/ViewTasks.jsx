@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button, Modal } from "antd";
 
+
 export default function ViewTasks() {
     const [taskList, setTaskList] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const { id } = useParams();
     const [error, setError] = useState('')
     const navigate = useNavigate();
 
-
     const token = localStorage.getItem('manager_token')
     useEffect(() => {
-
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
                 //                 console.log(res)
@@ -42,6 +42,9 @@ export default function ViewTasks() {
             <div className='d-flex justify-content-around p-3'>
                 <h2>View tasks Page</h2>
                 <Link to='/managerHome'><button className='btn btn-outline-success'>Back to ManangerHomepage</button></Link>
+                <Button type="primary" className='ms-5' onClick={showModal}>
+                    Add task
+                </Button>
             </div>
             <div className='taskMainContainer'>
                 {
@@ -54,7 +57,6 @@ export default function ViewTasks() {
 
                     ) : <h1 className='text-danger'>No tasks for this user</h1>
                 }
-                <h1>{error}</h1>
             </div>
         </div>
     )
