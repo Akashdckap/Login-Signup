@@ -17,6 +17,7 @@ export default function UserHome() {
   const [formData, setFormData] = useState({
     taskName: '',
     description: '',
+    status: ''
   });
   const [storeData, setStoreData] = useState([]);
   const [errors, setErrors] = useState({
@@ -114,7 +115,7 @@ export default function UserHome() {
         }
       })
   }
-  
+
 
   // storeData.filter(item => {
   //   console.log(item.task_name);
@@ -156,6 +157,16 @@ export default function UserHome() {
           <textarea className="form-control" onChange={handleChange} value={formData.description} id="exampleFormControlTextarea1" rows="3" placeholder='Type something' name='description'></textarea>
           {errors.description ? <span className="error">{errors.description}</span> : ""}
         </div>
+        <div className="form-floating mb-10">
+          <select name='status' onChange={handleChange} value={formData.status} className="form-select w-100" id="floatingSelect" aria-label="Floating label select example">
+            <option value="Select">Select</option>
+            <option value="Completed">Completed</option>
+            <option value="Started">Started</option>
+            <option value="Progress">Progress</option>
+            <option value="Not yet start">Not yet start</option>
+          </select>
+          <label htmlFor="floatingSelect">Task Status</label>
+        </div>
       </Modal>
       <div className='taskMainContainer'>
         {
@@ -163,7 +174,7 @@ export default function UserHome() {
             <div key={index} className='taskContainer'>
               <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
               <p><span className='text-white'>Description : </span>{item.description}</p>
-              {/* <p><span className='text-white'>Created at : </span>{time}</p> */}
+              <p><span className='text-white'>Status: </span>{item.status}</p>
               <div className='d-flex justify-content-center gap-3'>
                 <Link to={`/userHome/${item.id}`}><button type="button" id={item.id} className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Delete</button></Link>
                 <Link to={`/userHome/editTask/${item.id}`}><button id={item.id} className='btn btn-outline-success btn-sm'>Edit</button></Link>
