@@ -1,29 +1,34 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Button, Modal } from "antd";
 
 export default function ViewTasks() {
     const [taskList, setTaskList] = useState([]);
     const { id } = useParams();
+    const [error, setError] = useState('')
     const navigate = useNavigate();
+
+
     const token = localStorage.getItem('manager_token')
     useEffect(() => {
 
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(res => {
-//                 console.log(res)
+                //                 console.log(res)
                 if (res.data.Status === "Success") {
                     setTaskList(res.data.data)
                 }
                 else {
-                    alert(res.data.Error)
-                    // setError(res.data.Error)
-                    navigate(`/managerHome`)
+                    // alert(res.data.Error)
+                    setError(res.data.Error)
+                    // console.log(res.data.Error);
+                    // navigate(`/managerHome`)
                 }
             })
             .catch(err => console.log(err))
     }, []);
-
+    // console.log("error,", error);
     const handleDeleteTask = (e) => {
         const { id } = e.target;
         axios.post(`http://localhost:5051/delete`, { deleteId: id })
@@ -49,7 +54,7 @@ export default function ViewTasks() {
 
                     ) : <h1 className='text-danger'>No tasks for this user</h1>
                 }
-                {/* <h1>{error}</h1> */}
+                <h1>{error}</h1>
             </div>
         </div>
     )
