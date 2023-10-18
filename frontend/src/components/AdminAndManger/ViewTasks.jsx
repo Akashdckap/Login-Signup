@@ -11,6 +11,68 @@ export default function ViewTasks() {
     const [error, setError] = useState('')
     const navigate = useNavigate();
 
+    const [formData, setFormData] = useState({
+        taskName: '',
+        description: '',
+        status: '',
+    });
+    //   const [storeData, setStoreData] = useState([]);
+    const [errors, setErrors] = useState({
+        taskName: '',
+        description: '',
+    });
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+        delete errors[name]
+    };
+
+    const validate = () => {
+        let newErrors = { ...errors };
+        let isVaild = true;
+        if (formData.taskName.trim() === "" && formData.description.trim() === "") {
+            newErrors.taskName = 'taskname is required';
+            newErrors.description = 'description is required';
+            isVaild = false;
+        }
+        setErrors(newErrors);
+        return isVaild;
+    }
+
+    
+    const handleSubmit = (e) => {
+        let token = localStorage.getItem('manager_token')
+        e.preventDefault();
+        if (validate()) {
+            axios.post(`http://localhost:5051/managerHome/viewTasks/${id}`, formData, { headers: { Authorization: `Bearer ${token}` } })
+                .then(res => {
+                    if (res.data.Status === "Success") {
+                        setMessage(res.data.Status);
+                    }
+                    else {
+                        alert(res.data.Error)
+                    }
+                })
+                .catch(err => console.log(err));
+            setIsModalOpen(false);
+            window.location.reload(true)
+        }
+        else {
+            console.log("not okay");
+        }
+    }
+
     const token = localStorage.getItem('manager_token')
     useEffect(() => {
         axios.get(`http://localhost:5051/managerHome/viewTasks/${id}`, { headers: { Authorization: `Bearer ${token}` } })

@@ -72,13 +72,6 @@ export default function ViewTasksByAdmin() {
         }
     }
 
-    // const handleDeleteTask = (e) => {
-    //     const { id } = e.target;
-    //     axios.post(`http://localhost:5051/delete`, { deleteId: id })
-    //         .then(res => {
-    //             window.location.reload();
-    //         })
-    // }
     useEffect(() => {
         axios.get(`http://localhost:5051/adminHome/usersList/viewTasks/${id}`)
             .then(res => {
