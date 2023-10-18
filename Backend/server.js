@@ -172,8 +172,7 @@ const verifyUser = (req, res, next) => {
 // After Logged in user can add task [Inserting tasks]
 app.post('/userHome', verifyUser, (req, res) => {
     const userId = req.id;
-
-    const sql = "INSERT INTO userTasks (`task_name`,`description`,`status`,user_id`,`added_by`) VALUES(?)";
+    const sql = "INSERT INTO userTasks (`task_name`,`description`,`status`,`user_id`,`added_by`) VALUES(?)";
     const values = [
         req.body.taskName,
         req.body.description,
@@ -399,8 +398,8 @@ app.post('/managerHome/viewTasks/:id', verifyUser, (req, res) => {
     const userId = req.params.id;
     const managerId = req.id;
 
-    console.log("userId,----------------", userId);
-    console.log("umanagerId,----------------", managerId);
+    // console.log("userId,----------------", userId);
+    // console.log("umanagerId,----------------", managerId);
 
 
     const sql = 'INSERT INTO userTasks (`task_name`,`description`,`status`,`user_id`,`added_by`) VALUES(?)';
@@ -424,7 +423,7 @@ app.post('/managerHome/viewTasks/:id', verifyUser, (req, res) => {
 
 //Admin adding task to a user
 app.post('/adminHome/usersList/viewTasks/:id', verifyUser, (req, res) => {
-    const userId = req.params.id;
+    const userId = parseInt(req.params.id);
     const managerId = req.id;
     const sql = 'INSERT INTO userTasks (`task_name`,`description`,`status`,`user_id`,`added_by`) VALUES(?)';
     const values = [
@@ -436,8 +435,8 @@ app.post('/adminHome/usersList/viewTasks/:id', verifyUser, (req, res) => {
     ];
 
     db.query(sql, [values], (err, data) => {
-        if (err){
-            return res.json({ Error : "Unable to store data" })
+        if (err) {
+            return res.json({ Error: "Unable to store data" })
         }
 
         return res.json({ data, Status: "Success" });
