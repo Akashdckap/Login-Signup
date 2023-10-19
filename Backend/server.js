@@ -172,13 +172,13 @@ const verifyUser = (req, res, next) => {
 // After Logged in user can add task [Inserting tasks]
 app.post('/userHome', verifyUser, (req, res) => {
     const userId = req.id;
-    const sql = "INSERT INTO userTasks (`task_name`,`description`,`status`,`user_id`,`added_by`) VALUES(?)";
+
+    const sql = "INSERT INTO userTasks (`task_name`,`description`,`status`,`user_id`) VALUES(?)";
     const values = [
         req.body.taskName,
         req.body.description,
         req.body.status,
         userId,
-        userId
     ];
     db.query(sql, [values], (err, data) => {
         if (err) return res.json({ Error: "Task adding error" });
