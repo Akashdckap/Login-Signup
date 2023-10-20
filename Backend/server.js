@@ -365,9 +365,9 @@ app.get('/userHome/editTask/:id', (req, res) => {
 // After Edit updating the column through use Params Id
 app.post('/userHome/editTask/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
-    const { taskName, description } = req.body
-    const sql = `UPDATE userTasks SET task_name = ?, description = ? WHERE id = ?`
-    db.query(sql, [taskName, description, taskId], (err, result) => {
+    const { taskName, description, status } = req.body
+    const sql = `UPDATE userTasks SET task_name = ?, description = ?,status = ? WHERE id = ?`
+    db.query(sql, [taskName, description, status, taskId], (err, result) => {
         if (err) {
             return res.json({ Error: "Can update the task details" })
         }
