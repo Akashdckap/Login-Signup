@@ -61,7 +61,7 @@ export default function AdminAndMangerLogin() {
                         navigate('/adminHome');
                     }
                     else if (res.data.Status === "Success" && res.data.role === "Manager") {
-                        window.localStorage.setItem('manager_id', res.data.id)
+                        localStorage.setItem('manager_id', res.data.id)
                         localStorage.setItem('manager_name', res.data.name)
                         localStorage.setItem('manager_token', token)
                         navigate('/managerHome');
