@@ -84,7 +84,7 @@ export default function UserHome() {
     let token = localStorage.getItem('user_token')
     axios.get('http://localhost:5051/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.Status === "Success") {
           setName(res.data.user_name);
           setStoreData(res.data.data)
