@@ -10,7 +10,7 @@ export default function UserListByManger() {
     useEffect(() => {
         axios.get(`http://localhost:5051/usersList/${id}`)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 // setBothId(res.data.right)
                 setUsers(res.data.finalArray)
 

@@ -61,8 +61,6 @@ export default function AdminAndManagerRegister() {
             axios.post('http://localhost:5051/adminOrManagerRegister', formData)
                 .then(res => {
                     if (res.data.Status == "Success") {
-                        localStorage.setItem('username', formData.name)
-                        localStorage.setItem('email', formData.email)
                         navigate('/adminOrManagerLogin');
                     } else {
                         alert(res.data.Error);
