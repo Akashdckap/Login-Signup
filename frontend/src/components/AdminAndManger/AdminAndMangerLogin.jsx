@@ -51,8 +51,9 @@ export default function AdminAndMangerLogin() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:5051/adminOrManagerLogin', formData)
+            axios.post('http://localhost:4000/adminOrManagerLogin', formData)
                 .then(res => {
+                    // console.log(res);
                     let token = res.data.token
                     if (res.data.Status === "Success" && res.data.role === "Admin") {
                         localStorage.setItem('admin_id', res.data.id)
@@ -71,7 +72,7 @@ export default function AdminAndMangerLogin() {
                         navigate('/adminOrManagerLogin')
                     }
                 })
-                .catch(err => console.log(err));
+                // .catch(err => console.log(err));
         }
         else {
             alert("validation is not proper")

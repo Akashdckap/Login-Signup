@@ -48,8 +48,9 @@ export default function UserLogin() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:5051/userLogin', formData)
+            axios.post('http://localhost:4000/userLogin', formData)
                 .then(res => {
+                    console.log(res)
                     if (res.data.Status === "Success") {
                         localStorage.setItem('user_id', res.data.user_id)
                         localStorage.setItem('user_name', res.data.user_name)

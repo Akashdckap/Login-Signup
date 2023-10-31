@@ -60,8 +60,9 @@ function UserRegister() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            axios.post('http://localhost:5051/userRegister', formData)
+            axios.post('http://localhost:4000/userRegister', formData)
                 .then(res => {
+                    // console.log(res);
                     if (res.data.Status === "Success") {
                         navigate('/userLogin');
                     } else {

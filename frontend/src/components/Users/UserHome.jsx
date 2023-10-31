@@ -82,9 +82,9 @@ export default function UserHome() {
 
   useEffect(() => {
     let token = localStorage.getItem('user_token')
-    axios.get('http://localhost:5051/userHome', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get('http://localhost:4000/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        // console.log(res);
+
         if (res.data.Status === "Success") {
           setName(res.data.user_name);
           setStoreData(res.data.data)
