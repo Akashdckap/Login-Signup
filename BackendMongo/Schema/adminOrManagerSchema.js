@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const adminOrManagerColumn = mongoose.Schema({
     name:String,
     role:String,
+    userId:{
+        type:mongoose.Types.ObjectId,
+        default:null
+    },
     email:String,
     password:String,
 },{

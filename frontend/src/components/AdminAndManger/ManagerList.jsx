@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default function ManagerList() {
     const [managerList, setManagers] = useState([]);
     useEffect(() => {
-        axios.get('http://localhost:5051/managerList')
+        axios.get('http://localhost:4000/managerList')
             .then(res => {
                 setManagers(res.data.data)
             })
@@ -32,7 +32,8 @@ export default function ManagerList() {
                         return (
                             <tbody key={index}>
                                 <tr>
-                                    <th scope="row">{item.id}</th>
+                                    {/* <th scope="row">{item.id}</th> */}
+                                    <td>{index+1}</td>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
                                     <td><Link to={`/adminHome/managerList/userList/${item.id}`}><button className='btn btn-outline-success btn-sm' id={item.id}>Assign User</button></Link></td>

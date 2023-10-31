@@ -14,10 +14,11 @@ export default function ManagerHome() {
   useEffect(() => {
     let token = localStorage.getItem('manager_token')
 
-    axios.get("http://localhost:5051/managerHome", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get("http://localhost:4000/managerHome", { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
+        console.log(res.data.data[0].name)
         if (res.data.Status === "Success") {
-          setName(res.data.name)
+          setName(res.data.data[0].name)
           setId(res.data.id)
           setUsers(res.data.data)
           navigate('/managerHome')

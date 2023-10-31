@@ -53,7 +53,7 @@ export default function AdminAndMangerLogin() {
         if (validate()) {
             axios.post('http://localhost:4000/adminOrManagerLogin', formData)
                 .then(res => {
-                    // console.log(res);
+                    // console.log(res.data.name);
                     let token = res.data.token
                     if (res.data.Status === "Success" && res.data.role === "Admin") {
                         localStorage.setItem('admin_id', res.data.id)

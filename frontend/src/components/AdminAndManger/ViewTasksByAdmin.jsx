@@ -78,7 +78,7 @@ export default function ViewTasksByAdmin() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5051/adminHome/usersList/viewTasks/${user_id}`)
+        axios.get(`http://localhost:4000/adminHome/usersList/viewTasks/${user_id}`)
             .then(res => {
                 // console.log(res.data.data[0].user_id);
                 if (res.data.Status === "Success") {

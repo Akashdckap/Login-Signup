@@ -7,10 +7,11 @@ export default function AdminHome() {
   const navigate = useNavigate();
   useEffect(() => {
     let token = localStorage.getItem('admin_token')
-    axios.get('http://localhost:5051/adminHome', { headers: { Authorization: `Bearer ${token}` } })
+    axios.get('http://localhost:4000/adminHome', { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
+        // console.log(res.data.data[0].name)
         if (res.data.Status === "Success") {
-          setAdminName(res.data.name)
+          setAdminName(res.data.data[0].name)
           navigate('/adminHome')
         }
         else {

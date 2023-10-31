@@ -6,8 +6,9 @@ export default function UsersList() {
     const [userList, setUserList] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
-        axios.get('http://localhost:5051/adminHome/usersList')
+        axios.get('http://localhost:4000/adminHome/usersList')
             .then(res => {
+                console.log(res)
                 if (res.data.Status === "Success") {
                     setUserList(res.data.data)
                     navigate('/adminHome/usersList');
@@ -45,10 +46,11 @@ export default function UsersList() {
                             return (
                                 <tbody key={index}>
                                     <tr>
-                                        <th scope="row">{item.id}</th>
-                                        <td>{item.user_name}</td>
+                                        {/* <th scope="row">{item.id}</th> */}
+                                        <th>{index+1}</th>
+                                        <td>{item.name}</td>
                                         <td>{item.email}</td>
-                                        <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item.id}>View Task</button></td>
+                                        <td><button className='btn btn-outline-success btn-sm' onClick={handleViewTask} id={item._id}>View Task</button></td>
                                     </tr>
                                 </tbody>
                             )

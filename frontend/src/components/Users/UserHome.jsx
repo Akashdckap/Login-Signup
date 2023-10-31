@@ -59,7 +59,7 @@ export default function UserHome() {
     let token = localStorage.getItem('user_token')
     e.preventDefault();
     if (validate()) {
-      axios.post('http://localhost:5051/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
+      axios.post('http://localhost:4000/userHome', formData, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
           // console.log(res);
           if (res.data.Status === "Success") {
@@ -84,9 +84,8 @@ export default function UserHome() {
     let token = localStorage.getItem('user_token')
     axios.get('http://localhost:4000/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-
         if (res.data.Status === "Success") {
-          setName(res.data.user_name);
+          setName(res.data.data[0].name);
           setStoreData(res.data.data)
           navigate('/userHome');
         } else {
@@ -107,7 +106,7 @@ export default function UserHome() {
 
   const handleDeleteTask = (e) => {
     const { id } = e.target;
-    axios.post(`http://localhost:5051/delete`, { deleteId: id })
+    axios.post(`http://localhost:4000/delete`, { deleteId: id })
       .then(res => {
         // console.log(res);
         window.location.reload();
