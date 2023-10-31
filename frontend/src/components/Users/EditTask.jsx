@@ -9,9 +9,9 @@ function EditTask() {
     const { id } = useParams();
     const naviagate = useNavigate();
     useEffect(() => {
-        axios.get(`http://localhost:5051/userHome/editTask/${id}`)
+        axios.get(`http://localhost:4000/userHome/editTask/${id}`)
             .then((response) => {
-                setTaskName(response.data.data[0].task_name);
+                setTaskName(response.data.data[0].taskName);
                 setDescription(response.data.data[0].description);
                 setTaskStatus(response.data.data[0].status)
             })
@@ -22,7 +22,7 @@ function EditTask() {
 
     const handleUpdateTask = (e) => {
         e.preventDefault();
-        axios.post(`http://localhost:5051/userHome/editTask/${id}`, { taskName: taskName, description: description, status: status })
+        axios.post(`http://localhost:4000/userHome/editTask/${id}`, { taskName: taskName, description: description, status: status })
             .then(res => {
                 if (res.data.Status == "Success") {
                     naviagate("/userHome")

@@ -84,9 +84,10 @@ export default function UserHome() {
     let token = localStorage.getItem('user_token')
     axios.get('http://localhost:4000/userHome', { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
+        console.log()
         if (res.data.Status === "Success") {
           setName(res.data.data[0].name);
-          setStoreData(res.data.data)
+          setStoreData(res.data.tasks)
           navigate('/userHome');
         } else {
           navigate('/userLogin');
@@ -172,12 +173,12 @@ export default function UserHome() {
         {
           storeData.map((item, index) =>
             <div key={index} className='taskContainer'>
-              <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
+              <p><span className='text-white'>Task Name : </span>{item.taskName}</p>
               <p><span className='text-white'>Description : </span>{item.description}</p>
               <p><span className='text-white'>Status: </span>{item.status}</p>
               <div className='d-flex justify-content-center gap-3'>
-                <Link to={`/userHome/${item.id}`}><button type="button" id={item.id} className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Delete</button></Link>
-                <Link to={`/userHome/editTask/${item.id}`}><button id={item.id} className='btn btn-outline-success btn-sm'>Edit</button></Link>
+                <Link to={`/userHome/${item._id}`}><button type="button" id={item._id} className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Delete</button></Link>
+                <Link to={`/userHome/editTask/${item._id}`}><button id={item._id} className='btn btn-outline-success btn-sm'>Edit</button></Link>
               </div>
             </div>
           )

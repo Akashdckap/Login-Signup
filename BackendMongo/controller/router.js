@@ -47,7 +47,7 @@ Router.post("/userLogin", async (req, res) => {
         res.send({ Status: "Success", token: token, user_name: userName, user_id: id });
     }
     else {
-        res.send({ Error: "Email Id not Exists" })
+        res.send({ Error: "Email Id not Exists or Password incorrect" })
     }
 })
 
@@ -138,18 +138,20 @@ Router.get('/managerHome', verifyUser, async (req, res) => {
     else {
         res.send({ data: managerHome, Status: "Success" });
     }
+    const AssignedUsers = await adminOrManagerSchema.aggregate([{$lookup:{from:"users",localField:"userId",foreignF}}])
 })
 
 Router.get('/userHome', verifyUser, async (req, res) => {
     const userId = req.id;
+
     const userHome = await userSchema.find({ _id: new ObjectId(userId) });
-    // const userTasks = await userTasks.find({userId:userId});
-    // console.log(userTasks);
+    const taskList = await userTasks.find({ userId: userId });
+
     if (!userHome) {
         res.send({ Error: "Fetching Admin Details Error" });
     }
     else {
-        res.send({ data: userHome, Status: "Success" });
+        res.send({ data: userHome, tasks: taskList, Status: "Success" });
     }
 })
 
@@ -159,7 +161,7 @@ Router.post('/userHome', verifyUser, async (req, res) => {
         taskName: req.body.taskName,
         description: req.body.description,
         status: req.body.status,
-        userId:userId,
+        userId: userId,
     };
 
     const task = new userTasks(formData);
@@ -196,4 +198,77 @@ Router.get('/adminHome/usersList/viewTasks/:id', async (req, res) => {
     const userId = req.params.id;
     const tasks = await userTasks.find({ _id: new ObjectId(userId) });
 })
+
+Router.post('/delete', async (req, res) => {
+    const taskDelete = req.body.deleteId;
+
+    const deleteTask = await userTasks.deleteOne({ _id: new ObjectId(taskDelete) });
+    if (!deleteTask) {
+        res.send({ Error: "Not deleted" })
+    }
+    else {
+        res.send({ message: "task delete successfully" });
+    }
+})
+
+Router.get('/userHome/editTask/:id', async (req, res) => {
+    const userId = req.params.id;
+    const getDetails = await userTasks.find({ _id: new ObjectId(userId) });
+    if (!getDetails) {
+        res.send({ Error: "Edit facing errors" });
+    }
+    else {
+        res.send({ data: getDetails, Status: "Success" });
+    }
+});
+
+Router.post('/userHome/editTask/:id', async (req, res) => {
+    const taskId = Object(req.params.id);
+
+    const formData = {
+        taskName: req.body.taskName,
+        description: req.body.description,
+        status: req.body.status,
+    };
+    const update = await userTasks.findByIdAndUpdate(taskId, formData, { new: true });
+    if (!update) {
+        res.send({ Error: "Your data not updated" })
+    }
+    else {
+        res.send({ Status: "Success", data: update });
+    }
+});
+
+Router.get('/usersList/:id', async (req, res) => {
+    const usersList = await userSchema.find({});
+    if (!usersList) {
+        res.send({ Error: "fetching UserList throwing error" });
+    }
+    else {
+        res.send({ data: usersList, Status: "Success" });
+    }
+})
+
+Router.post(('/adminHome/managerList'), async (req, res) => {
+    const managerId = req.body.managerId;
+    const userId = req.body.userId;
+
+    const userIdAorN = await adminOrManagerSchema.find({ $and: [{ _id: new ObjectId(managerId) }, { userId: new ObjectId(userId) }] });
+
+    if (userIdAorN == 0) {
+        const assignUser = await adminOrManagerSchema.updateOne({ _id: new ObjectId(managerId) }, { $push: { userId: new ObjectId(userId) } });
+
+        if (!assignUser) {
+            res.send({ Error: "Assigning is Error" });
+        }
+        else {
+            res.send({ Status: "Success", data: assignUser });
+        }
+    }
+    else {
+        res.send({ Error: "Already Assigned" });
+    }
+
+})
+
 module.exports = Router;

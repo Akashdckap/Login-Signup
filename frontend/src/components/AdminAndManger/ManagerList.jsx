@@ -7,6 +7,7 @@ export default function ManagerList() {
     useEffect(() => {
         axios.get('http://localhost:4000/managerList')
             .then(res => {
+                console.log(res)
                 setManagers(res.data.data)
             })
             .catch(err => console.log(err))
@@ -36,7 +37,7 @@ export default function ManagerList() {
                                     <td>{index+1}</td>
                                     <td>{item.name}</td>
                                     <td>{item.email}</td>
-                                    <td><Link to={`/adminHome/managerList/userList/${item.id}`}><button className='btn btn-outline-success btn-sm' id={item.id}>Assign User</button></Link></td>
+                                    <td><Link to={`/adminHome/managerList/userList/${item._id}`}><button className='btn btn-outline-success btn-sm' id={item._id}>Assign User</button></Link></td>
                                 </tr>
                             </tbody>)
                     })}

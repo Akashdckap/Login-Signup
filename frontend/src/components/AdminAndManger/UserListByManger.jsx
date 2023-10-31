@@ -8,11 +8,11 @@ export default function UserListByManger() {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:5051/usersList/${id}`)
+        axios.get(`http://localhost:4000/usersList/${id}`)
             .then(res => {
                 // console.log(res);
                 // setBothId(res.data.right)
-                setUsers(res.data.finalArray)
+                setUsers(res.data.data)
 
             })
             .catch(err => console.log(err))
@@ -24,7 +24,7 @@ export default function UserListByManger() {
             managerId: id,
             userId: e.target.id
         }
-        axios.post('http://localhost:5051/adminHome/managerList', payload)
+        axios.post('http://localhost:4000/adminHome/managerList', payload)
             .then(res => {
                 console.log(res);
                 if (res.data.Status === "Success") {
@@ -65,10 +65,11 @@ export default function UserListByManger() {
                             {userList.map((user, index) => {
                                 return (
                                     <tr key={index}>
-                                        <th scope="row">{user.id}</th>
-                                        <td>{user.user_name}</td>
+                                        {/* <th scope="row">{user._id}</th> */}
+                                        <th>{index+1}</th>
+                                        <td>{user.name}</td>
                                         <td>{user.email}</td>
-                                        <td><input type='button' value={user.status ? "UnAssign" : "Assign"} className={user.status ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} id={user.id} onClick={handleUserAssign}></input></td>
+                                        <td><input type='button' value={user.status ? "UnAssign" : "Assign"} className={user.status ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} id={user._id} onClick={handleUserAssign}></input></td>
                                         {/* <td><input type='button' className={idx.find(id => id == user.id) == user.id ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm"} value={idx.filter(id => id == user.id) == user.id ? "Unassign" : "Assign"} id={user.id} onClick={handleUserAssign}></input></td> */}
                                     </tr>)
                             })}
