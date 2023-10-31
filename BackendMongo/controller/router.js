@@ -78,7 +78,7 @@ Router.post('/adminOrManagerRegister', async (req, res) => {
 Router.post("/adminOrManagerLogin",async(req,res)=>{
     const emailExists = await adminOrManagerSchema.findOne({email:req.body.email});
     const password = bcrypt.compareSync(req.body.password.toString(),emailExists.password);
-    
+    ///addd
     if(emailExists && password == true){
         const name = emailExists.name;
         const id = emailExists._id;
