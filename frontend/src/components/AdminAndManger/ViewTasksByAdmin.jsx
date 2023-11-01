@@ -57,7 +57,7 @@ export default function ViewTasksByAdmin() {
         let token = localStorage.getItem('admin_token')
         e.preventDefault();
         if (validate()) {
-            axios.post(`http://localhost:5051/adminHome/usersList/viewTasks/${user_id}`, formData, { headers: { Authorization: `Bearer ${token}` } })
+            axios.post(`http://localhost:4000/adminHome/usersList/viewTasks/${user_id}`, formData, { headers: { Authorization: `Bearer ${token}` } })
                 .then(res => {
 
                     if (res.data.Status === "Success") {
@@ -95,7 +95,7 @@ export default function ViewTasksByAdmin() {
 
     const handleDeleteTask = (e) => {
         const { id } = e.target;
-        axios.post(`http://localhost:5051/delete`, { deleteId: id })
+        axios.post(`http://localhost:4000/delete`, { deleteId: id })
             .then(res => {
                 if (res.data.message == "task delete successfully") {
                     navigate(`/adminHome/usersList/viewTasks/${user_id}`)
@@ -120,7 +120,7 @@ export default function ViewTasksByAdmin() {
                 {
                     taskList.length > 0 ? taskList.map((item, index) =>
                         <div key={index} className='taskContainer'>
-                            <p><span className='text-white'>Task Name : </span>{item.task_name}</p>
+                            <p><span className='text-white'>Task Name : </span>{item.taskName}</p>
                             <p><span className='text-white'>Description : </span>{item.description}</p>
                             <p><span className='text-white'>Status: </span>{item.status}</p>
                             {/* <Link to={`/adminHome/usersList/viewTasks/${item.id}`}><button type="button" id={item.id} className="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Delete</button></Link> */}

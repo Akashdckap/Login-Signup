@@ -159,7 +159,7 @@ Router.post('/userHome', verifyUser, async (req, res) => {
         taskName: req.body.taskName,
         description: req.body.description,
         status: req.body.status,
-        userId:userId,
+        userId: userId,
     };
 
     const task = new userTasks(formData);
@@ -194,6 +194,14 @@ Router.get('/adminHome/usersList', async (req, res) => {
 
 Router.get('/adminHome/usersList/viewTasks/:id', async (req, res) => {
     const userId = req.params.id;
-    const tasks = await userTasks.find({ _id: new ObjectId(userId) });
+    const tasks = await userTasks.find({ userId: new ObjectId(userId) });
+    if (tasks) {
+        res.send({ data: tasks, Status: "Success" });
+    }
+    else{
+        
+    }
+
+
 })
 module.exports = Router;
